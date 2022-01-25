@@ -2,10 +2,9 @@
 
 #### Project submodules structure:
 
-- (root) [Current game project](https://github.com/gloomyzen/bento-time)
+- (root) [Current game project](https://github.com/efreyu/bento-time)
 - (src/common) [Common modules for all games](https://github.com/gloomyzen/cocos2d-common)
-- (cocos2d) [Modified core](https://github.com/gloomyzen/cocos2d)
-- (lib/dragonbones) [dragonBones for cocos2d v4](https://github.com/gloomyzen/cocos2d-dragonbones)
+- (cocos2d) [Modified core](https://github.com/gloomyzen/cocos2d-x)
 - (lib/imgui) [ImGui for cocos2d v4](https://github.com/gloomyzen/cocos2d-x-imgui)
 
 #### Install:
@@ -49,8 +48,3 @@ android gradle plugin version: 3.6.3
 gradle version: 5.6.4
 NDK 21.0.6011959
 
-
-#Credits
-- International Phonetic Alphabet (IPA) Free Font - https://www.wfonts.com/font/ipa-font
-- International Phonetic Alphabet (IPA) Free Dictionary - https://sourceforge.net/projects/free-english-to-ipa-database/
-- SF Pro Text Regular Font - https://fontsfree.net/sf-pro-text-regular-font-download.html

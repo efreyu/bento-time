@@ -1,0 +1,5 @@
+---
+Checks:          '-fuchsia-*,-google-*,-zircon-*,-abseil-*,-modernize-use-trailing-return-type,-misc-non-private-member-variables-in-classes,-cppcoreguidelines-avoid-*,-cppcoreguidelines-narrowing-conversions'
+WarningsAsErrors: '*'
+HeaderFilterRegex: ''
+FormatStyle:     none
