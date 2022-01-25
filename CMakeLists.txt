@@ -60,6 +60,8 @@ elseif(WINDOWS)
          ${common_res_files}
          )
 elseif(APPLE)
+    set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "11.0")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.4" CACHE STRING "Minimum OS X deployment version")
     if(IOS)
         list(APPEND GAME_HEADER
              proj.ios_mac/ios/AppController.h
