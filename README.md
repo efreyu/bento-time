@@ -42,9 +42,3 @@ cd bento-time
 cmake -S . -B build-win32 -G"Visual Studio 16 2019" -Tv142 -A Win32 -DDEBUG=1
 and open .sln file from `build-win32` folder
 ```
-
-For Android studio:
-android gradle plugin version: 3.6.3
-gradle version: 5.6.4
-NDK 21.0.6011959
-
