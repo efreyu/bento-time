@@ -3,7 +3,7 @@
 #### Project submodules structure:
 
 - (root) [Current game project](https://github.com/efreyu/bento-time)
-- (src/common) [Common modules for all games](https://github.com/gloomyzen/cocos2d-common)
+- (src/generic) [Common modules for all games](https://github.com/gloomyzen/cocos2d-common)
 - (cocos2d) [Modified core](https://github.com/gloomyzen/cocos2d-x)
 - (lib/imgui) [ImGui for cocos2d v4](https://github.com/gloomyzen/cocos2d-x-imgui)
 
@@ -11,7 +11,7 @@
 1. Install cocos2d v4
 2. Clone repo with all submodules
 ```bash
-git clone --recurse-submodules git@github.com:gloomyzen/bento-time.git bento-time 
+git clone --recurse-submodules git@github.com:efreyu/bento-time.git bento-time 
 cd bento-time
 ```
 

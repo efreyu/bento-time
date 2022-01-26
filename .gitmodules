@@ -1,0 +1,4 @@
+[submodule "src/generic"]
+	path = src/generic
+	url = git@github.com:gloomyzen/cocos2d-generic.git
+	branch = master
