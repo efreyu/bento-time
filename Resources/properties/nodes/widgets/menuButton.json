@@ -1,0 +1,16 @@
+{
+  "struct": {
+    "type": "node",
+    "name": "menuButton"
+  },
+  "props": {
+    "menuButton": {
+      "transformProperty": {
+        "size": [ 97, 97 ]
+      },
+      "spriteProperty": {
+        "image": "images/widgets/menuButton/menuBtn.png"
+      }
+    }
+  }
+}

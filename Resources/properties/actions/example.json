@@ -1,0 +1,55 @@
+//usage
+//generic::actionModule::sActionsList list;
+//    if (GET_ACTION_FACTORY().loadActionsFromFile("example", list)) {
+//        if (list.hasAction("loop")) {
+//            runAction(list.getAction("loop"));
+//        }
+//    }
+
+{
+  "first": {"type": "moveBy", "duration": 1, "positions": [50, 50]},
+  "simple": {"type": "moveBy", "duration": 1, "positions": [50, 50]},
+  "sequence": {
+    "type": "sequence",
+    "run": [
+      {"type": "moveBy", "duration": 2, "positions": [200, 200]},
+      {"type": "moveBy", "duration": 1, "positions": [-200, -200, 1]}
+    ]
+  },
+  "spawn": {
+    "type": "spawn",
+    "run": [
+      {"type": "moveBy", "duration": 1, "positions": [50, 50]},
+      {"type": "moveBy", "duration": 1, "positions": [-50, -50, 1]}
+    ]
+  },
+  "loopTwoTimes": {
+    "type": "repeat",
+    "count": 2,
+    "run": [
+      {
+        "type": "sequence",
+        "run": [
+          {"type": "moveBy", "duration": 1, "positions": [200, 0]},
+          {"type": "moveBy", "duration": 1, "positions": [0, 200]},
+          {"type": "moveBy", "duration": 1, "positions": [-200, 0]},
+          {"type": "moveBy", "duration": 1, "positions": [0, -200]}
+        ]
+      }
+    ]
+  },
+  "loop": {
+    "type": "repeatForever",
+    "run": [
+      {
+        "type": "sequence",
+        "run": [
+          {"type": "moveBy", "duration": 1, "positions": [200, 0]},
+          {"type": "moveBy", "duration": 1, "positions": [0, 200]},
+          {"type": "moveBy", "duration": 1, "positions": [-200, 0]},
+          {"type": "moveBy", "duration": 1, "positions": [0, -200]}
+        ]
+      }
+    ]
+  }
+}

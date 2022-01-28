@@ -1,0 +1,48 @@
+{
+  "struct": {
+    "type": "node",
+    "name": "buttonWidget",
+    "child": [
+      {
+        "type": "label",
+        "name": "btnText"
+      }
+    ]
+  },
+  "props": {
+    "buttonWidget": {
+      "transformProperty": {
+        "anchor": [ 0.0, 1.0 ],
+        "pivot": [ 0.0, 1.0 ],
+        "size": [382, 68]
+      },
+      "scale9SpriteProperty": {
+        "size": [382, 68],
+        "image": "images/general/cardBg.png",
+        "slice9": {
+          "x": 34,
+          "y": 34,
+          "width": 1,
+          "height": 1
+        }
+      }
+    },
+    "btnText": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ]
+      },
+      "labelProperty": {
+        "fontType": "ttf",
+        "fontSize": 36.0,
+        "fontFile": "fonts/SFProText_Regular.ttf",
+        "bold": true,
+        "italics": false,
+        "align": "center"
+      },
+      "colorProperty": {
+        "color": [0, 0, 0]
+      }
+    }
+  }
+}

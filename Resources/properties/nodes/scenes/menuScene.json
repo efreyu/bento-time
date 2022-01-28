@@ -1,0 +1,28 @@
+{
+  "struct": {
+    "type": "node",
+    "name": "menuScene",
+    "child": [
+      {
+        "type": "buttonWidget",
+        "name": "btn",
+        "settings": {
+          "text": "Let's play!"
+        }
+      }
+    ]
+  },
+  "props": {
+    "menuScene": {
+      "transformProperty": {
+        "stretch": [ 1, 1 ]
+      }
+    },
+    "btn": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ]
+      }
+    }
+  }
+}

@@ -5,28 +5,38 @@
 #include "generic/databaseModule/databaseManagerInterface.h"
 #include <map>
 #include <string>
+#include <memory>
 
 #define GET_DATABASE_MANAGER() bt::databasesModule::databaseManager::getInstance()
 
 namespace bt::databasesModule {
     class databaseManager : public generic::databaseModule::databaseManagerInterface {
     public:
-        enum class eDatabaseList {
+        enum class eDatabaseType {
             LOCATIONS_DB = 0,
             MAP_OBJECTS_DB
         };
-        databaseManager();
-        ~databaseManager() override;
 
         static databaseManager& getInstance();
-        void cleanup() override;
+        static void cleanup();
 
-        void addDatabase(eDatabaseList id, const std::string& value, generic::databaseModule::databaseInterface* db);
+        void addDatabase(eDatabaseType id, const std::string& value, const std::shared_ptr<generic::databaseModule::databaseInterface>& dbPtr);
 
         template<typename T>
-        T* getDatabase(eDatabaseList key) {
+        const std::shared_ptr<T> &getDatabase(eDatabaseType key) {
             return getRegisteredDatabase<T>(static_cast<int>(key));
         }
+
+    private:
+        databaseManager() = default;
+        ~databaseManager() override = default;
+        databaseManager(const databaseManager&) = default;
+        databaseManager& operator=(const databaseManager&) = default;
+        static void create();
+        static void onDeadReference();
+
+        static databaseManager* pInstance;
+        static bool destroyed;
     };
 }// namespace bt::databasesModule
 

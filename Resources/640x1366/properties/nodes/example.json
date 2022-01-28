@@ -1,0 +1,37 @@
+{
+  "props": {
+    "example": {
+      "transformProperty": {
+        "position": [ 200, 200 ],
+        "size": [ 128, 128 ],
+        "scale": 1
+      }
+    },
+    "spriteNode": {
+      "transformProperty": {
+        "position": [ 128, 128 ],
+        "size": [ 128, 128 ],
+        "scale": 1
+      },
+      "spriteProperty": {
+        "image": "images/testTiles/tile_3.png"
+      }
+    },
+    "labelNode": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "scale": 1
+      },
+      "labelProperty": {
+        "text": "Label Node Text",
+        "fontType": "ttf",
+        "fontSize": 24.0,
+        "fontFile": "fonts/arial.ttf",
+        "bold": true,
+        "italic": true,
+        "align": "center",
+        "maxLineWidth": 200
+      }
+    }
+  }
+}

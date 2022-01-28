@@ -1,0 +1,53 @@
+{
+  "struct": {
+    "type": "node",
+    "name": "rollbackButton",
+    "child": [
+      {
+        "type": "sprite",
+        "name": "notificationBg",
+        "child": [
+          {
+            "type": "label",
+            "name": "notificationCounter"
+          }
+        ]
+      }
+    ]
+  },
+  "props": {
+    "rollbackButton": {
+      "transformProperty": {
+        "size": [ 97, 97 ]
+      },
+      "spriteProperty": {
+        "image": "images/widgets/rollbackButton/rollbackBtn.png"
+      }
+    },
+    "notificationBg": {
+      "transformProperty": {
+        "pivot": [ 0.15, 0.85 ],
+        "anchor": [ 0.5, 0.5 ]
+      },
+      "spriteProperty": {
+        "image": "images/widgets/rollbackButton/rollbackCntr.png"
+      }
+    },
+    "notificationCounter": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ]
+      },
+      "labelProperty": {
+        "text": "1",
+        "fontType": "ttf",
+        "fontSize": 20.0,
+        "fontFile": "fonts/SFProText_Regular.ttf",
+        "bold": true,
+        "italics": false,
+        "align": "center",
+        "maxLineWidth": 100
+      }
+    }
+  }
+}

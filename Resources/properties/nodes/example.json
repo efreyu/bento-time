@@ -1,0 +1,78 @@
+{
+  "struct": {
+    "type": "sprite",
+    "name": "example",
+    "child": [
+      {
+        "type": "sprite",
+        "name": "spriteNode"
+      },
+      {
+        "type": "label",
+        "name": "labelNode"
+      },
+      {
+        "type": "aseprite",
+        "name": "asepriteNode"
+      }
+    ]
+  },
+  "props": {
+    "example": {
+      "transformProperty": {
+        "position": [ 200, 200 ],
+        "size": [ 128, 128 ],
+        "scale": 1
+      },
+      "gridProperty": {
+        "marginX": [ 5, 5 ],
+        "marginY": [ 5, 5 ],
+        "paddingX": [ 5, 5 ],
+        "paddingY": [ 5, 5 ],
+        "col": 1,
+        "row": 4,
+        "direction": "horizontal",
+        "align": "left"
+      }
+    },
+    "spriteNode": {
+      "transformProperty": {
+        "position": [ 128, 128 ],
+        "size": [ 128, 128 ],
+        "scale": 1
+      },
+      "spriteProperty": {
+        "image": "images/general/recycle_btn.png"
+      }
+    },
+    "labelNode": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "scale": 1
+      },
+      "labelProperty": {
+        "text": "Label Node Text",
+        "fontType": "ttf",
+        "fontSize": 24.0,
+        "fontFile": "fonts/arial.ttf",
+        "bold": true,
+        "italics": true,
+        "align": "center",
+        "maxLineWidth": 200
+      }
+    },
+    "asepriteNode": {
+      "transformProperty": {
+        "anchor": [0.5, 0.5],
+        "pivot": [0.5, 0.71],
+        "scale": 6
+      },
+      "asepriteProperty": {
+        "file": "path/to/file",
+        "animation": "idle",
+        "loop": true,
+        "usePixelMode": true
+      }
+    }
+  }
+}

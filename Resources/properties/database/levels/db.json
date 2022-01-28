@@ -1,0 +1,42 @@
+{
+  "objectsTypes": {
+    "levelStart": {},
+    "levelEnd": {},
+    "enemy": {
+      "required": {
+        "id": "int"
+      },
+      "allowed": {
+        "level": "int"
+      }
+    },
+    "staticWall": {
+      "required": {
+        "id": "int"
+      },
+      "allowed": {
+        "push": "bool"
+      }
+    }
+  },
+  "levels": [
+    {
+      "id": 10001,
+      "tmxPath": "images/battle/locations/1.tmx",
+      "objectTypes": "images/battle/locations/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10002,
+      "tmxPath": "images/battle/locations/template.tmx",
+      "objectTypes": "images/battle/locations/templateOT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    }
+  ]
+}

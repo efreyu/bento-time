@@ -2,23 +2,19 @@
 #include "generic/audioModule/audioEngineInstance.h"
 #include "generic/coreModule/physicsShape/physicsShapeCache.h"
 #include "generic/coreModule/resources/resourceManager.h"
-#include "generic/coreModule/resources/settings/settingManager.h"
-#include "generic/coreModule/scenes/sceneInterface.h"
 #include "generic/coreModule/scenes/scenesFactoryInstance.h"
 #include "generic/debugModule/logManager.h"
 
 // all profile block header
-#include "generic/profileModule/profileManager.h"
-#include "localProfile/localProfileBlock.h"
+//#include "generic/profileModule/profileManager.h"
+//#include "localProfile/localProfileBlock.h"
 // all databases header
 #include "databasesModule/databaseManager.h"
-#include "databasesModule/locationsDatabase.h"
+#include "databasesModule/levelsDatabase.h"
 #include "databasesModule/mapObjectsDatabase.h"
-#include "databasesModule/skillsDatabase.h"
-#include "generic/databaseModule/databaseInterface.h"
 // all scenes
-#include "sceneModule/battleScene.h"
-#include "sceneModule/metaScene.h"
+#include "sceneModule/gameScene.h"
+#include "sceneModule/menuScene.h"
 // widgets
 #include "interfaceModule/customNodeTypes.h"
 
@@ -27,7 +23,7 @@ USING_NS_CC;
 
 AppDelegate::AppDelegate() {
     GET_AUDIO_ENGINE();
-    GET_PROFILE();
+//    GET_PROFILE();
     GET_DATABASE_MANAGER();
     GET_NODE_FACTORY();
     GET_LOGGER();
@@ -37,8 +33,8 @@ AppDelegate::AppDelegate() {
 
 AppDelegate::~AppDelegate() {
     generic::audioModule::audioEngineInstance::cleanup();
-    generic::profileModule::profileManager::cleanup();
-    GET_DATABASE_MANAGER().cleanup();
+//    generic::profileModule::profileManager::cleanup();
+    bt::databasesModule::databaseManager::cleanup();
     generic::coreModule::nodeFactory::cleanup();
     generic::coreModule::scenesFactoryInstance::cleanup();
     generic::debugModule::logManager::cleanup();
@@ -59,7 +55,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     setting->load();
 //    cocos2d::FileUtils::getInstance()->setPopupNotify(false);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-    setting->init(false, "frameResolution"); // default development resolution
+    setting->init(false, "640x1136");// default development resolution
 #else
     setting->init(true);
 #endif
@@ -69,12 +65,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     if (!glView) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
         glView = GLViewImpl::createWithRect(
-          "Swipe RPG", cocos2d::Rect(0, 0, currentResolution->size.width, currentResolution->size.height), currentResolution->scale);
+          "Bento time", cocos2d::Rect(0, 0, currentResolution->size.width, currentResolution->size.height), currentResolution->scale);
         glView->setDesignResolutionSize(currentResolution->size.width, currentResolution->size.height, ResolutionPolicy::EXACT_FIT);
-        glView = GLViewImpl::createWithRect("Bento time", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
         glView->setFrameZoomFactor(0.60f);
-#endif // end (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#endif// end (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 #else
         glView = GLViewImpl::create("Bento time");
 #endif
@@ -99,23 +94,31 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     GET_AUDIO_ENGINE().stopAll();
     // register all profile
-    GET_PROFILE().registerBlock("local", []() {
-        return new bt::localProfile::localProfileBlock();
-    });
-    GET_PROFILE().executeLoad();
+//    GET_PROFILE().registerBlock("local", []() {
+//        return new bt::localProfile::localProfileBlock();
+//    });
+//    GET_PROFILE().executeLoad();
     // register all databases
-    GET_DATABASE_MANAGER().addDatabase(bt::databasesModule::databaseManager::eDatabaseList::LOCATIONS_DB, "properties/database/locations/db.json", new bt::databasesModule::locationsDatabase());
-    GET_DATABASE_MANAGER().addDatabase(bt::databasesModule::databaseManager::eDatabaseList::MAP_OBJECTS_DB, "properties/database/mapObjects/db.json", new bt::databasesModule::mapObjectsDatabase());
+    GET_DATABASE_MANAGER().addDatabase(
+        bt::databasesModule::databaseManager::eDatabaseType::LOCATIONS_DB,
+        "properties/database/levels/db.json",
+        std::make_shared<bt::databasesModule::levelsDatabase>()
+    );
+    GET_DATABASE_MANAGER().addDatabase(
+        bt::databasesModule::databaseManager::eDatabaseType::MAP_OBJECTS_DB,
+        "properties/database/mapObjects/db.json",
+        std::make_shared<bt::databasesModule::mapObjectsDatabase>()
+    );
     GET_DATABASE_MANAGER().executeLoadData();
     // register external node types
     bt::interfaceModule::registerAllCustomNodes();
     // register all states
     GET_SCENES_FACTORY().registerScene("menuScene", []() {
-        return new bt::sceneModule::metaScene();//todo rename to menu scene
+        return new bt::sceneModule::menuScene();
     });
-    GET_SCENES_FACTORY().registerScene("battleScene", []() {
-        return new bt::sceneModule::battleScene(); // todo rename to game scene
-    });
+//    GET_SCENES_FACTORY().registerScene("gameScene", []() {
+//        return new bt::sceneModule::gameScene();
+//    });
 
     // run first scene
     GET_SCENES_FACTORY().runScene("menuScene");

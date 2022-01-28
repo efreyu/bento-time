@@ -48,7 +48,7 @@ add_subdirectory(src/generic)
 # current game modules
 add_subdirectory(src/databasesModule)
 add_subdirectory(src/interfaceModule)
-add_subdirectory(src/localProfile)
+#add_subdirectory(src/localProfile)
 add_subdirectory(src/sceneModule)
 
 if(ANDROID)

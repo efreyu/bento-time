@@ -1,0 +1,10 @@
+{
+  "sounds": {
+    "ui.click": "effects/click.wav",
+
+    "battle.step_lth4": "effects/step_lth4.ogg",
+    "battle.step_lth33": "effects/step_lth33.ogg",
+
+    "music.main": "musics/theme_ruine.mp3"
+  }
+}

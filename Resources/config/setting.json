@@ -1,0 +1,16 @@
+{
+  "640x1136": {
+    "width": 640, "height": 1136, "desktopScale": 0.75,
+    "parent": "",
+    "path": "",
+    "showDisplayStats": false,
+    "pixel": false
+  },
+  "640x1366": {
+    "width": 640, "height": 1366, "desktopScale": 0.75,
+    "parent": "640x1136",
+    "path": "largeResolution",
+    "showDisplayStats": false,
+    "pixel": false
+  }
+}

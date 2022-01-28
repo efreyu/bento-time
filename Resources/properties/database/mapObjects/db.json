@@ -1,0 +1,74 @@
+{
+  "mapObjects": [
+    {
+      "id": 20001,
+      "propertyPath": "battle/mapObjects/20001",
+      "iconPath": "images/mapObjects/20001/icon/icon.png",
+      "objectType": "hero",
+      "nodeType": "spine"
+    },
+    {
+      "id": 20002,
+      "propertyPath": "battle/mapObjects/20002",
+      "iconPath": "images/mapObjects/20002/icon/icon.png",
+      "objectType": "enemy",
+      "nodeType": "spine"
+    },
+    {
+      "id": 20003,
+      "propertyPath": "battle/mapObjects/20003",
+      "iconPath": "images/mapObjects/20003/icon/icon.png",
+      "objectType": "enemy",
+      "nodeType": "spine"
+    },
+    {
+      "id": 20004,
+      "propertyPath": "battle/mapObjects/walls/20004",
+      "objectType": "staticWall",
+      "nodeType": "sprite"
+    },
+    {
+      "id": 20005,
+      "propertyPath": "battle/mapObjects/walls/20005",
+      "objectType": "staticWall",
+      "nodeType": "sprite"
+    },
+    {
+      "id": 20006,
+      "propertyPath": "battle/mapObjects/walls/20006",
+      "objectType": "staticWall",
+      "nodeType": "sprite"
+    },
+    {
+      "id": 20007,
+      "propertyPath": "battle/mapObjects/walls/20007",
+      "objectType": "staticWall",
+      "nodeType": "sprite"
+    },
+    {
+      "id": 20008,
+      "propertyPath": "battle/mapObjects/walls/20008",
+      "objectType": "staticWall",
+      "nodeType": "sprite"
+    },
+    {
+      "id": 20009,
+      "propertyPath": "battle/mapObjects/walls/20009",
+      "objectType": "staticWall",
+      "nodeType": "sprite"
+    },
+    {
+      "id": 20010,
+      "propertyPath": "battle/mapObjects/walls/20010",
+      "objectType": "staticWall",
+      "nodeType": "sprite"
+    },
+    {
+      "id": 20011,
+      "propertyPath": "battle/mapObjects/20011",
+      "iconPath": "images/mapObjects/20011/icon/icon.png",
+      "objectType": "hero",
+      "nodeType": "aseprite"
+    }
+  ]
+}
