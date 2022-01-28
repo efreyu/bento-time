@@ -1,116 +1,124 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 #include "AppDelegate.h"
-#include "scenesModule/HelloWorldScene.h"
+#include "generic/audioModule/audioEngineInstance.h"
+#include "generic/coreModule/physicsShape/physicsShapeCache.h"
+#include "generic/coreModule/resources/resourceManager.h"
+#include "generic/coreModule/resources/settings/settingManager.h"
+#include "generic/coreModule/scenes/sceneInterface.h"
+#include "generic/coreModule/scenes/scenesFactoryInstance.h"
+#include "generic/debugModule/logManager.h"
 
-// #define USE_AUDIO_ENGINE 1
-
-#if USE_AUDIO_ENGINE
-#include "audio/include/AudioEngine.h"
-#endif
+// all profile block header
+#include "generic/profileModule/profileManager.h"
+#include "localProfile/localProfileBlock.h"
+// all databases header
+#include "databasesModule/databaseManager.h"
+#include "databasesModule/locationsDatabase.h"
+#include "databasesModule/mapObjectsDatabase.h"
+#include "databasesModule/skillsDatabase.h"
+#include "generic/databaseModule/databaseInterface.h"
+// all scenes
+#include "sceneModule/battleScene.h"
+#include "sceneModule/metaScene.h"
+// widgets
+#include "interfaceModule/customNodeTypes.h"
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
-static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
-static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
-static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
-AppDelegate::AppDelegate()
-{
+AppDelegate::AppDelegate() {
+    GET_AUDIO_ENGINE();
+    GET_PROFILE();
+    GET_DATABASE_MANAGER();
+    GET_NODE_FACTORY();
+    GET_LOGGER();
+    GET_PHYSICS_SHAPE();
+    GET_SCENES_FACTORY();
 }
 
-AppDelegate::~AppDelegate() 
-{
-#if USE_AUDIO_ENGINE
-    AudioEngine::end();
-#endif
+AppDelegate::~AppDelegate() {
+    generic::audioModule::audioEngineInstance::cleanup();
+    generic::profileModule::profileManager::cleanup();
+    GET_DATABASE_MANAGER().cleanup();
+    generic::coreModule::nodeFactory::cleanup();
+    generic::coreModule::scenesFactoryInstance::cleanup();
+    generic::debugModule::logManager::cleanup();
+    generic::coreModule::physicsShapeCache::cleanup();
 }
 
 // if you want a different context, modify the value of glContextAttrs
 // it will affect all platforms
-void AppDelegate::initGLContextAttrs()
-{
+void AppDelegate::initGLContextAttrs() {
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
-    GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
+    GLContextAttrs glContextAttrs = { 8, 8, 8, 8, 24, 8, 0 };
 
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
-// if you want to use the package manager to install more packages,  
-// don't modify or remove this function
-static int register_all_packages()
-{
-    return 0; //flag for packages manager
-}
-
 bool AppDelegate::applicationDidFinishLaunching() {
-    // initialize director
-    auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
-    if(!glview) {
+    auto setting = GET_RESOLUTION_SETTING();
+    setting->load();
+//    cocos2d::FileUtils::getInstance()->setPopupNotify(false);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("bento-time", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+    setting->init(false, "frameResolution"); // default development resolution
 #else
-        glview = GLViewImpl::create("bento-time");
+    setting->init(true);
 #endif
-        director->setOpenGLView(glview);
+    auto currentResolution = setting->getCurrentSize();
+    auto director = Director::getInstance();
+    auto glView = director->getOpenGLView();
+    if (!glView) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+        glView = GLViewImpl::createWithRect(
+          "Swipe RPG", cocos2d::Rect(0, 0, currentResolution->size.width, currentResolution->size.height), currentResolution->scale);
+        glView->setDesignResolutionSize(currentResolution->size.width, currentResolution->size.height, ResolutionPolicy::EXACT_FIT);
+        glView = GLViewImpl::createWithRect("Bento time", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+        glView->setFrameZoomFactor(0.60f);
+#endif // end (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#else
+        glView = GLViewImpl::create("Bento time");
+#endif
+        director->setOpenGLView(glView);
     }
 
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(currentResolution->showStats);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
 
+    // set project view mode
+    director->setProjection(Director::Projection::_3D);
+    cocos2d::Sprite::setUsePixelModeGlobal(currentResolution->spritePixel);
     // Set the design resolution
-    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
-    auto frameSize = glview->getFrameSize();
-    // if the frame's height is larger than the height of medium size.
-    if (frameSize.height > mediumResolutionSize.height)
-    {        
-        director->setContentScaleFactor(MIN(largeResolutionSize.height/designResolutionSize.height, largeResolutionSize.width/designResolutionSize.width));
-    }
-    // if the frame's height is larger than the height of small size.
-    else if (frameSize.height > smallResolutionSize.height)
-    {        
-        director->setContentScaleFactor(MIN(mediumResolutionSize.height/designResolutionSize.height, mediumResolutionSize.width/designResolutionSize.width));
-    }
-    // if the frame's height is smaller than the height of medium size.
-    else
-    {        
-        director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
-    }
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+    director->setContentScaleFactor(1.f);
+#else
+    glView->setDesignResolutionSize(currentResolution->size.width, currentResolution->size.height, ResolutionPolicy::EXACT_FIT);
+#endif
 
-    register_all_packages();
+    GET_AUDIO_ENGINE().stopAll();
+    // register all profile
+    GET_PROFILE().registerBlock("local", []() {
+        return new bt::localProfile::localProfileBlock();
+    });
+    GET_PROFILE().executeLoad();
+    // register all databases
+    GET_DATABASE_MANAGER().addDatabase(bt::databasesModule::databaseManager::eDatabaseList::LOCATIONS_DB, "properties/database/locations/db.json", new bt::databasesModule::locationsDatabase());
+    GET_DATABASE_MANAGER().addDatabase(bt::databasesModule::databaseManager::eDatabaseList::MAP_OBJECTS_DB, "properties/database/mapObjects/db.json", new bt::databasesModule::mapObjectsDatabase());
+    GET_DATABASE_MANAGER().executeLoadData();
+    // register external node types
+    bt::interfaceModule::registerAllCustomNodes();
+    // register all states
+    GET_SCENES_FACTORY().registerScene("menuScene", []() {
+        return new bt::sceneModule::metaScene();//todo rename to menu scene
+    });
+    GET_SCENES_FACTORY().registerScene("battleScene", []() {
+        return new bt::sceneModule::battleScene(); // todo rename to game scene
+    });
 
-    // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
-
-    // run
-    director->runWithScene(scene);
+    // run first scene
+    GET_SCENES_FACTORY().runScene("menuScene");
 
     return true;
 }
@@ -118,17 +126,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
-
-#if USE_AUDIO_ENGINE
-    AudioEngine::pauseAll();
-#endif
+    GET_AUDIO_ENGINE().pauseAll();
 }
 
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground() {
     Director::getInstance()->startAnimation();
-
-#if USE_AUDIO_ENGINE
-    AudioEngine::resumeAll();
-#endif
+    GET_AUDIO_ENGINE().resumeAll();
 }

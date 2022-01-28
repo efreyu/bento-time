@@ -1,12 +1,19 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.13)
 
 set(APP_NAME bento-time)
 
 project(${APP_NAME})
 
+if (${DEBUG})
+    add_definitions(-DDEBUG=1)
+else ()
+    add_definitions(-DRELEASE=1)
+endif ()
+add_definitions(-DGENERIC_APP_NAME="${APP_NAME}")
+
 if(XCODE)
     if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
-        SET (CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 8.0)
+        SET (CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 11.0)
     endif()
 endif()
 
@@ -19,8 +26,8 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test bento-time into root project
 endif()
 
 # record sources, headers, resources...
-set(GAME_SOURCE)
 set(GAME_HEADER)
+set(GAME_SOURCE)
 
 set(GAME_RES_FOLDER
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
@@ -30,13 +37,19 @@ if(APPLE OR WINDOWS)
 endif()
 
 # add cross-platforms source files and header files 
-list(APPEND GAME_SOURCE
-     src/AppDelegate.cpp
-     )
 list(APPEND GAME_HEADER
      src/AppDelegate.h
      )
-add_subdirectory(src/scenesModule)
+list(APPEND GAME_SOURCE
+     src/AppDelegate.cpp
+     )
+# generic modules
+add_subdirectory(src/generic)
+# current game modules
+add_subdirectory(src/databasesModule)
+add_subdirectory(src/interfaceModule)
+add_subdirectory(src/localProfile)
+add_subdirectory(src/sceneModule)
 
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
@@ -105,11 +118,14 @@ else()
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 endif()
 
-target_link_libraries(${APP_NAME} cocos2d)
+target_link_libraries(${APP_NAME} cocos2d ${GENERIC_LIB_NAME})
 target_include_directories(${APP_NAME}
         PRIVATE src
         PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
 )
+target_compile_features(${APP_NAME} PRIVATE cxx_std_17)
+target_compile_options(${APP_NAME} PRIVATE -Wall)
+finalizeInitGeneric()
 
 # mark app resources
 setup_cocos_app_config(${APP_NAME})

@@ -1,0 +1,1965 @@
+Index: cmake/Modules/CocosConfigDepend.cmake
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cmake/Modules/CocosConfigDepend.cmake b/cmake/Modules/CocosConfigDepend.cmake
+--- a/cmake/Modules/CocosConfigDepend.cmake	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
++++ b/cmake/Modules/CocosConfigDepend.cmake	(revision 80a9929353d9e3c730df6a95e553958782f3d025)
+@@ -47,16 +47,16 @@
+             find_library(APPLICATIONSERVICES_LIBRARY ApplicationServices)
+             find_library(IOKIT_LIBRARY IOKit)
+             find_library(APPKIT_LIBRARY AppKit)
+-            find_library(ICONV_LIBRARY iconv)
++            find_library(APPKIT_LIBRARY AppKit)
+             list(APPEND PLATFORM_SPECIFIC_LIBS
+-                 ${COCOA_LIBRARY}
+-                 ${OPENGL_LIBRARY}
+-                 ${APPLICATIONSERVICES_LIBRARY}
+-                 ${IOKIT_LIBRARY}
+-                 ${COCOS_APPLE_LIBS}
+-                 ${APPKIT_LIBRARY}
+-                 ${ICONV_LIBRARY}
+-                 )
++                ${COCOA_LIBRARY}
++                ${OPENGL_LIBRARY}
++                ${APPLICATIONSERVICES_LIBRARY}
++                ${IOKIT_LIBRARY}
++                ${COCOS_APPLE_LIBS}
++                ${APPKIT_LIBRARY}
++                iconv
++                )
+         elseif(IOS)
+             # Locate system libraries on iOS
+             find_library(UIKIT_LIBRARY UIKit)
+Index: cocos/2d/CCNode.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/2d/CCNode.cpp b/cocos/2d/CCNode.cpp
+--- a/cocos/2d/CCNode.cpp	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
++++ b/cocos/2d/CCNode.cpp	(revision f0a2feb5a0226ae9c16d44dbcfab40e1ab3ad596)
+@@ -43,6 +43,9 @@
+ #include "2d/CCComponent.h"
+ #include "renderer/CCMaterial.h"
+ #include "math/TransformUtils.h"
++#include "CCDrawNode.h"
++#include "utility/taskHolder.h"
++#include "base/CCAsyncTaskPool.h"
+ 
+ 
+ #if CC_NODE_RENDER_SUBPIXEL
+@@ -74,6 +77,7 @@
+ , _skewX(0.0f)
+ , _skewY(0.0f)
+ , _anchorPoint(0, 0)
++, _pivotPoint(0, 0)
+ , _contentSize(Size::ZERO)
+ , _contentSizeDirty(true)
+ , _transformDirty(true)
+@@ -150,7 +154,7 @@
+ Node::~Node()
+ {
+     CCLOGINFO( "deallocing Node: %p - tag: %i", this, _tag );
+-    
++
+ #if CC_ENABLE_SCRIPT_BINDING
+     if (_updateScriptHandler)
+     {
+@@ -168,16 +172,16 @@
+     }
+ 
+     removeAllComponents();
+-    
++
+     CC_SAFE_DELETE(_componentContainer);
+-    
++
+     stopAllActions();
+     unscheduleAllCallbacks();
+     CC_SAFE_RELEASE_NULL(_actionManager);
+     CC_SAFE_RELEASE_NULL(_scheduler);
+-    
++
+     _eventDispatcher->removeEventListenersForTarget(this);
+-    
++
+ #if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
+     _eventDispatcher->debugCheckNodeHasNoEventListenersOnDestruction(this);
+ #endif
+@@ -207,7 +211,7 @@
+         ScriptEngineManager::sendNodeEventToLua(this, kNodeOnCleanup);
+     }
+ #endif // #if CC_ENABLE_SCRIPT_BINDING
+-    
++
+     // actions
+     this->stopAllActions();
+     // timers
+@@ -215,18 +219,62 @@
+ 
+     // NOTE: Although it was correct that removing event listeners associated with current node in Node::cleanup.
+     // But it broke the compatibility to the versions before v3.16 .
+-    // User code may call `node->removeFromParent(true)` which will trigger node's cleanup method, when the node 
+-    // is added to scene again, event listeners like EventListenerTouchOneByOne will be lost. 
++    // User code may call `node->removeFromParent(true)` which will trigger node's cleanup method, when the node
++    // is added to scene again, event listeners like EventListenerTouchOneByOne will be lost.
+     // In fact, user's code should use `node->removeFromParent(false)` in order not to do a cleanup and just remove node
+     // from its parent. For more discussion about why we revert this change is at https://github.com/cocos2d/cocos2d-x/issues/18104.
+     // We need to consider more before we want to correct the old and wrong logic code.
+     // For now, compatiblity is the most important for our users.
+ //    _eventDispatcher->removeEventListenersForTarget(this);
+-    
++
+     for( const auto &child: _children)
+         child->cleanup();
+ }
+ 
++void Node::setDebug(bool value) {
++#ifdef DEBUG
++    isDebugDraw = value;
++    if (value && !_debugDrawNode) {
++        _debugDrawNode = DrawNode::create();
++        _debugDrawNode->setName("debugNode");
++        addChild(_debugDrawNode);
++    }
++    if (value) {
++        _debugDrawNode->setVisible(true);
++    }
++    if (!value) {
++        _debugDrawNode->clear();
++        _debugDrawNode->setVisible(false);
++    }
++#endif
++}
++
++void Node::setDebugLineColor(Color4F color) {
++#ifdef DEBUG
++    _debugColorLine = color;
++    _debugColorPoint = color;
++#endif
++}
++
++Color4F Node::getDebugLineColor() {
++    return _debugColorLine;
++}
++
++Node* Node::findNode(const std::string &name) {
++	if (getName() == name) {
++		return this;
++	}
++	Node *nodeFound = getChildByName(name);
++	if (!nodeFound) {
++		auto children = getChildren();
++		for (auto child: children) {
++			nodeFound = child->findNode(name);
++			if (nodeFound) break;
++		}
++	}
++	return nodeFound;
++}
++
+ std::string Node::getDescription() const
+ {
+     return StringUtils::format("<Node | Tag = %d", _tag);
+@@ -243,7 +291,7 @@
+ {
+     if (_skewX == skewX)
+         return;
+-    
++
+     _skewX = skewX;
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+ }
+@@ -257,7 +305,7 @@
+ {
+     if (_skewY == skewY)
+         return;
+-    
++
+     _skewY = skewY;
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+ }
+@@ -266,7 +314,7 @@
+ {
+     if (getLocalZOrder() == z)
+         return;
+-    
++
+     _setLocalZOrder(z);
+     if (_parent)
+     {
+@@ -309,10 +357,10 @@
+ {
+     if (_rotationZ_X == rotation)
+         return;
+-    
++
+     _rotationZ_X = _rotationZ_Y = rotation;
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+-    
++
+     updateRotationQuat();
+ }
+ 
+@@ -327,7 +375,7 @@
+         _rotationY == rotation.y &&
+         _rotationZ_X == rotation.z)
+         return;
+-    
++
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+ 
+     _rotationX = rotation.x;
+@@ -335,7 +383,7 @@
+ 
+     // rotation Z is decomposed in 2 to simulate Skew for Flash animations
+     _rotationZ_Y = _rotationZ_X = rotation.z;
+-    
++
+     updateRotationQuat();
+ }
+ 
+@@ -369,7 +417,7 @@
+     sy = clampf(sy, -1, 1);
+     _rotationY = asinf(sy);
+     _rotationZ_X = atan2f(2.f * (w * z + x * y), 1.f - 2.f * (y * y + z * z));
+-    
++
+     _rotationX = CC_RADIANS_TO_DEGREES(_rotationX);
+     _rotationY = CC_RADIANS_TO_DEGREES(_rotationY);
+     _rotationZ_X = _rotationZ_Y = -CC_RADIANS_TO_DEGREES(_rotationZ_X);
+@@ -391,10 +439,10 @@
+ {
+     if (_rotationZ_X == rotationX)
+         return;
+-    
++
+     _rotationZ_X = rotationX;
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+-    
++
+     updateRotationQuat();
+ }
+ 
+@@ -407,10 +455,10 @@
+ {
+     if (_rotationZ_Y == rotationY)
+         return;
+-    
++
+     _rotationZ_Y = rotationY;
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+-    
++
+     updateRotationQuat();
+ }
+ 
+@@ -426,7 +474,7 @@
+ {
+     if (_scaleX == scale && _scaleY == scale && _scaleZ == scale)
+         return;
+-    
++
+     _scaleX = _scaleY = _scaleZ = scale;
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+ }
+@@ -442,7 +490,7 @@
+ {
+     if (_scaleX == scaleX && _scaleY == scaleY)
+         return;
+-    
++
+     _scaleX = scaleX;
+     _scaleY = scaleY;
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+@@ -453,7 +501,7 @@
+ {
+     if (_scaleX == scaleX)
+         return;
+-    
++
+     _scaleX = scaleX;
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+ }
+@@ -469,7 +517,7 @@
+ {
+     if (_scaleZ == scaleZ)
+         return;
+-    
++
+     _scaleZ = scaleZ;
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+ }
+@@ -485,7 +533,7 @@
+ {
+     if (_scaleY == scaleY)
+         return;
+-    
++
+     _scaleY = scaleY;
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+ }
+@@ -513,10 +561,10 @@
+ {
+     if (_position.x == x && _position.y == y)
+         return;
+-    
++
+     _position.x = x;
+     _position.y = y;
+-    
++
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+     _usingNormalizedPosition = false;
+ }
+@@ -561,7 +609,7 @@
+ {
+     if (_positionZ == positionZ)
+         return;
+-    
++
+     _transformUpdated = _transformDirty = _inverseDirty = true;
+ 
+     _positionZ = positionZ;
+@@ -627,6 +675,19 @@
+         _transformUpdated = _transformDirty = _inverseDirty = true;
+     }
+ }
++
++void Node::setPivotPoint(const Vec2& point) {
++    _pivotPoint = point;
++    _transformUpdated = _transformDirty = _inverseDirty = true;
++}
++
++const Vec2 &Node::getPivotPoint() const {
++    return _pivotPoint;
++}
++
++void Node::setMarkDirty() {
++    _transformUpdated = _transformDirty = _inverseDirty = true;
++}
+ 
+ /// contentSize getter
+ const Size& Node::getContentSize() const
+@@ -645,6 +706,14 @@
+     }
+ }
+ 
++void Node::setStretch(float w, float h) {
++    auto visibleSize = Director::getInstance()->getVisibleSize();
++    auto _size = cocos2d::Size();
++    _size.width = visibleSize.width * w;
++    _size.height = visibleSize.height * h;
++    setContentSize(_size);
++}
++
+ // isRunning getter
+ bool Node::isRunning() const
+ {
+@@ -667,7 +736,7 @@
+ /// isRelativeAnchorPoint setter
+ void Node::setIgnoreAnchorPointForPosition(bool newValue)
+ {
+-    if (newValue != _ignoreAnchorPointForPosition) 
++    if (newValue != _ignoreAnchorPointForPosition)
+     {
+         _ignoreAnchorPointForPosition = newValue;
+         _transformUpdated = _transformDirty = _inverseDirty = true;
+@@ -725,7 +794,7 @@
+ {
+     if (!_parent)
+         return nullptr;
+-    
++
+     auto sceneNode = _parent;
+     while (sceneNode->_parent)
+     {
+@@ -764,10 +833,10 @@
+ Node* Node::getChildByName(const std::string& name) const
+ {
+     CCASSERT(!name.empty(), "Invalid name");
+-    
++
+     std::hash<std::string> h;
+     size_t hash = h(name);
+-    
++
+     for (const auto& child : _children)
+     {
+         // Different strings may have the same hash code, but can use it to compare first for speed
+@@ -781,12 +850,12 @@
+ {
+     CCASSERT(!name.empty(), "Invalid name");
+     CCASSERT(callback != nullptr, "Invalid callback function");
+-    
++
+     size_t length = name.length();
+-    
++
+     size_t subStrStartPos = 0;  // sub string start index
+     size_t subStrlength = length; // sub string length
+-    
++
+     // Starts with '//'?
+     bool searchRecursively = false;
+     if (length > 2 && name[0] == '/' && name[1] == '/')
+@@ -795,7 +864,7 @@
+         subStrStartPos = 2;
+         subStrlength -= 2;
+     }
+-    
++
+     // End with '/..'?
+     bool searchFromParent = false;
+     if (length > 3 &&
+@@ -806,12 +875,12 @@
+         searchFromParent = true;
+         subStrlength -= 3;
+     }
+-    
++
+     // Remove '//', '/..' if exist
+     std::string newName = name.substr(subStrStartPos, subStrlength);
+-    
++
+     const Node* target = this;
+-    
++
+     if (searchFromParent)
+     {
+         if (nullptr == _parent)
+@@ -820,7 +889,7 @@
+         }
+         target = _parent;
+     }
+-    
++
+     if (searchRecursively)
+     {
+         // name is '//xxx'
+@@ -836,7 +905,7 @@
+ bool Node::doEnumerateRecursive(const Node* node, const std::string &name, std::function<bool (Node *)> callback) const
+ {
+     bool ret =false;
+-    
++
+     if (node->doEnumerate(name, callback))
+     {
+         // search itself
+@@ -854,7 +923,7 @@
+             }
+         }
+     }
+-    
++
+     return ret;
+ }
+ 
+@@ -870,7 +939,7 @@
+         name.erase(0, pos+1);
+         needRecursive = true;
+     }
+-    
++
+     bool ret = false;
+     for (const auto& child : getChildren())
+     {
+@@ -893,7 +962,7 @@
+             }
+         }
+     }
+-    
++
+     return ret;
+ }
+ 
+@@ -902,7 +971,7 @@
+ * to override this method
+ */
+ void Node::addChild(Node *child, int localZOrder, int tag)
+-{    
++{
+     CCASSERT( child != nullptr, "Argument must be non-nil");
+     CCASSERT( child->_parent == nullptr, "child already added. It can't be added again");
+ 
+@@ -913,7 +982,7 @@
+ {
+     CCASSERT(child != nullptr, "Argument must be non-nil");
+     CCASSERT(child->_parent == nullptr, "child already added. It can't be added again");
+-    
++
+     addChildHelper(child, localZOrder, INVALID_TAG, name, false);
+ }
+ 
+@@ -926,26 +995,26 @@
+                     parent = parent->getParent() )
+                   if ( parent == child )
+                       return false;
+-              
++
+               return true;
+           } );
+     (void)assertNotSelfChild;
+-    
++
+     CCASSERT( assertNotSelfChild(),
+               "A node cannot be the child of his own children" );
+-    
++
+     if (_children.empty())
+     {
+         this->childrenAlloc();
+     }
+-    
++
+     this->insertChild(child, localZOrder);
+-    
++
+     if (setTag)
+         child->setTag(tag);
+     else
+         child->setName(name);
+-    
++
+     child->setParent(this);
+ 
+     child->updateOrderOfArrival();
+@@ -959,12 +1028,12 @@
+             child->onEnterTransitionDidFinish();
+         }
+     }
+-    
++
+     if (_cascadeColorEnabled)
+     {
+         updateCascadeColor();
+     }
+-    
++
+     if (_cascadeOpacityEnabled)
+     {
+         updateCascadeOpacity();
+@@ -981,6 +1050,13 @@
+ {
+     CCASSERT( child != nullptr, "Argument must be non-nil");
+     this->addChild(child, child->getLocalZOrder(), child->_name);
++    if (auto item = dynamic_cast<taskHolder*>(child)) {
++        auto atp = cocos2d::AsyncTaskPool::getInstance();
++        atp->enqueue(cocos2d::AsyncTaskPool::TaskType::TASK_OTHER, [](void*){}, nullptr,
++            [item]() {
++                item->executeTasks();
++            });
++    }
+ }
+ 
+ void Node::removeFromParent()
+@@ -993,7 +1069,7 @@
+     if (_parent != nullptr)
+     {
+         _parent->removeChild(this,cleanup);
+-    } 
++    }
+ }
+ 
+ /* "remove" logic MUST only be on this method
+@@ -1032,9 +1108,9 @@
+ void Node::removeChildByName(const std::string &name, bool cleanup)
+ {
+     CCASSERT(!name.empty(), "Invalid name");
+-    
++
+     Node *child = this->getChildByName(name);
+-    
++
+     if (child == nullptr)
+     {
+         CCLOG("cocos2d: removeChildByName(name = %s): child not found!", name.c_str());
+@@ -1078,7 +1154,7 @@
+         // set parent nil at the end
+         child->setParent(nullptr);
+     }
+-    
++
+     _children.clear();
+ }
+ 
+@@ -1099,7 +1175,7 @@
+     {
+         child->cleanup();
+     }
+-    
++
+ #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
+     if (sEngine)
+@@ -1156,8 +1232,20 @@
+     draw(renderer, _modelViewTransform, FLAGS_TRANSFORM_DIRTY);
+ }
+ 
+-void Node::draw(Renderer* /*renderer*/, const Mat4 & /*transform*/, uint32_t /*flags*/)
++void Node::draw(Renderer* renderer, const Mat4 & transform, uint32_t flags)
+ {
++#if DEBUG
++    if (isDebugDraw) {
++        _debugDrawNode->clear();
++        auto anchor = getAnchorPoint();
++        auto rect = getContentSize();
++        auto pos = getPosition();
++
++        Vec2 dot = {rect.width * anchor.x, rect.height * anchor.y};
++        _debugDrawNode->drawPoint(dot, 4.f, _debugColorPoint);
++        _debugDrawNode->drawRect(Vec2::ZERO, rect, _debugColorLine);
++    }
++#endif //DEBUG
+ }
+ 
+ void Node::visit()
+@@ -1190,11 +1278,11 @@
+     uint32_t flags = parentFlags;
+     flags |= (_transformUpdated ? FLAGS_TRANSFORM_DIRTY : 0);
+     flags |= (_contentSizeDirty ? FLAGS_CONTENT_SIZE_DIRTY : 0);
+-    
++
+ 
+     if(flags & FLAGS_DIRTY_MASK)
+         _modelViewTransform = this->transform(parentTransform);
+-    
++
+     _transformUpdated = false;
+     _contentSizeDirty = false;
+ 
+@@ -1223,7 +1311,7 @@
+     // but it is deprecated and your code should not rely on it
+     _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+-    
++
+     bool visibleByCamera = isVisitableByVisitingCamera();
+ 
+     int i = 0;
+@@ -1254,7 +1342,7 @@
+     }
+ 
+     _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+-    
++
+     // FIX ME: Why need to set _orderOfArrival to 0??
+     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
+     // reset for next frame
+@@ -1281,7 +1369,7 @@
+             return;
+     }
+ #endif
+-    
++
+     if (_onEnterCallback)
+         _onEnterCallback();
+ 
+@@ -1289,16 +1377,16 @@
+     {
+         _componentContainer->onEnter();
+     }
+-    
++
+     _isTransitionFinished = false;
+-    
++
+     for( const auto &child: _children)
+         child->onEnter();
+-    
++
+     this->resume();
+-    
++
+     _running = true;
+-    
++
+ #if CC_ENABLE_SCRIPT_BINDING
+     if (_scriptType == kScriptTypeLua)
+     {
+@@ -1316,14 +1404,14 @@
+             return;
+     }
+ #endif
+-    
++
+     if (_onEnterTransitionDidFinishCallback)
+         _onEnterTransitionDidFinishCallback();
+ 
+     _isTransitionFinished = true;
+     for( const auto &child: _children)
+         child->onEnterTransitionDidFinish();
+-    
++
+ #if CC_ENABLE_SCRIPT_BINDING
+     if (_scriptType == kScriptTypeLua)
+     {
+@@ -1341,13 +1429,13 @@
+             return;
+     }
+ #endif
+-    
++
+     if (_onExitTransitionDidStartCallback)
+         _onExitTransitionDidStartCallback();
+-    
++
+     for( const auto &child: _children)
+         child->onExitTransitionDidStart();
+-    
++
+ #if CC_ENABLE_SCRIPT_BINDING
+     if (_scriptType == kScriptTypeLua)
+     {
+@@ -1369,22 +1457,22 @@
+             return;
+     }
+ #endif
+-    
++
+     if (_onExitCallback)
+         _onExitCallback();
+-    
++
+     if (_componentContainer && !_componentContainer->isEmpty())
+     {
+         _componentContainer->onExit();
+     }
+-    
++
+     this->pause();
+-    
++
+     _running = false;
+-    
++
+     for( const auto &child: _children)
+         child->onExit();
+-    
++
+ #if CC_ENABLE_SCRIPT_BINDING
+     if (_scriptType == kScriptTypeLua)
+     {
+@@ -1507,18 +1595,18 @@
+ void Node::scheduleUpdateWithPriorityLua(int nHandler, int priority)
+ {
+     unscheduleUpdate();
+-    
++
+ #if CC_ENABLE_SCRIPT_BINDING
+     _updateScriptHandler = nHandler;
+ #endif
+-    
++
+     _scheduler->scheduleUpdate(this, priority, !_running);
+ }
+ 
+ void Node::unscheduleUpdate()
+ {
+     _scheduler->unscheduleUpdate(this);
+-    
++
+ #if CC_ENABLE_SCRIPT_BINDING
+     if (_updateScriptHandler)
+     {
+@@ -1576,7 +1664,7 @@
+     // explicit null handling
+     if (selector == nullptr)
+         return;
+-    
++
+     _scheduler->unschedule(selector, this);
+ }
+ 
+@@ -1616,7 +1704,7 @@
+         ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&event);
+     }
+ #endif
+-    
++
+     if (_componentContainer && !_componentContainer->isEmpty())
+     {
+         _componentContainer->visit(fDelta);
+@@ -1663,22 +1751,26 @@
+         float x = _position.x;
+         float y = _position.y;
+         float z = _positionZ;
+-        
++
+         if (_ignoreAnchorPointForPosition)
+         {
+             x += _anchorPointInPoints.x;
+             y += _anchorPointInPoints.y;
+         }
+-        
++        if (_parent) {
++            x += _parent->getContentSize().width * _pivotPoint.x;
++            y += _parent->getContentSize().height * _pivotPoint.y;
++        }
++
+         bool needsSkewMatrix = ( _skewX || _skewY );
+ 
+         // Build Transform Matrix = translation * rotation * scale
+         Mat4 translation;
+         //move to anchor point first, then rotate
+         Mat4::createTranslation(x, y, z, &translation);
+-        
++
+         Mat4::createRotation(_rotationQuat, &_transform);
+-        
++
+         if (_rotationZ_X != _rotationZ_Y)
+         {
+             // Rotation values
+@@ -1690,7 +1782,7 @@
+             float sx = sinf(radiansX);
+             float cy = cosf(radiansY);
+             float sy = sinf(radiansY);
+-            
++
+             float m0 = _transform.m[0], m1 = _transform.m[1], m4 = _transform.m[4], m5 = _transform.m[5], m8 = _transform.m[8], m9 = _transform.m[9];
+             _transform.m[0] = cy * m0 - sx * m1;
+             _transform.m[4] = cy * m4 - sx * m5;
+@@ -1719,7 +1811,7 @@
+             _transform.m[9] *= _scaleZ;
+             _transform.m[10] *= _scaleZ;
+         }
+-        
++
+         // FIXME:: Try to inline skew
+         // If skew is needed, apply skew and then anchor point
+         if (needsSkewMatrix)
+@@ -1732,7 +1824,7 @@
+                 0,  0,  0, 1
+             };
+             Mat4 skewMatrix(skewMatArray);
+-            
++
+             _transform = _transform * skewMatrix;
+         }
+ 
+@@ -1914,7 +2006,7 @@
+ {
+     if (_componentContainer)
+         return _componentContainer->get(name);
+-    
++
+     return nullptr;
+ }
+ 
+@@ -1923,10 +2015,10 @@
+     // lazy alloc
+     if (!_componentContainer)
+         _componentContainer = new (std::nothrow) ComponentContainer(this);
+-    
++
+     // should enable schedule update, then all components can receive this call back
+     scheduleUpdate();
+-    
++
+     return _componentContainer->add(component);
+ }
+ 
+@@ -1934,7 +2026,7 @@
+ {
+     if (_componentContainer)
+         return _componentContainer->remove(name);
+-    
++
+     return false;
+ }
+ 
+@@ -1944,7 +2036,7 @@
+     {
+         return _componentContainer->remove(component);
+     }
+-    
++
+     return false;
+ }
+ 
+@@ -1969,7 +2061,7 @@
+ void Node::setOpacity(uint8_t opacity)
+ {
+     _displayedOpacity = _realOpacity = opacity;
+-    
++
+     updateCascadeOpacity();
+ }
+ 
+@@ -1977,7 +2069,7 @@
+ {
+     _displayedOpacity = _realOpacity * parentOpacity/255.0;
+     updateColor();
+-    
++
+     if (_cascadeOpacityEnabled)
+     {
+         for(const auto& child : _children)
+@@ -1998,9 +2090,9 @@
+     {
+         return;
+     }
+-    
++
+     _cascadeOpacityEnabled = cascadeOpacityEnabled;
+-    
++
+     if (cascadeOpacityEnabled)
+     {
+         updateCascadeOpacity();
+@@ -2014,19 +2106,19 @@
+ void Node::updateCascadeOpacity()
+ {
+     uint8_t parentOpacity = 255;
+-    
++
+     if (_parent != nullptr && _parent->isCascadeOpacityEnabled())
+     {
+         parentOpacity = _parent->getDisplayedOpacity();
+     }
+-    
++
+     updateDisplayedOpacity(parentOpacity);
+ }
+ 
+ void Node::disableCascadeOpacity()
+ {
+     _displayedOpacity = _realOpacity;
+-    
++
+     for(const auto& child : _children)
+     {
+         child->updateDisplayedOpacity(255);
+@@ -2054,7 +2146,7 @@
+ void Node::setColor(const Color3B& color)
+ {
+     _displayedColor = _realColor = color;
+-    
++
+     updateCascadeColor();
+ }
+ 
+@@ -2064,7 +2156,7 @@
+     _displayedColor.g = _realColor.g * parentColor.g/255.0;
+     _displayedColor.b = _realColor.b * parentColor.b/255.0;
+     updateColor();
+-    
++
+     if (_cascadeColorEnabled)
+     {
+         for(const auto &child : _children)
+@@ -2085,9 +2177,9 @@
+     {
+         return;
+     }
+-    
++
+     _cascadeColorEnabled = cascadeColorEnabled;
+-    
++
+     if (_cascadeColorEnabled)
+     {
+         updateCascadeColor();
+@@ -2105,7 +2197,7 @@
+     {
+         parentColor = _parent->getDisplayedColor();
+     }
+-    
++
+     updateDisplayedColor(parentColor);
+ }
+ 
+@@ -2123,19 +2215,19 @@
+     {
+         return false;
+     }
+-    
++
+     // first, convert pt to near/far plane, get Pn and Pf
+     Vec3 Pn(pt.x, pt.y, -1), Pf(pt.x, pt.y, 1);
+     Pn = camera->unprojectGL(Pn);
+     Pf = camera->unprojectGL(Pf);
+-    
++
+     //  then convert Pn and Pf to node space
+     w2l.transformPoint(&Pn);
+     w2l.transformPoint(&Pf);
+ 
+     // Pn and Pf define a line Q(t) = D + t * E which D = Pn
+     auto E = Pf - Pn;
+-    
++
+     // second, get three points which define content plane
+     //  these points define a plane P(u, w) = A + uB + wC
+     Vec3 A = Vec3(rect.origin.x, rect.origin.y, 0);
+@@ -2143,7 +2235,7 @@
+     Vec3 C(rect.origin.x, rect.origin.y + rect.size.height, 0);
+     B = B - A;
+     C = C - A;
+-    
++
+     //  the line Q(t) intercept with plane P(u, w)
+     //  calculate the intercept point P = Q(t)
+     //      (BxC).A - (BxC).D
+Index: cocos/2d/CCNode.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/2d/CCNode.h b/cocos/2d/CCNode.h
+--- a/cocos/2d/CCNode.h	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
++++ b/cocos/2d/CCNode.h	(revision f0a2feb5a0226ae9c16d44dbcfab40e1ab3ad596)
+@@ -100,6 +100,7 @@
+  - scale (default: x=1, y=1)
+  - rotation (in degrees, clockwise) (default: 0)
+  - anchor point (default: x=0, y=0)
++ - pivot point (default: x=0, y=0)
+  - contentSize (default: width=0, height=0)
+  - visible (default: true)
+ 
+@@ -107,6 +108,7 @@
+  - A Node is a "void" object. If you want to draw something on the screen, you should use a Sprite instead. Or subclass Node and override `draw`.
+ 
+  */
++class DrawNode;
+ 
+ class CC_DLL Node : public Ref
+ {
+@@ -134,8 +136,22 @@
+      * Gets count of nodes those are attached to scene graph.
+      */
+     static int getAttachedNodeCount();
++
++protected:
++    bool isDebugDraw = false;
++    Color4F _debugColorLine = Color4F::WHITE;
++    Color4F _debugColorPoint = Color4F::RED;
++#if DEBUG
++    DrawNode *_debugDrawNode = nullptr;
++#endif //DEBUG
+ public:
+-    
++
++    bool getDebug() { return isDebugDraw; }
++    virtual void setDebug(bool);
++    virtual void setDebugLineColor(Color4F);
++    virtual Color4F getDebugLineColor();
++
++    virtual Node* findNode(const std::string &name);
+     /**
+      * Gets the description string. It makes debugging easier.
+      * @return A string
+@@ -156,19 +172,19 @@
+ 
+      The Node's parent will sort all its children based on the LocalZOrder value.
+      If two nodes have the same LocalZOrder, then the node that was added first to the children's array will be in front of the other node in the array.
+-     
++
+      Also, the Scene Graph is traversed using the "In-Order" tree traversal algorithm ( http://en.wikipedia.org/wiki/Tree_traversal#In-order )
+      And Nodes that have LocalZOrder values < 0 are the "left" subtree
+      While Nodes with LocalZOrder >=0 are the "right" subtree.
+-     
++
+      @see `setGlobalZOrder`
+      @see `setVertexZ`
+      *
+      * @param localZOrder The local Z order value.
+      */
+     virtual void setLocalZOrder(std::int32_t localZOrder);
+-    
+-    /* 
++
++    /*
+      Helper function used by `setLocalZOrder`. Don't use it unless you know what you are doing.
+      @js NA
+      */
+@@ -199,14 +215,14 @@
+     /**
+      Defines the order in which the nodes are renderer.
+      Nodes that have a Global Z Order lower, are renderer first.
+-     
++
+      In case two or more nodes have the same Global Z Order, the order is not guaranteed.
+      The only exception if the Nodes have a Global Z Order == 0. In that case, the Scene Graph order is used.
+-     
++
+      By default, all nodes have a Global Z Order = 0. That means that by default, the Scene Graph order is used to render the nodes.
+-     
++
+      Global Z Order is useful when you need to render nodes in an order different than the Scene Graph order.
+-     
++
+      Limitations: Global Z Order can't be used by Nodes that have SpriteBatchNode as one of their ancestors.
+      And if ClippingNode is one of the ancestors, then "global Z order" will be relative to the ClippingNode.
+ 
+@@ -361,7 +377,7 @@
+     virtual const Vec2& getPosition() const;
+ 
+     /** Returns the normalized position.
+-     * 
++     *
+      * @return The normalized position.
+      */
+     virtual const Vec2& getPositionNormalized() const;
+@@ -422,7 +438,7 @@
+ 
+     /**
+      * Sets the position (X, Y, and Z) in its parent's coordinate system.
+-     * 
++     *
+      * @param position The position (X, Y, and Z) in its parent's coordinate system.
+      * @js NA
+      */
+@@ -539,7 +555,12 @@
+      *
+      * @return The anchor point in absolute pixels.
+      */
++    virtual void setPivotPoint(const Vec2& anchorPoint);
++    virtual const Vec2& getPivotPoint() const;
+     virtual const Vec2& getAnchorPointInPoints() const;
++    virtual void setMarkDirty();
++    virtual void setStretch(float, float);
++
+ 
+ 
+     /**
+@@ -609,12 +630,12 @@
+     virtual void setRotation3D(const Vec3& rotation);
+     /**
+      * Returns the rotation (X,Y,Z) in degrees.
+-     * 
++     *
+      * @return The rotation of the node in 3d.
+      * @js NA
+      */
+     virtual Vec3 getRotation3D() const;
+-    
++
+     /**
+      * Set rotation by quaternion. You should make sure the quaternion is normalized.
+      *
+@@ -622,7 +643,7 @@
+      * @js NA
+      */
+     virtual void setRotationQuat(const Quaternion& quat);
+-    
++
+     /**
+      * Return the rotation by quaternion, Note that when _rotationZ_X == _rotationZ_Y, the returned quaternion equals to RotationZ_X * RotationY * RotationX,
+      * it equals to RotationY * RotationX otherwise.
+@@ -654,7 +675,7 @@
+      * @see `setRotationSkewX(float)`
+      *
+      * @return The X rotation in degrees.
+-     * @js getRotationX 
++     * @js getRotationX
+      */
+     virtual float getRotationSkewX() const;
+ 
+@@ -693,7 +714,7 @@
+      * @param ignore    true if anchor point will be (0,0) when you position this node.
+      */
+     virtual void setIgnoreAnchorPointForPosition(bool ignore);
+-    
++
+     /**
+      * Gets whether the anchor point will be (0,0) when you position this node.
+      *
+@@ -734,7 +755,7 @@
+      * @param child         A child node.
+      * @param localZOrder   Z order for drawing priority. Please refer to `setLocalZOrder(int)`.
+      * @param tag           An integer to identify the node easily. Please refer to `setTag(int)`.
+-     * 
++     *
+      * Please use `addChild(Node* child, int localZOrder, const std::string &name)` instead.
+      */
+      virtual void addChild(Node* child, int localZOrder, int tag);
+@@ -759,7 +780,7 @@
+      * Please use `getChildByName()` instead.
+      */
+      virtual Node * getChildByTag(int tag) const;
+-    
++
+      /**
+      * Gets a child from the container with its tag that can be cast to Type T.
+      *
+@@ -769,7 +790,7 @@
+     */
+     template <typename T>
+     T getChildByTag(int tag) const { return static_cast<T>(getChildByTag(tag)); }
+-    
++
+     /**
+      * Gets a child from the container with its name.
+      *
+@@ -810,7 +831,7 @@
+      * @warning Only support alpha or number for name, and not support unicode.
+      *
+      * @param callback A callback function to execute on nodes that match the `name` parameter. The function takes the following arguments:
+-     *  `node` 
++     *  `node`
+      *      A node that matches the name
+      *  And returns a boolean result. Your callback can return `true` to terminate the enumeration.
+      *
+@@ -824,8 +845,8 @@
+      */
+     virtual Vector<Node*>& getChildren() { return _children; }
+     virtual const Vector<Node*>& getChildren() const { return _children; }
+-    
+-    /** 
++
++    /**
+      * Returns the amount of children.
+      *
+      * @return The amount of children.
+@@ -940,7 +961,7 @@
+     }
+ 
+     /// @} end of Children and Parent
+-    
++
+     /// @{
+     /// @name Tag & User data
+ 
+@@ -962,10 +983,10 @@
+      * Please use `setName()` instead.
+      */
+      virtual void setTag(int tag);
+-    
++
+     /** Returns a string that is used to identify the node.
+      * @return A string that identifies the node.
+-     * 
++     *
+      * @since v3.2
+      */
+     virtual const std::string& getName() const;
+@@ -976,7 +997,7 @@
+      */
+     virtual void setName(const std::string& name);
+ 
+-    
++
+     /**
+      * Returns a custom user data pointer.
+      *
+@@ -1104,7 +1125,7 @@
+      * - `glEnable(GL_TEXTURE_2D);`
+      * AND YOU SHOULD NOT DISABLE THEM AFTER DRAWING YOUR NODE
+      * But if you enable any other GL state, you should disable it after drawing your node.
+-     * 
++     *
+      * @param renderer A given renderer.
+      * @param transform A transform matrix.
+      * @param flags Renderer flag.
+@@ -1196,7 +1217,7 @@
+      * @param tag   A tag that indicates the action to be removed.
+      */
+     void stopActionByTag(int tag);
+-    
++
+     /**
+      * Removes all actions from the running action list by its tag.
+      *
+@@ -1494,7 +1515,7 @@
+      */
+     virtual AffineTransform getNodeToParentAffineTransform(Node* ancestor) const;
+ 
+-    /** 
++    /**
+      * Sets the transformation matrix manually.
+      *
+      * @param transform A given transformation matrix.
+@@ -1624,7 +1645,7 @@
+      */
+     virtual bool removeComponent(const std::string& name);
+ 
+-    /** 
++    /**
+      * Removes a component by its pointer.
+      *
+      * @param component A given component.
+@@ -1636,7 +1657,7 @@
+      */
+     virtual void removeAllComponents();
+     /// @} end of component functions
+-    
++
+     // overrides
+     /**
+      * Return the node's opacity.
+@@ -1754,7 +1775,7 @@
+      * @return std::function<void()>
+      */
+     const std::function<void()>& getOnExitTransitionDidStartCallback() const { return _onExitTransitionDidStartCallback; }
+-    
++
+     /**
+      * get & set camera mask, the node is visible by the camera whose camera flag & node's camera mask is true
+      */
+@@ -1766,7 +1787,7 @@
+      * @param applyChildren A boolean value to determine whether the mask bit should apply to its children or not.
+      */
+     virtual void setCameraMask(unsigned short mask, bool applyChildren = true);
+-    
++
+     virtual void setProgramState(backend::ProgramState* programState);
+     virtual backend::ProgramState* getProgramState() const;
+ 
+@@ -1780,7 +1801,7 @@
+ protected:
+     /// lazy allocs
+     void childrenAlloc();
+-    
++
+     /// helper that reorder a child
+     void insertChild(Node* child, int z);
+ 
+@@ -1798,21 +1819,21 @@
+     virtual void updateCascadeColor();
+     virtual void disableCascadeColor();
+     virtual void updateColor() {}
+-    
++
+     bool doEnumerate(std::string name, std::function<bool (Node *)> callback) const;
+     bool doEnumerateRecursive(const Node* node, const std::string &name, std::function<bool (Node *)> callback) const;
+-    
++
+     //check whether this camera mask is visible by the current visiting camera
+     bool isVisitableByVisitingCamera() const;
+-    
++
+     // update quaternion from Rotation3D
+     void updateRotationQuat();
+     // update Rotation3D from quaternion
+     void updateRotation3D();
+-    
++
+ private:
+     void addChildHelper(Node* child, int localZOrder, int tag, const std::string &name, bool setTag);
+-    
++
+ protected:
+ 
+     float _rotationX;               ///< rotation on the X-axis
+@@ -1821,7 +1842,7 @@
+     // rotation Z is decomposed in 2 to simulate Skew for Flash animations
+     float _rotationZ_X;             ///< rotation angle on Z-axis, component X
+     float _rotationZ_Y;             ///< rotation angle on Z-axis, component Y
+-    
++
+     Quaternion _rotationQuat;       ///rotation using quaternion, if _rotationZ_X == _rotationZ_Y, _rotationQuat = RotationZ_X * RotationY * RotationX, else _rotationQuat = RotationY * RotationX
+ 
+     float _scaleX;                  ///< scaling factor on x-axis
+@@ -1839,6 +1860,7 @@
+ 
+     Vec2 _anchorPointInPoints;      ///< anchor point in points
+     Vec2 _anchorPoint;              ///< anchor point normalized (NOT in points)
++    Vec2 _pivotPoint;
+ 
+     Size _contentSize;              ///< untransformed size of the node
+     bool _contentSizeDirty;         ///< whether or not the contentSize is dirty
+@@ -1880,13 +1902,13 @@
+     Node *_parent;                  ///< weak reference to parent node
+     Director* _director;            //cached director pointer to improve rendering performance
+     int _tag;                       ///< a tag. Can be any number you assigned just to identify this node
+-    
++
+     std::string _name;              ///<a string label, an user defined string to identify this node
+     size_t _hashOfName;             ///<hash value of _name, used for speed in getChildByName
+ 
+     void *_userData;                ///< A user assigned void pointer, Can be point to any cpp object
+     Ref *_userObject;               ///< A user assigned Object
+-    
++
+     Scheduler *_scheduler;          ///< scheduler used to schedule timers and updates
+ 
+     ActionManager *_actionManager;  ///< a pointer to ActionManager singleton, which is used to handle all the actions
+@@ -1908,9 +1930,9 @@
+     int _updateScriptHandler;         ///< script handler for update() callback per frame, which is invoked from lua & javascript.
+     ccScriptType _scriptType;         ///< type of script binding, lua or javascript
+ #endif
+-    
++
+     ComponentContainer *_componentContainer;        ///< Dictionary of components
+-    
++
+     // opacity controls
+     uint8_t     _displayedOpacity;
+     uint8_t     _realOpacity;
+@@ -1921,15 +1943,15 @@
+ 
+     // camera mask, it is visible only when _cameraMask & current camera' camera flag is true
+     unsigned short _cameraMask;
+-    
++
+     std::function<void()> _onEnterCallback;
+     std::function<void()> _onExitCallback;
+     std::function<void()> _onEnterTransitionDidFinishCallback;
+     std::function<void()> _onExitTransitionDidStartCallback;
+-    
++
+     backend::ProgramState* _programState = nullptr;
+ 
+-//Physics:remaining backwardly compatible  
++//Physics:remaining backwardly compatible
+ #if CC_USE_PHYSICS
+     PhysicsBody* _physicsBody;
+ public:
+@@ -1948,7 +1970,7 @@
+ #endif
+ 
+     static int __attachedNodeCount;
+-    
++
+ private:
+     CC_DISALLOW_COPY_AND_ASSIGN(Node);
+ };
+Index: cocos/2d/CCSprite.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/2d/CCSprite.cpp b/cocos/2d/CCSprite.cpp
+--- a/cocos/2d/CCSprite.cpp	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
++++ b/cocos/2d/CCSprite.cpp	(revision ee76b1eb4c7a2f66067ae25e400c185384af979e)
+@@ -46,6 +46,14 @@
+ 
+ NS_CC_BEGIN
+ 
++Texture2D::TexParams Sprite::pixelTexParams = {
++    backend::SamplerFilter::NEAREST,            // TextureMinFilter
++    backend::SamplerFilter::NEAREST,            // TextureMagFilter
++    backend::SamplerAddressMode::CLAMP_TO_EDGE, // TextureWrapMode Horizontal
++    backend::SamplerAddressMode::CLAMP_TO_EDGE  // TextureWrapMode Vertical
++};
++bool Sprite::usePixelModeGlobal = false;
++
+ // MARK: create, init, dealloc
+ Sprite* Sprite::createWithTexture(Texture2D *texture)
+ {
+@@ -285,6 +293,7 @@
+         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
+         setBatchNode(nullptr);
+         result = true;
++        setCorrectPixelTexture();
+     }
+ 
+     _recursiveDirty = true;
+@@ -293,12 +302,15 @@
+     return result;
+ }
+ 
+-Sprite::Sprite()
++Sprite::Sprite() : usePixelMode(false)
+ {
+-#if CC_SPRITE_DEBUG_DRAW
+-    _debugDrawNode = DrawNode::create();
+-    addChild(_debugDrawNode);
+-#endif //CC_SPRITE_DEBUG_DRAW
++#if DEBUG
++    if (isDebugDraw) {
++        _debugDrawNode = DrawNode::create();
++        _debugDrawNode->setName("debugNode");
++        addChild(_debugDrawNode);
++    }
++#endif //DEBUG
+ }
+ 
+ Sprite::~Sprite()
+@@ -309,6 +321,24 @@
+     CC_SAFE_RELEASE(_texture);
+ }
+ 
++void Sprite::setDebug(bool value) {
++#ifdef DEBUG
++    isDebugDraw = value;
++    if (value && !_debugDrawNode) {
++        _debugDrawNode = DrawNode::create();
++        _debugDrawNode->setName("debugNode");
++        addChild(_debugDrawNode);
++    }
++    if (value) {
++        _debugDrawNode->setVisible(true);
++    }
++    if (!value) {
++        _debugDrawNode->clear();
++        _debugDrawNode->setVisible(false);
++    }
++#endif
++}
++
+ /*
+  * Texture methods
+  */
+@@ -363,7 +393,7 @@
+                               backend::VertexFormat::FLOAT2,
+                               offsetof(V3F_C4B_T2F, texCoords),
+                               false);
+-    
++
+     ///a_color
+     vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR,
+                               _programState->getAttributeLocation(backend::Attribute::COLOR),
+@@ -387,7 +417,7 @@
+     if(_programState != nullptr &&
+        _programState->getProgram()->getProgramType() == type)
+         return;
+-    
++
+     auto* program = backend::Program::getBuiltinProgram(type);
+     auto programState = new (std::nothrow) backend::ProgramState(program);
+     setProgramState(programState);
+@@ -422,7 +452,7 @@
+     CCASSERT(! _batchNode || (texture &&  texture == _batchNode->getTexture()), "CCSprite: Batched sprites should use the same texture as the batchnode");
+     // accept texture==nil as argument
+     CCASSERT( !texture || dynamic_cast<Texture2D*>(texture), "setTexture expects a Texture2D. Invalid argument");
+-    
++
+     if (texture == nullptr)
+     {
+         // Gets the texture by key firstly.
+@@ -842,7 +872,7 @@
+ void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_C4B_T2F_Quad* outQuad)
+ {
+     Texture2D *tex = (_renderMode == RenderMode::QUAD_BATCHNODE) ? _textureAtlas->getTexture() : _texture;
+-    
++
+     if (tex == nullptr)
+         return;
+ 
+@@ -850,7 +880,7 @@
+ 
+     const float atlasWidth = (float)tex->getPixelsWide();
+     const float atlasHeight = (float)tex->getPixelsHigh();
+-   
++
+     float rw = rectInPixels.size.width;
+     float rh = rectInPixels.size.height;
+ 
+@@ -1099,7 +1129,7 @@
+ {
+     if (_texture == nullptr || _texture->getBackendTexture() == nullptr)
+         return;
+-    
++
+     //TODO: arnold: current camera can be a non-default one.
+     setMVPMatrixUniform();
+ 
+@@ -1125,28 +1155,37 @@
+                                transform,
+                                flags);
+         renderer->addCommand(&_trianglesCommand);
+-        
+-#if CC_SPRITE_DEBUG_DRAW
++
++#if DEBUG
++        if (isDebugDraw) {
+             _debugDrawNode->clear();
+             auto count = _polyInfo.triangles.indexCount / 3;
+             auto indices = _polyInfo.triangles.indices;
+             auto verts = _polyInfo.triangles.verts;
+-            for(unsigned int i = 0; i < count; i++)
+-            {
+-                //draw 3 lines
+-                Vec3 from =verts[indices[i*3]].vertices;
+-                Vec3 to = verts[indices[i*3+1]].vertices;
+-                _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x,to.y), Color4F::WHITE);
+-                
+-                from =verts[indices[i*3+1]].vertices;
+-                to = verts[indices[i*3+2]].vertices;
+-                _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x,to.y), Color4F::WHITE);
+-                
+-                from =verts[indices[i*3+2]].vertices;
+-                to = verts[indices[i*3]].vertices;
+-                _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x,to.y), Color4F::WHITE);
++            for (unsigned int i = 0; i < count; i++) {
++              // draw 3 lines
++                Vec3 from = verts[indices[i * 3]].vertices;
++                Vec3 to = verts[indices[i * 3 + 1]].vertices;
++                _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y),
++                                         _debugColorLine);
++
++                from = verts[indices[i * 3 + 1]].vertices;
++                to = verts[indices[i * 3 + 2]].vertices;
++                _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y),
++                                         _debugColorLine);
++
++                from = verts[indices[i * 3 + 2]].vertices;
++                to = verts[indices[i * 3]].vertices;
++                _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y),
++                                         _debugColorLine);
+             }
+-#endif //CC_SPRITE_DEBUG_DRAW
++            auto anchor = getAnchorPoint();
++            auto rect = getCenterRect();
++            Vec2 pos = {(rect.origin.x + rect.size.width) * anchor.x,
++                        (rect.origin.y + rect.size.height) * anchor.y};
++            _debugDrawNode->drawPoint(pos, 4.f, _debugColorPoint);
++        }
++#endif //DEBUG
+     }
+ }
+ 
+@@ -1709,11 +1748,11 @@
+ void Sprite::updateBlendFunc()
+ {
+     CCASSERT(_renderMode != RenderMode::QUAD_BATCHNODE, "CCSprite: updateBlendFunc doesn't work when the sprite is rendered using a SpriteBatchNode");
+-    
++
+     // it is possible to have an untextured sprite
+     backend::BlendDescriptor& blendDescriptor = _trianglesCommand.getPipelineDescriptor().blendDescriptor;
+     blendDescriptor.blendEnabled = true;
+-    
++
+     if (! _texture || ! _texture->hasPremultipliedAlpha())
+     {
+         _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
+@@ -1733,7 +1772,7 @@
+         sprintf(textureDescriptor, "<Sprite | Tag = %d, TextureID = %p>", _tag, _batchNode->getTextureAtlas()->getTexture()->getBackendTexture());
+     else
+         sprintf(textureDescriptor, "<Sprite | Tag = %d, TextureID = %p>", _tag, _texture->getBackendTexture());
+-    
++
+     return textureDescriptor;
+ }
+ 
+@@ -1761,4 +1800,21 @@
+     return _programState;
+ }
+ 
++Sprite::RenderMode Sprite::getRenderMode() const {
++    return _renderMode;
++}
++
++void Sprite::setCorrectPixelTexture() {
++    if (getTexture() != nullptr && (usePixelModeGlobal || usePixelMode))
++        getTexture()->setTexParameters(pixelTexParams);
++}
++
++void Sprite::setUsePixelMode(bool value) {
++    usePixelMode = value;
++}
++
++void Sprite::setUsePixelModeGlobal(bool value) {
++    usePixelModeGlobal = value;
++}
++
+ NS_CC_END
+Index: cocos/2d/CCSprite.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/2d/CCSprite.h b/cocos/2d/CCSprite.h
+--- a/cocos/2d/CCSprite.h	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
++++ b/cocos/2d/CCSprite.h	(revision ee76b1eb4c7a2f66067ae25e400c185384af979e)
+@@ -187,6 +187,8 @@
+      */
+     static Sprite* createWithSpriteFrameName(const std::string& spriteFrameName);
+ 
++    virtual void setDebug(bool) override;
++
+     //  end of creators group
+     /// @}
+ 
+@@ -624,7 +626,16 @@
+ 
+     virtual void setVertexLayout();
+     virtual void updateShaders(const char* vert, const char* frag);
+-    
++
++    virtual RenderMode getRenderMode() const;
++    virtual void setCorrectPixelTexture();
++    static void setUsePixelModeGlobal(bool value);
++    void setUsePixelMode(bool value);
++private:
++    static Texture2D::TexParams pixelTexParams;
++    static bool usePixelModeGlobal;
++    bool usePixelMode;
++
+ protected:
+     virtual void updateColor() override;
+     virtual void setTextureCoords(const Rect& rect);
+@@ -666,9 +677,9 @@
+     backend::UniformLocation _textureLocation;
+     backend::UniformLocation _alphaTextureLocation;
+         
+-#if CC_SPRITE_DEBUG_DRAW
++#if DEBUG
+     DrawNode *_debugDrawNode = nullptr;
+-#endif //CC_SPRITE_DEBUG_DRAW
++#endif //DEBUG
+     //
+     // Shared data
+     //
+Index: cocos/2d/CMakeLists.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/2d/CMakeLists.txt b/cocos/2d/CMakeLists.txt
+--- a/cocos/2d/CMakeLists.txt	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
++++ b/cocos/2d/CMakeLists.txt	(revision 80a9929353d9e3c730df6a95e553958782f3d025)
+@@ -66,6 +66,7 @@
+     2d/CCTMXLayer.h
+     2d/CCCamera.h
+     2d/CCParallaxNode.h
++    utility/taskHolder.h
+     )
+ 
+ set(COCOS_2D_SRC
+@@ -136,4 +137,5 @@
+     2d/CCTransitionPageTurn.cpp
+     2d/CCTransitionProgress.cpp
+     2d/CCTweenFunction.cpp
++    utility/taskHolder.cpp
+     )
+Index: cocos/CMakeLists.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/CMakeLists.txt b/cocos/CMakeLists.txt
+--- a/cocos/CMakeLists.txt	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
++++ b/cocos/CMakeLists.txt	(revision 80a9929353d9e3c730df6a95e553958782f3d025)
+@@ -148,10 +148,12 @@
+     cocos_mark_code_files("cocos2d")
+ endif()
+ 
+-if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
+-    message("CMake 3.16 target_precompile_headers")
+-    target_precompile_headers(cocos2d PRIVATE 
+-       "$<$<COMPILE_LANGUAGE:CXX>:cocos2d.h>")
++if(NOT APPLE OR (APPLE AND XCODE))
++    if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
++        message("CMake 3.16 target_precompile_headers")
++        target_precompile_headers(cocos2d PRIVATE
++           "$<$<COMPILE_LANGUAGE:CXX>:cocos2d.h>")
++    endif()
+ endif()
+ 
+ #if(XCODE)
+Index: cocos/cocos2d.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/cocos2d.h b/cocos/cocos2d.h
+--- a/cocos/cocos2d.h	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
++++ b/cocos/cocos2d.h	(revision 80a9929353d9e3c730df6a95e553958782f3d025)
+@@ -180,6 +180,9 @@
+ #include "platform/CCPlatformMacros.h"
+ #include "platform/CCSAXParser.h"
+ 
++//utility
++#include "utility/taskHolder.h"
++
+ #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+     #include "platform/ios/CCApplication-ios.h"
+     #include "platform/ios/CCGLViewImpl-ios.h"
+Index: cocos/ui/UIScrollView.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/ui/UIScrollView.cpp b/cocos/ui/UIScrollView.cpp
+--- a/cocos/ui/UIScrollView.cpp	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
++++ b/cocos/ui/UIScrollView.cpp	(revision 80a9929353d9e3c730df6a95e553958782f3d025)
+@@ -70,6 +70,8 @@
+ _autoScrollBraking(false),
+ _inertiaScrollEnabled(true),
+ _bounceEnabled(false),
++_bounceOffsetX(0.5f),
++_bounceOffsetY(0.5f),
+ _outOfBoundaryAmount(Vec2::ZERO),
+ _outOfBoundaryAmountDirty(true),
+ _scrollBarEnabled(true),
+@@ -648,8 +650,8 @@
+     {
+         // If the position of the inner container is out of the boundary, the offsets should be divided by two.
+         Vec2 outOfBoundary = getHowMuchOutOfBoundary();
+-        realMove.x *= (outOfBoundary.x == 0 ? 1 : 0.5f);
+-        realMove.y *= (outOfBoundary.y == 0 ? 1 : 0.5f);
++        realMove.x *= (outOfBoundary.x == 0 ? 1 : _bounceOffsetX);
++        realMove.y *= (outOfBoundary.y == 0 ? 1 : _bounceOffsetY);
+     }
+     
+     if(!_bounceEnabled)
+@@ -1209,6 +1211,27 @@
+     return _bounceEnabled;
+ }
+ 
++void ScrollView::setBounceOffsetX(float offsetX)
++{
++    _bounceOffsetX = offsetX;
++}
++
++void ScrollView::setBounceOffsetY(float offsetY)
++{
++    _bounceOffsetY = offsetY;
++}
++
++void ScrollView::setBounceOffset(float offsetX, float offsetY)
++{
++    _bounceOffsetX = offsetX;
++    _bounceOffsetY = offsetY;
++}
++
++Vec2 ScrollView::getBounceOffset() const
++{
++    return {_bounceOffsetX, _bounceOffsetY};
++}
++
+ void ScrollView::setInertiaScrollEnabled(bool enabled)
+ {
+     _inertiaScrollEnabled = enabled;
+@@ -1496,6 +1519,8 @@
+         _autoScrollBrakingStartPosition = scrollView->_autoScrollBrakingStartPosition;
+         setInertiaScrollEnabled(scrollView->_inertiaScrollEnabled);
+         setBounceEnabled(scrollView->_bounceEnabled);
++        setBounceOffsetX(scrollView->_bounceOffsetX);
++        setBounceOffsetY(scrollView->_bounceOffsetY);
+         _scrollViewEventListener = scrollView->_scrollViewEventListener;
+         _eventCallback = scrollView->_eventCallback;
+         _ccEventCallback = scrollView->_ccEventCallback;
+Index: cocos/ui/UIScrollView.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/ui/UIScrollView.h b/cocos/ui/UIScrollView.h
+--- a/cocos/ui/UIScrollView.h	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
++++ b/cocos/ui/UIScrollView.h	(revision 80a9929353d9e3c730df6a95e553958782f3d025)
+@@ -372,6 +372,28 @@
+      */
+     bool isBounceEnabled() const;
+ 
++    /**
++     * @brief Set the maximal bounce offset by 'x'
++     */
++    void setBounceOffsetX(float offsetX);
++
++    /**
++     * @brief Set the maximal bounce offset by 'y'
++     */
++    void setBounceOffsetY(float offsetY);
++
++    /**
++     * @brief Set the maximal bounce offset by 'x' and 'y'
++     */
++    void setBounceOffset(float offsetX, float offsetY);
++
++    /**
++     * @brief Get the maximal bounce offset
++     *
++     * @return Vec2 of _bounceOffsetX and _bounceOffsetY
++     */
++    Vec2 getBounceOffset() const;
++
+     /**
+      * @brief Toggle whether enable scroll inertia while scrolling.
+      *
+@@ -668,7 +690,9 @@
+     bool _inertiaScrollEnabled;
+ 
+     bool _bounceEnabled;
+-    
++    float _bounceOffsetX;
++    float _bounceOffsetY;
++
+     Vec2 _outOfBoundaryAmount;
+     bool _outOfBoundaryAmountDirty;
+     
+Index: cocos/utility/taskHolder.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/utility/taskHolder.cpp b/cocos/utility/taskHolder.cpp
+new file mode 100644
+--- /dev/null	(revision 80a9929353d9e3c730df6a95e553958782f3d025)
++++ b/cocos/utility/taskHolder.cpp	(revision 80a9929353d9e3c730df6a95e553958782f3d025)
+@@ -0,0 +1,37 @@
++#include "taskHolder.h"
++#include "base/CCAsyncTaskPool.h"
++#include "cocos2d.h"
++#include <2d/CCNode.h>
++
++taskHolder::taskHolder() = default;
++
++void taskHolder::executeTasks() {
++    if (allTasksLoaded)
++        return;
++    allTasksLoaded = true;
++
++    auto allTasks = getTasks();
++    if (allTasks.empty())
++        return;
++
++    if (auto currentNode = dynamic_cast<cocos2d::Node*>(this)) {
++        currentNode->scheduleOnce(
++            [allTasks](float) {
++                for (const auto& task : allTasks) {
++                    if (!task)
++                        return false;
++                    auto res = task();
++                    switch (res) {
++                    case eTasksStatus::STATUS_OK:
++                        break;
++                    case eTasksStatus::STATUS_ERROR_BREAK:
++                        return false;
++                        break;
++                    }
++                }
++                return true;
++            },
++            0.f,
++            "runTasks");
++    }
++}
+Index: cocos/utility/taskHolder.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cocos/utility/taskHolder.h b/cocos/utility/taskHolder.h
+new file mode 100644
+--- /dev/null	(revision ee76b1eb4c7a2f66067ae25e400c185384af979e)
++++ b/cocos/utility/taskHolder.h	(revision ee76b1eb4c7a2f66067ae25e400c185384af979e)
+@@ -0,0 +1,32 @@
++#ifndef CORE_TASKHOLDER_H
++#define CORE_TASKHOLDER_H
++
++#include <deque>
++#include <functional>
++
++enum class eTasksStatus {
++  STATUS_OK = 0,
++  STATUS_ERROR_BREAK
++};
++
++typedef std::function<eTasksStatus()> nodeTasks;
++
++class taskHolder {
++public:
++  taskHolder();
++  virtual ~taskHolder() = default;
++
++  void executeTasks();
++
++protected:
++  /***
++   * Loading nodes with tasks
++   * @return std::function<bool()>
++   */
++  virtual std::deque<nodeTasks> getTasks() = 0;
++
++private:
++  bool allTasksLoaded = false;
++};
++
++#endif // CORE_TASKHOLDER_H
