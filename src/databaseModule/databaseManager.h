@@ -7,9 +7,9 @@
 #include <string>
 #include <memory>
 
-#define GET_DATABASE_MANAGER() bt::databasesModule::databaseManager::getInstance()
+#define GET_DATABASE_MANAGER() bt::databaseModule::databaseManager::getInstance()
 
-namespace bt::databasesModule {
+namespace bt::databaseModule {
     class databaseManager : public generic::databaseModule::databaseManagerInterface {
     public:
         enum class eDatabaseType {
@@ -38,7 +38,7 @@ namespace bt::databasesModule {
         static databaseManager* pInstance;
         static bool destroyed;
     };
-}// namespace bt::databasesModule
+}// namespace bt::databaseModule
 
 
 #endif// BENTO_TIME_DATABASEMANAGER_H

@@ -5,7 +5,7 @@
 #include <string>
 #include <tuple>
 
-using namespace bt::databasesModule;
+using namespace bt::databaseModule;
 
 std::map<std::string, cocos2d::Value::Type> typesMap = {
   {"int", cocos2d::Value::Type::INTEGER},

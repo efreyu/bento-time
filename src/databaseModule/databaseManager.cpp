@@ -1,7 +1,7 @@
 #include "databaseManager.h"
 #include "cocos2d.h"
 
-using namespace bt::databasesModule;
+using namespace bt::databaseModule;
 
 databaseManager* databaseManager::pInstance = nullptr;
 bool databaseManager::destroyed = false;

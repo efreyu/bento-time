@@ -2,6 +2,7 @@
 #define BENTO_TIME_MAPOBJECTSDATABASE_H
 
 #include "cocos2d.h"
+#include "databaseModule/mapObjectTypes.h"
 #include "generic/databaseModule/databaseInterface.h"
 #include "generic/utilityModule/jsonHelper.h"
 #include <map>
@@ -9,23 +10,14 @@
 #include <tuple>
 #include <vector>
 
-namespace bt::databasesModule {
+namespace bt::databaseModule {
 
-    enum class eObjectType {
-        UNDEFINED = 0,
-        HERO,
-        FOOD
-    };
-
-    enum class eNodeType {
-        SPRITE = 0,
-        ASEPRITE
-    };
+    enum class eNodeType { SPRITE = 0, ASEPRITE };
 
     struct sMapObjectsData {
         int id;
         std::string propertyPath;
-        eObjectType objectType = eObjectType::UNDEFINED;
+        eMapObjectType objectType = eMapObjectType::UNDEFINED;
         eNodeType nodeType = eNodeType::SPRITE;
         bool load(const rapidjson::GenericValue<rapidjson::UTF8<char>>::ConstObject&);
     };
@@ -44,7 +36,7 @@ namespace bt::databasesModule {
     private:
         std::map<int, sMapObjectsData> mapObjectsDb;
     };
-}// namespace bt::databasesModule
+}// namespace bt::databaseModule
 
 
 #endif// BENTO_TIME_MAPOBJECTSDATABASE_H

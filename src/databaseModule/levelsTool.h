@@ -4,12 +4,12 @@
 #include "base/CCMap.h"
 #include "base/CCValue.h"
 #include "base/CCVector.h"
-#include "databasesModule/levelsDatabase.h"
+#include "databaseModule/levelsDatabase.h"
 #include "platform/CCSAXParser.h"
 #include <map>
 #include <string>
 
-namespace bt::databasesModule {
+namespace bt::databaseModule {
 
     enum class eLocationWallType {
         UNDEFINED = 0,

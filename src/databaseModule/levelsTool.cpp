@@ -1,6 +1,6 @@
 #include "levelsTool.h"
-#include "databasesModule/databaseManager.h"
-#include "databasesModule/levelsDatabase.h"
+#include "databaseModule/databaseManager.h"
+#include "databaseModule/levelsDatabase.h"
 #include "generic/debugModule/logManager.h"
 #include "generic/utilityModule/stringUtility.h"
 #include <map>
@@ -8,7 +8,7 @@
 #include <tuple>
 #include <vector>
 
-using namespace bt::databasesModule;
+using namespace bt::databaseModule;
 
 std::map<std::string, eLocationWallType> wallTypes = {
     { "right", eLocationWallType::WALL_RIGHT },

@@ -9,9 +9,9 @@
 //#include "generic/profileModule/profileManager.h"
 //#include "localProfile/localProfileBlock.h"
 // all databases header
-#include "databasesModule/databaseManager.h"
-#include "databasesModule/levelsDatabase.h"
-#include "databasesModule/mapObjectsDatabase.h"
+#include "databaseModule/databaseManager.h"
+#include "databaseModule/levelsDatabase.h"
+#include "databaseModule/mapObjectsDatabase.h"
 // all scenes
 #include "sceneModule/gameScene.h"
 #include "sceneModule/menuScene.h"
@@ -34,7 +34,7 @@ AppDelegate::AppDelegate() {
 AppDelegate::~AppDelegate() {
     generic::audioModule::audioEngineInstance::cleanup();
 //    generic::profileModule::profileManager::cleanup();
-    bt::databasesModule::databaseManager::cleanup();
+    bt::databaseModule::databaseManager::cleanup();
     generic::coreModule::nodeFactory::cleanup();
     generic::coreModule::scenesFactoryInstance::cleanup();
     generic::debugModule::logManager::cleanup();
@@ -100,14 +100,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
 //    GET_PROFILE().executeLoad();
     // register all databases
     GET_DATABASE_MANAGER().addDatabase(
-        bt::databasesModule::databaseManager::eDatabaseType::LEVELS_DB,
+        bt::databaseModule::databaseManager::eDatabaseType::LEVELS_DB,
         "properties/database/levels/db.json",
-        std::make_shared<bt::databasesModule::levelsDatabase>()
+        std::make_shared<bt::databaseModule::levelsDatabase>()
     );
     GET_DATABASE_MANAGER().addDatabase(
-        bt::databasesModule::databaseManager::eDatabaseType::MAP_OBJECTS_DB,
+        bt::databaseModule::databaseManager::eDatabaseType::MAP_OBJECTS_DB,
         "properties/database/mapObjects/db.json",
-        std::make_shared<bt::databasesModule::mapObjectsDatabase>()
+        std::make_shared<bt::databaseModule::mapObjectsDatabase>()
     );
     GET_DATABASE_MANAGER().executeLoadData();
     // register external node types

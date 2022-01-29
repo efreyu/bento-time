@@ -3,7 +3,7 @@
 
 #include "gameplayModule/objects/objectOnMap.h"
 #include "cocos2d.h"
-#include "databasesModule/levelsTool.h"
+#include "databaseModule/levelsTool.h"
 #include "generic/coreModule/nodes/nodeProperties.h"
 #include "generic/coreModule/signals/signalHolder.h"
 #include <string>
@@ -11,12 +11,8 @@
 #include <vector>
 #include <functional>
 
-namespace bt::databasesModule {
-    enum class eObjectType;
-}
-namespace bt::gameplayModule {
 
-    class playerObject;
+namespace bt::gameplayModule {
 
     struct battleBoardEvents {
         generic::signal::signalHolder<bool> onPlayerMove;
@@ -35,7 +31,7 @@ namespace bt::gameplayModule {
         battleBoardEvents* getEmitter() { return &eventHolder; }
 
     private:
-        void reloadWalls(const databasesModule::sLevelData&);
+        void reloadWalls(const databaseModule::sLevelData&);
         void spawnObjects(int id);
         battleBoardEvents eventHolder;
         cocos2d::Node* gameFieldNode = nullptr;
@@ -44,13 +40,13 @@ namespace bt::gameplayModule {
 
         // tiled
         cocos2d::TMXTiledMap* tiledMap = nullptr;
-        databasesModule::levelsTool levelTool;
+        databaseModule::levelsTool levelTool;
         // (x, y from tiled) -> Node*
         std::map<int, std::map<int, objectOnMap*>> tilesOnMap;
 
         // walls
         // (x, y from tiled) -> [wallType]
-        std::map<int, std::map<int, std::vector<databasesModule::eLocationWallType>>> wallOnMap;
+        std::map<int, std::map<int, std::vector<databaseModule::eLocationWallType>>> wallOnMap;
     };
 }// namespace bt::gameplayModule
 

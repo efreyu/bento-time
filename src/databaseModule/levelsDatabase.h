@@ -9,7 +9,7 @@
 #include <vector>
 #include <tuple>
 
-namespace bt::databasesModule {
+namespace bt::databaseModule {
 
     struct sObjectType {
         std::string name;
@@ -49,7 +49,7 @@ namespace bt::databasesModule {
         std::map<std::string, sObjectType> objectTypeMap;
     };
 
-}// namespace bt::databasesModule
+}// namespace bt::databaseModule
 
 
 #endif// BENTO_TIME_LEVELSDATABASE_H

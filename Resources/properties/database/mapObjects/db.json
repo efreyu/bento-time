@@ -4,19 +4,19 @@
       "id": 20001,
       "propertyPath": "objects/mapObjects/20001",
       "objectType": "hero",
-      "nodeType": "sprite"
+      "nodeType": "aseprite"
     },
     {
       "id": 20002,
       "propertyPath": "objects/mapObjects/20002",
       "objectType": "food",
-      "nodeType": "sprite"
+      "nodeType": "aseprite"
     },
     {
       "id": 20003,
       "propertyPath": "objects/mapObjects/20003",
       "objectType": "food",
-      "nodeType": "sprite"
+      "nodeType": "aseprite"
     }
   ]
 }
