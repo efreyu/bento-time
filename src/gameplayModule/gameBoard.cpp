@@ -57,5 +57,43 @@ void gameBoard::loadLevel(int id) {
         gameFieldNode->setPositionY((cocos2d::Director::getInstance()->getVisibleSize().height / 2) - (gameFieldNode->getContentSize().height * gameFieldNode->getScaleY() / 2));
     }
 
+    reloadWalls(levelData);
+}
 
+void gameBoard::reloadWalls(const databasesModule::sLevelData& levelData) {
+    auto wallsLayerName = levelData.wallsLayer;
+    auto wallsPropPattern = levelData.wallPropPattern;
+    wallOnMap.clear();
+    if (auto wallsLayer = tiledMap->getLayer(wallsLayerName)) {
+        const auto& layerSize = wallsLayer->getLayerSize();
+        auto wallsCount = levelTool.getWallCount();
+        for (auto x = 0; x < static_cast<int>(layerSize.width); ++x) {
+            for (auto y = 0; y < static_cast<int>(layerSize.height); ++y) {
+                auto gid = wallsLayer->getTileGIDAt({ static_cast<float>(x), static_cast<float>(y) });
+                auto prop = tiledMap->getPropertiesForGID(gid);
+                if (prop.getType() == cocos2d::Value::Type::MAP) {
+                    auto val = prop.asValueMap();
+                    for (int i = 0; i < wallsCount; ++i) {
+                        auto key = STRING_FORMAT(wallsPropPattern.c_str(), i);
+                        if (val.count(key)) {
+                            auto& item = val[key];
+                            if (item.getType() == cocos2d::Value::Type::STRING) {
+                                auto wallType = levelTool.getWallTypeByString(item.asString());
+                                if (wallType != eLocationWallType::UNDEFINED) {
+                                    wallOnMap[x][y].emplace_back(static_cast<databasesModule::eLocationWallType>(wallType));
+                                }
+                            }
+                        } else {
+                            i = wallsCount;
+                        }
+                    }
+                }
+            }
+        }
+        wallsLayer->setVisible(false);
+
+    } else {
+        LOG_ERROR(CSTRING_FORMAT("wallsLayerName %s not found!", wallsLayerName.c_str()));
+        return;
+    }
 }

@@ -35,17 +35,21 @@ namespace bt::gameplayModule {
         battleBoardEvents* getEmitter() { return &eventHolder; }
 
     private:
-
+        void reloadWalls(const databasesModule::sLevelData&);
         battleBoardEvents eventHolder;
         cocos2d::Node* gameFieldNode = nullptr;
         cocos2d::Node* objectsLayer = nullptr; //todo not used
-        int currentLevelId;
+        int currentLevelId = -1;
 
         // tiled
         cocos2d::TMXTiledMap* tiledMap = nullptr;
         databasesModule::levelsTool levelTool;
         // (x, y from tiled) -> Node*
         std::map<int, std::map<int, objectOnMap*>> tilesOnMap;
+
+        // walls
+        // (x, y from tiled) -> [wallType]
+        std::map<int, std::map<int, std::vector<databasesModule::eLocationWallType>>> wallOnMap;
     };
 }// namespace bt::gameplayModule
 
