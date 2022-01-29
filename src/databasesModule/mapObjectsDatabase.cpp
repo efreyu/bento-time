@@ -7,8 +7,7 @@ using namespace bt::databasesModule;
 
 const std::map<std::string, eObjectType> mapObjectTypes = {
   {"hero", eObjectType::HERO},
-  {"food", eObjectType::FOOD},
-  {"staticWall", eObjectType::STATIC_WALL}
+  {"food", eObjectType::FOOD}
 };
 
 const std::map<std::string, eNodeType> mapNodeTypes = {
@@ -61,8 +60,6 @@ bool sMapObjectsData::load(const rapidjson::GenericValue<rapidjson::UTF8<char>>:
     }
     if (object.HasMember("propertyPath") && object["propertyPath"].IsString())
         propertyPath = object["propertyPath"].GetString();
-    if (object.HasMember("iconPath") && object["iconPath"].IsString())
-        iconPath = object["iconPath"].GetString();
     if (object.HasMember("objectType") && object["objectType"].IsString() && mapObjectTypes.count(object["objectType"].GetString())) {
         objectType = mapObjectTypes.at(object["objectType"].GetString());
     }

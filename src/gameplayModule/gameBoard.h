@@ -36,6 +36,7 @@ namespace bt::gameplayModule {
 
     private:
         void reloadWalls(const databasesModule::sLevelData&);
+        void spawnObjects(int id);
         battleBoardEvents eventHolder;
         cocos2d::Node* gameFieldNode = nullptr;
         cocos2d::Node* objectsLayer = nullptr; //todo not used

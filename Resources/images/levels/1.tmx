@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="84" tileheight="84" infinite="0" nextlayerid="21" nextobjectid="35">
+ <editorsettings>
+  <chunksize width="40" height="40"/>
+ </editorsettings>
+ <tileset firstgid="1" name="triggers" tilewidth="84" tileheight="84" tilecount="36" columns="6">
+  <image source="assets/triggers.png" trans="ff00ff" width="504" height="504"/>
+  <tile id="0">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="top"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="wall0" value="top"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="right"/>
+    <property name="wall2" value="left"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="left"/>
+    <property name="wall2" value="down"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="right"/>
+    <property name="wall2" value="down"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="down"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="wall0" value="down"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="wall0" value="down"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="down"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="37" name="bg" tilewidth="84" tileheight="84" tilecount="9" columns="3">
+  <image source="assets/bg.png" trans="ff00ff" width="252" height="252"/>
+ </tileset>
+ <layer id="20" name="background_ground" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxTZWBgUANidSBWxcPWAGJNINYiwNYGYh0g1iXAxmfXSLYXAH6YD90=
+  </data>
+ </layer>
+ <layer id="19" name="wallsLayer" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYCAPcEAxExQz41DHjsTmA2J+LOYwIfE5iTCHUnUcOPTC/AKT52WAuBkX5sFhDiUAALEEAP4=
+  </data>
+ </layer>
+ <objectgroup id="15" name="spawnLayer">
+  <object id="23" name="start" type="start" x="673.686" y="86.2222" width="80" height="80"/>
+  <object id="25" name="food_20002_1" type="food_20002_1" x="253.305" y="337.739" width="80" height="80"/>
+  <object id="26" name="food_20002_1" type="food_20002_1" x="505.319" y="338.191" width="80" height="80"/>
+ </objectgroup>
+</map>

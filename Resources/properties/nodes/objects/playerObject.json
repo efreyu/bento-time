@@ -1,0 +1,15 @@
+{
+  "struct": {
+    "type": "node",
+    "name": "playerObject",
+    "child": []
+  },
+  "props": {
+    "playerObject": {
+      "transformProperty": {
+        "anchor": [0.0, 0.0],
+        "pivot": [0.0, 0.0]
+      }
+    }
+  }
+}

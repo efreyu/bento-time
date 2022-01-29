@@ -14,8 +14,7 @@ namespace bt::databasesModule {
     enum class eObjectType {
         UNDEFINED = 0,
         HERO,
-        FOOD,
-        STATIC_WALL
+        FOOD
     };
 
     enum class eNodeType {
@@ -26,7 +25,6 @@ namespace bt::databasesModule {
     struct sMapObjectsData {
         int id;
         std::string propertyPath;
-        std::string iconPath;
         eObjectType objectType = eObjectType::UNDEFINED;
         eNodeType nodeType = eNodeType::SPRITE;
         bool load(const rapidjson::GenericValue<rapidjson::UTF8<char>>::ConstObject&);

@@ -23,8 +23,7 @@ namespace bt::databasesModule {
         UNDEFINED = 0,
         LEVEL_START,
         LEVEL_END,
-        ENEMY,
-        STATIC_WALL
+        FOOD
     };
 
     struct sObjectData {

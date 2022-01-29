@@ -20,8 +20,7 @@ std::map<std::string, eLocationWallType> wallTypes = {
 std::map<std::string, eLocationObject> locationObjectTypes = {
     { "levelStart", eLocationObject::LEVEL_START },
     { "levelEnd", eLocationObject::LEVEL_END },
-    { "enemy", eLocationObject::ENEMY },
-    { "staticWall", eLocationObject::STATIC_WALL }
+    { "food", eLocationObject::FOOD }
 };
 
 levelsTool::levelsTool() = default;
