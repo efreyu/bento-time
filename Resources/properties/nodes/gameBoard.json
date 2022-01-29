@@ -1,0 +1,21 @@
+{
+  "struct": {
+    "type": "sprite",
+    "name": "gameBoard",
+    "child": [
+      {
+        "type": "node",
+        "name": "gameField"
+      }
+    ]
+  },
+  "props": {
+    "battleBoard": {
+      "transformProperty": {
+        "stretch": [ 1, 1 ],
+        "anchor": [ 0.0, 0.0 ],
+        "pivot": [ 0.0, 0.0 ]
+      }
+    }
+  }
+}

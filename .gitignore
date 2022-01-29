@@ -1,4 +1,4 @@
-# Clion build folders
+# Clion and CMake build folders
 build
 build*
 cmake-build-*
@@ -73,6 +73,8 @@ proj.android/gen/
 proj.android/libs/
 proj.android/local.properties
 proj.android/obj/
+!proj.android/build.gradle
+!proj.android/app/build.gradle
 cocos2d/cocos/platform/android/java/bin/
 cocos2d/cocos/platform/android/java/gen/
 cocos2d/cocos/platform/android/java/local.properties
@@ -136,6 +138,7 @@ proj.win32/*.opensdf
 proj.win32/Debug.*/
 proj.win32/Release.*/
 proj.win32/build/
+!proj.win32/build-cfg.json
 
 # proj.win8.1-universal
 

@@ -14,7 +14,6 @@ namespace bt::interfaceModule {
         void updateSettings() override;
 
         void setText(const std::string&);
-        CREATE_FUNC(buttonWidget);
 
     private:
         cocos2d::Label* label = nullptr;

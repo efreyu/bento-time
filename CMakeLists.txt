@@ -47,6 +47,7 @@ list(APPEND GAME_SOURCE
 add_subdirectory(src/generic)
 # current game modules
 add_subdirectory(src/databasesModule)
+add_subdirectory(src/gameplayModule)
 add_subdirectory(src/interfaceModule)
 #add_subdirectory(src/localProfile)
 add_subdirectory(src/sceneModule)

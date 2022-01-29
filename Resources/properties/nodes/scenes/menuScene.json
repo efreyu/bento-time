@@ -4,11 +4,17 @@
     "name": "menuScene",
     "child": [
       {
-        "type": "buttonWidget",
-        "name": "btn",
-        "settings": {
-          "text": "Let's play!"
-        }
+        "type": "sprite",
+        "name": "bg",
+        "child": [
+          {
+            "type": "buttonWidget",
+            "name": "btn",
+            "settings": {
+              "text": "Let's play!"
+            }
+          }
+        ]
       }
     ]
   },
@@ -22,6 +28,15 @@
       "transformProperty": {
         "anchor": [ 0.5, 0.5 ],
         "pivot": [ 0.5, 0.5 ]
+      }
+    },
+    "bg": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ]
+      },
+      "spriteProperty": {
+        "image": "images/scenes/menuScene/bg.png"
       }
     }
   }

@@ -14,8 +14,9 @@ std::deque<nodeTasks> menuScene::getTasks() {
     std::deque<nodeTasks> result;
     result.emplace_back([this]() {
         if (auto btn = dynamic_cast<bt::interfaceModule::buttonWidget*>(findNode("btn"))) {
+            btn->initListener();
             btn->setOnTouchEnded([]() {
-//                GET_SCENES_FACTORY().runScene("battleScene");
+                GET_SCENES_FACTORY().runScene("gameScene");
             });
         }
         return eTasksStatus::STATUS_OK;

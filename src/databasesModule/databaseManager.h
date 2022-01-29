@@ -13,7 +13,7 @@ namespace bt::databasesModule {
     class databaseManager : public generic::databaseModule::databaseManagerInterface {
     public:
         enum class eDatabaseType {
-            LOCATIONS_DB = 0,
+            LEVELS_DB = 0,
             MAP_OBJECTS_DB
         };
 

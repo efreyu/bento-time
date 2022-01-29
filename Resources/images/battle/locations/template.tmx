@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="right-down" width="8" height="11" tilewidth="128" tileheight="128" infinite="0" nextlayerid="19" nextobjectid="35">
+ <editorsettings>
+  <chunksize width="40" height="40"/>
+ </editorsettings>
+ <tileset firstgid="1" name="4_tilesetGrass" tilewidth="128" tileheight="128" tilecount="64" columns="8">
+  <image source="ruins/4_tilesetGrass.png" trans="ff00ff" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="65" name="1_plant" tilewidth="128" tileheight="128" tilecount="256" columns="16">
+  <image source="ruins/1_plant.png" trans="ff00ff" width="2048" height="2048"/>
+ </tileset>
+ <tileset firstgid="321" name="5_tilesetWall" tilewidth="128" tileheight="128" tilecount="256" columns="16">
+  <image source="ruins/5_tilesetWall.png" trans="ff00ff" width="2048" height="2048"/>
+  <tile id="0">
+   <properties>
+    <property name="level" type="int" value="1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="spawnPlayer" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="level" type="int" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="577" name="3_struct" tilewidth="128" tileheight="128" tilecount="256" columns="16">
+  <image source="ruins/3_struct.png" trans="ff00ff" width="2048" height="2048"/>
+ </tileset>
+ <tileset firstgid="833" name="2_props" tilewidth="128" tileheight="128" tilecount="256" columns="16">
+  <image source="ruins/2_props.png" trans="ff00ff" width="2048" height="2048"/>
+ </tileset>
+ <tileset firstgid="1089" name="triggers" tilewidth="128" tileheight="128" tilecount="36" columns="6">
+  <image source="ruins/triggers.png" trans="ff00ff" width="768" height="768"/>
+  <tile id="0">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="top"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="wall0" value="top"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="right"/>
+    <property name="wall2" value="left"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="wall0" value="left"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="right"/>
+    <property name="wall2" value="left"/>
+    <property name="wall3" value="down"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="wall0" value="right"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="left"/>
+    <property name="wall2" value="down"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="right"/>
+    <property name="wall2" value="down"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="down"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="wall0" value="down"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="wall0" value="down"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="down"/>
+    <property name="wall2" value="right"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="down"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="1125" name="grid" tilewidth="128" tileheight="128" tilecount="4" columns="2">
+  <image source="ruins/grid.png" trans="ff00ff" width="256" height="256"/>
+ </tileset>
+ <layer id="12" name="background_ground" width="8" height="11">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYIRiJiBmBmIWJDY3EuaBYhBbFImNLM+BxIapQ+bzo5nFjMQXwmEXOo2MmZDkpND0sgKxMBDzopkLEhMAYj4s5kvgsVceyQ5cGFkPCAMAf+ID+Q==
+  </data>
+ </layer>
+ <layer id="4" name="background_structs" width="8" height="11">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFtAQAAWAAAQ==
+  </data>
+ </layer>
+ <layer id="17" name="gridLayer" width="8" height="11">
+  <data encoding="base64" compression="zlib">
+   eJxLZWFgSAPiVBx0OhBn4KFx6RvVD6EBcAcklQ==
+  </data>
+ </layer>
+ <layer id="1" name="structs" width="8" height="11">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFtAQAAWAAAQ==
+  </data>
+ </layer>
+ <objectgroup id="15" name="spawnLayer">
+  <object id="23" name="start" type="start" x="255.763" y="1283.79" width="117.408" height="118.19"/>
+  <object id="25" name="enemy_20002_1" type="enemy_20002_1" x="381.532" y="894.68" width="117.408" height="118.19"/>
+  <object id="26" name="enemy_20002_1" type="enemy_20002_1" x="775.069" y="897.403" width="117.408" height="118.19"/>
+ </objectgroup>
+ <layer id="10" name="wallsLayer" width="8" height="11">
+  <data encoding="base64" compression="zlib">
+   eJxzZGFgcMKBnYHYHYhxAc9ReQZfIPbDgf2BGADIrgoZ
+  </data>
+ </layer>
+</map>

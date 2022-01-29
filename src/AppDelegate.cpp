@@ -100,7 +100,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 //    GET_PROFILE().executeLoad();
     // register all databases
     GET_DATABASE_MANAGER().addDatabase(
-        bt::databasesModule::databaseManager::eDatabaseType::LOCATIONS_DB,
+        bt::databasesModule::databaseManager::eDatabaseType::LEVELS_DB,
         "properties/database/levels/db.json",
         std::make_shared<bt::databasesModule::levelsDatabase>()
     );
@@ -116,12 +116,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     GET_SCENES_FACTORY().registerScene("menuScene", []() {
         return new bt::sceneModule::menuScene();
     });
-//    GET_SCENES_FACTORY().registerScene("gameScene", []() {
-//        return new bt::sceneModule::gameScene();
-//    });
+    GET_SCENES_FACTORY().registerScene("gameScene", []() {
+        return new bt::sceneModule::gameScene();
+    });
 
     // run first scene
-    GET_SCENES_FACTORY().runScene("menuScene");
+    GET_SCENES_FACTORY().runScene("gameScene");
 
     return true;
 }

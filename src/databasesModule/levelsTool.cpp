@@ -31,7 +31,7 @@ levelsTool::~levelsTool() = default;
 std::vector<sObjectData> levelsTool::getAllObjects(cocos2d::TMXTiledMap* map, const sLevelData& levelData) {
     std::vector<sObjectData> result;
     auto layer = map->getObjectGroup(levelData.spawnLayer);
-    auto locationDb = GET_DATABASE_MANAGER().getDatabase<levelsDatabase>(databaseManager::eDatabaseType::LOCATIONS_DB);
+    auto locationDb = GET_DATABASE_MANAGER().getDatabase<levelsDatabase>(databaseManager::eDatabaseType::LEVELS_DB);
     auto objectTypeMap = locationDb->getObjectTypeMap();
     if (parseXMLFile(levelData.objectTypesPath)) {
         for (auto& item : objectProperties) {

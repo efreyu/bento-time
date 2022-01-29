@@ -1,0 +1,13 @@
+{
+  "struct": {
+    "type": "node",
+    "name": "gameScene"
+  },
+  "props": {
+    "battleScene": {
+      "transformProperty": {
+        "stretch": [ 1, 1 ]
+      }
+    }
+  }
+}

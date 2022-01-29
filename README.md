@@ -4,7 +4,7 @@
 
 - (root) [Current game project](https://github.com/efreyu/bento-time)
 - (src/generic) [Common modules for all games](https://github.com/gloomyzen/cocos2d-common)
-- (cocos2d) [Modified core](https://github.com/gloomyzen/cocos2d-x)
+- (cocos2d) [Modified core](https://github.com/gloomyzen/cocos2d-x) *see .patch file 'docs/cocos2d-x v4 features.patch'
 - (lib/imgui) [ImGui for cocos2d v4](https://github.com/gloomyzen/cocos2d-x-imgui)
 
 #### Install:
