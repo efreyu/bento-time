@@ -1,0 +1,98 @@
+{ "frames": [
+   {
+    "filename": "arrows 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "sourceSize": { "w": 105, "h": 97 },
+    "duration": 100
+   },
+   {
+    "filename": "arrows 1.aseprite",
+    "frame": { "x": 105, "y": 0, "w": 105, "h": 97 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "sourceSize": { "w": 105, "h": 97 },
+    "duration": 100
+   },
+   {
+    "filename": "arrows 2.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "sourceSize": { "w": 105, "h": 97 },
+    "duration": 100
+   },
+   {
+    "filename": "arrows 3.aseprite",
+    "frame": { "x": 210, "y": 0, "w": 105, "h": 97 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "sourceSize": { "w": 105, "h": 97 },
+    "duration": 100
+   },
+   {
+    "filename": "arrows 4.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "sourceSize": { "w": 105, "h": 97 },
+    "duration": 100
+   },
+   {
+    "filename": "arrows 5.aseprite",
+    "frame": { "x": 315, "y": 0, "w": 105, "h": 97 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "sourceSize": { "w": 105, "h": 97 },
+    "duration": 100
+   },
+   {
+    "filename": "arrows 6.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "sourceSize": { "w": 105, "h": 97 },
+    "duration": 100
+   },
+   {
+    "filename": "arrows 7.aseprite",
+    "frame": { "x": 420, "y": 0, "w": 105, "h": 97 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 105, "h": 97 },
+    "sourceSize": { "w": 105, "h": 97 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.30",
+  "image": "arrows.png",
+  "format": "RGBA8888",
+  "size": { "w": 525, "h": 97 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "default", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "up_pressed", "from": 1, "to": 1, "direction": "forward" },
+   { "name": "down", "from": 2, "to": 2, "direction": "forward" },
+   { "name": "down_pressed", "from": 3, "to": 3, "direction": "forward" },
+   { "name": "right", "from": 4, "to": 4, "direction": "forward" },
+   { "name": "right_pressed", "from": 5, "to": 5, "direction": "forward" },
+   { "name": "left", "from": 6, "to": 6, "direction": "forward" },
+   { "name": "left_pressed", "from": 7, "to": 7, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "btns", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

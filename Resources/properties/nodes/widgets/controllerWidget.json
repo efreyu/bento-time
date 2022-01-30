@@ -4,23 +4,27 @@
     "name": "controllerWidget",
     "child": [
       {
-        "type": "sprite",
-        "name": "center",
+        "type": "aseprite",
+        "name": "arrows"
+      },
+      {
+        "type": "node",
+        "name": "buttonHolder",
         "child": [
           {
-            "type": "sprite",
-            "name": "top"
+            "type": "node",
+            "name": "up"
           },
           {
-            "type": "sprite",
+            "type": "node",
             "name": "left"
           },
           {
-            "type": "sprite",
+            "type": "node",
             "name": "down"
           },
           {
-            "type": "sprite",
+            "type": "node",
             "name": "right"
           }
         ]
@@ -35,49 +39,52 @@
         "size": [287, 287]
       }
     },
-    "top": {
+    "up": {
       "transformProperty": {
         "pivot": [ 0.5, 1 ],
-        "anchor": [ 0.5, 0 ]
-      },
-      "spriteProperty": {
-        "image": "images/widgets/controllerWidget/top.png"
+        "anchor": [ 0.5, 0 ],
+        "size": [100, 87]
       }
     },
     "down": {
       "transformProperty": {
         "pivot": [ 0.5, 0 ],
-        "anchor": [ 0.5, 1 ]
-      },
-      "spriteProperty": {
-        "image": "images/widgets/controllerWidget/down.png"
+        "anchor": [ 0.5, 1 ],
+        "size": [100, 87]
       }
     },
     "right": {
       "transformProperty": {
         "pivot": [ 1, 0.5 ],
-        "anchor": [ 0, 0.5 ]
-      },
-      "spriteProperty": {
-        "image": "images/widgets/controllerWidget/right.png"
+        "anchor": [ 0, 0.5 ],
+        "size": [100, 100]
+      }
+    },
+    "buttonHolder": {
+      "transformProperty": {
+        "pivot": [ 0.5, 0.5 ],
+        "anchor": [ 0.5, 0.5 ],
+        "size": [100, 100]
       }
     },
     "left": {
       "transformProperty": {
         "pivot": [ 0, 0.5 ],
-        "anchor": [ 1, 0.5 ]
-      },
-      "spriteProperty": {
-        "image": "images/widgets/controllerWidget/left.png"
+        "anchor": [ 1, 0.5 ],
+        "size": [100, 100]
       }
     },
-    "center": {
+    "arrows": {
       "transformProperty": {
         "anchor": [ 0.5, 0.5 ],
-        "pivot": [ 0.5, 0.5 ]
+        "pivot": [ 0.5, 0.5 ],
+        "size": [100, 100],
+        "scale": 2.5
       },
-      "spriteProperty": {
-        "image": "images/widgets/controllerWidget/center.png"
+      "asepriteProperty": {
+        "file": "images/widgets/controllerWidget/arrows",
+        "animation": "default",
+        "usePixelMode": true
       }
     }
   }

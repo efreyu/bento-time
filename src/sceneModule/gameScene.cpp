@@ -1,6 +1,7 @@
 #include "gameScene.h"
 #include "gameplayModule/gameBoard.h"
 #include "generic/debugModule/logManager.h"
+#include "interfaceModule/widgets/controllerWidget.h"
 
 using namespace bt::sceneModule;
 
@@ -19,6 +20,14 @@ std::deque<nodeTasks> gameScene::getTasks() {
             board->loadLevel(10001);
         } else {
             LOG_ERROR("Can't find 'topPanel' node!");
+        }
+        return eTasksStatus::STATUS_OK;
+    });
+    result.emplace_back([this]() {
+        if (auto controllerNode = dynamic_cast<interfaceModule::controllerWidget*>(findNode("controller"))) {
+            controllerNode->init();
+        } else {
+            LOG_ERROR("Can't find 'controller' node!");
         }
         return eTasksStatus::STATUS_OK;
     });
