@@ -9,12 +9,11 @@ namespace bt::sceneModule {
 
     class gameScene
       : public generic::coreModule::nodeProperties
-        , public generic::coreModule::sceneInterface
-        , public taskHolder {
+        , public generic::coreModule::sceneInterface {
     public:
         gameScene();
         ~gameScene() override = default;
-        std::deque<nodeTasks> getTasks() override;
+        void onSceneLoading() override;
     };
 }// namespace bt::sceneModule
 

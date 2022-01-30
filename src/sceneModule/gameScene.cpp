@@ -10,26 +10,18 @@ gameScene::gameScene() {
     initWithProperties("scenes/" + this->getName());
 }
 
-std::deque<nodeTasks> gameScene::getTasks() {
-    std::deque<nodeTasks> result;
-    result.emplace_back([this]() {
-        if (auto panelHolder = findNode("panelHolder")) {
-            auto board = new gameplayModule::gameBoard();
-            panelHolder->addChild(board, -1);
-            // todo this is fake value, I will change this after testing
-            board->loadLevel(10001);
-        } else {
-            LOG_ERROR("Can't find 'topPanel' node!");
-        }
-        return eTasksStatus::STATUS_OK;
-    });
-    result.emplace_back([this]() {
-        if (auto controllerNode = dynamic_cast<interfaceModule::controllerWidget*>(findNode("controller"))) {
-            controllerNode->init();
-        } else {
-            LOG_ERROR("Can't find 'controller' node!");
-        }
-        return eTasksStatus::STATUS_OK;
-    });
-    return result;
+void gameScene::onSceneLoading() {
+    sceneInterface::onSceneLoading();
+    auto panelHolder = findNode("panelHolder");
+    auto controllerNode = dynamic_cast<interfaceModule::controllerWidget*>(findNode("controller"));
+    if (!panelHolder || !controllerNode) {
+        LOG_ERROR("Problems with loading nodes.");
+        return;
+    }
+    auto board = new gameplayModule::gameBoard();
+    panelHolder->addChild(board, -1);
+    // todo this is fake value, I will change this after testing
+    board->loadLevel(10001);
+    controllerNode->init();
+    board->attachController(controllerNode->getEmitter());
 }

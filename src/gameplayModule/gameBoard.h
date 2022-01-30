@@ -6,6 +6,7 @@
 #include "gameplayModule/bentoNode.h"
 #include "generic/coreModule/nodes/nodeProperties.h"
 #include "generic/coreModule/signals/signalHolder.h"
+#include "interfaceModule/widgets/controllerWidget.h"
 #include <functional>
 #include <string>
 #include <tuple>
@@ -36,6 +37,8 @@ namespace bt::gameplayModule {
         battleBoardEvents* getEmitter() {
             return &eventHolder;
         }
+
+        void attachController(const interfaceModule::sControllerEvents& emitter);
 
     private:
         void reloadWalls(const databaseModule::sLevelData&);

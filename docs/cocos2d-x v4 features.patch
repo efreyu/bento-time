@@ -1656,7 +1656,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 ===================================================================
 diff --git a/cocos/2d/CCSprite.h b/cocos/2d/CCSprite.h
 --- a/cocos/2d/CCSprite.h	(revision 90f6542cf7fb081335f04e474b880d7ce8c445a1)
-+++ b/cocos/2d/CCSprite.h	(revision ee76b1eb4c7a2f66067ae25e400c185384af979e)
++++ b/cocos/2d/CCSprite.h	(revision 006e86ba014d9bafa25dafd25666504c97ae8113)
 @@ -187,6 +187,8 @@
       */
      static Sprite* createWithSpriteFrameName(const std::string& spriteFrameName);
@@ -1675,7 +1675,7 @@ diff --git a/cocos/2d/CCSprite.h b/cocos/2d/CCSprite.h
 +    virtual RenderMode getRenderMode() const;
 +    virtual void setCorrectPixelTexture();
 +    static void setUsePixelModeGlobal(bool value);
-+    void setUsePixelMode(bool value);
++    virtual void setUsePixelMode(bool value);
 +private:
 +    static Texture2D::TexParams pixelTexParams;
 +    static bool usePixelModeGlobal;

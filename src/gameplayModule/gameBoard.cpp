@@ -160,3 +160,7 @@ void gameBoard::spawnObjects(int id) {
         }
     }
 }
+
+void gameBoard::attachController(const interfaceModule::sControllerEvents& emitter) {
+    //todo add controller tomorrow
+}

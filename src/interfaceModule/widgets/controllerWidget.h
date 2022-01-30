@@ -40,6 +40,9 @@ namespace bt::interfaceModule {
         void onButtonHold();
 
         cocos2d::EventListenerTouchOneByOne* listener = nullptr;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+        cocos2d::EventListenerKeyboard* keyboardListener = nullptr;
+#endif
         std::map<eMoveDirection, cocos2d::Node*> nodesWithDirections;
         eMoveDirection currentPressed = eMoveDirection::UNDEFINED;
         generic::coreModule::asepriteNode* arrowsNode = nullptr;

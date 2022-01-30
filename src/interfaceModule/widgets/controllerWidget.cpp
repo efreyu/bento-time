@@ -45,6 +45,41 @@ void controllerWidget::initHandler() {
         return true;
     };
     GET_CURRENT_SCENE()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+    keyboardListener = cocos2d::EventListenerKeyboard::create();
+    keyboardListener->onKeyPressed = [this](cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
+        auto keyboardDir = eMoveDirection::UNDEFINED;
+        switch (keyCode) {
+        case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
+        case cocos2d::EventKeyboard::KeyCode::KEY_W: {}
+            keyboardDir = eMoveDirection::UP;
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+        case cocos2d::EventKeyboard::KeyCode::KEY_S:
+            keyboardDir = eMoveDirection::DOWN;
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+        case cocos2d::EventKeyboard::KeyCode::KEY_A:
+            keyboardDir = eMoveDirection::LEFT;
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+        case cocos2d::EventKeyboard::KeyCode::KEY_D:
+            keyboardDir = eMoveDirection::RIGHT;
+            break;
+        }
+        if (keyboardDir != eMoveDirection::UNDEFINED) {
+            currentPressed = keyboardDir;
+            onButtonHold();
+        }
+    };
+    keyboardListener->onKeyReleased = [this](auto, auto) {
+        currentPressed = eMoveDirection::UNDEFINED;
+        getEmitter()->onReleased.emit();
+    };
+    GET_CURRENT_SCENE()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+
+#endif
 }
 
 bool controllerWidget::init() {
@@ -82,8 +117,8 @@ void controllerWidget::onButtonHold() {
     auto delayAction = cocos2d::DelayTime::create(animDelay);
     auto clb = cocos2d::CallFunc::create([this]() {
         if (currentPressed == eMoveDirection::UNDEFINED) {
-            if (auto currentAction = arrowsNode->getActionByTag(buttonActionTag)) {
-                arrowsNode->stopAction(currentAction);
+            if (auto currentAction = getActionByTag(buttonActionTag)) {
+                stopAction(currentAction);
             }
         } else {
             getEmitter()->onPressed.emit(currentPressed);
