@@ -15,7 +15,8 @@
 namespace bt::gameplayModule {
 
     struct battleBoardEvents {
-        generic::signal::signalHolder<bool> onPlayerMove;
+        generic::signal::signalHolder<> onPlayerMove;
+        generic::signal::signalHolder<> onPlayerConnect;
     };
 
     class gameBoard
@@ -41,7 +42,7 @@ namespace bt::gameplayModule {
         void spawnObjects(int id);
         battleBoardEvents eventHolder;
         cocos2d::Node* gameFieldNode = nullptr;
-        cocos2d::Node* objectsLayer = nullptr;// todo not used
+        cocos2d::Node* objectsLayer = nullptr;
         int currentLevelId = -1;
 
         // tiled

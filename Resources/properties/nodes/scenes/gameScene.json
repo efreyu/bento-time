@@ -1,12 +1,41 @@
 {
   "struct": {
     "type": "node",
-    "name": "gameScene"
+    "name": "gameScene",
+    "child": [
+      {
+        "type": "node",
+        "name": "panelHolder",
+        "child": [
+          {
+            "type": "node",
+            "name": "downPanel",
+            "child": [
+              {
+                "type": "controllerWidget",
+                "name": "controller"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "props": {
     "battleScene": {
       "transformProperty": {
         "stretch": [ 1, 1 ]
+      }
+    },
+    "panelHolder": {
+      "transformProperty": {
+        "stretch": [ 1, 1 ]
+      }
+    },
+    "downPanel": {
+      "transformProperty": {
+        "size": [ 640, 250 ],
+        "position": [25, 25]
       }
     }
   }

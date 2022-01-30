@@ -47,8 +47,8 @@ namespace bt::databaseModule {
         ~levelsTool() override;
 
         std::vector<sObjectData> getAllObjects(cocos2d::TMXTiledMap* map, const sLevelData&);
-        int getWallCount();
-        bool hasWallTypeByString(const std::string& str);
+        int getWallCount() const;
+        bool hasWallTypeByString(const std::string& str) const;
         eLocationWallType getWallTypeByString(const std::string& str);
 
     private:

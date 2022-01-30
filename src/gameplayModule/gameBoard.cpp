@@ -54,8 +54,6 @@ void gameBoard::loadLevel(int id) {
         auto mapSize = tiledMap->getMapSize();
         auto scale = cocos2d::Director::getInstance()->getVisibleSize().width / (mapSize.width * width);
         gameFieldNode->setScale(scale);
-        gameFieldNode->setPositionY((cocos2d::Director::getInstance()->getVisibleSize().height / 2)
-                                    - (gameFieldNode->getContentSize().height * gameFieldNode->getScaleY() / 2));
     }
 
     reloadWalls(levelData);

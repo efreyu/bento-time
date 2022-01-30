@@ -1,0 +1,8 @@
+#ifndef BENTO_TIME_MOVEHANDLER_H
+#define BENTO_TIME_MOVEHANDLER_H
+
+
+class moveHandler {};
+
+
+#endif// BENTO_TIME_MOVEHANDLER_H

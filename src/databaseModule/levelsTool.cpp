@@ -34,10 +34,10 @@ std::vector<sObjectData> levelsTool::getAllObjects(cocos2d::TMXTiledMap* map, co
     auto objectTypeMap = locationDb->getObjectTypeMap();
     if (parseXMLFile(levelData.objectTypesPath)) {
         for (auto& item : objectProperties) {
-            auto typeStr = item.second.properties.find("type");
             bool valid = false;
-            if (typeStr != item.second.properties.end() && typeStr->second.getType() == cocos2d::Value::Type::STRING) {
-                auto type = typeStr->second.asString();
+            if (item.second.properties.count("type") && item.second.properties["type"].getType() == cocos2d::Value::Type::STRING) {
+                const auto& typeStr(item.second.properties["type"]);
+                auto type = typeStr.asString();
                 item.second.type = locationObjectTypes[type];
                 if (objectTypeMap.count(type)) {
                     const auto& dbObj = objectTypeMap[type];
@@ -90,11 +90,11 @@ std::vector<sObjectData> levelsTool::getAllObjects(cocos2d::TMXTiledMap* map, co
     return result;
 }
 
-int levelsTool::getWallCount() {
+int levelsTool::getWallCount() const {
     return static_cast<int>(wallTypes.size());
 }
 
-bool levelsTool::hasWallTypeByString(const std::string& str) {
+bool levelsTool::hasWallTypeByString(const std::string& str) const {
     return wallTypes.count(str);
 }
 

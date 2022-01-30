@@ -1,0 +1,84 @@
+{
+  "struct": {
+    "type": "node",
+    "name": "controllerWidget",
+    "child": [
+      {
+        "type": "sprite",
+        "name": "center",
+        "child": [
+          {
+            "type": "sprite",
+            "name": "top"
+          },
+          {
+            "type": "sprite",
+            "name": "left"
+          },
+          {
+            "type": "sprite",
+            "name": "down"
+          },
+          {
+            "type": "sprite",
+            "name": "right"
+          }
+        ]
+      }
+    ]
+  },
+  "props": {
+    "controllerWidget": {
+      "transformProperty": {
+        "anchor": [ 0.0, 0.0 ],
+        "pivot": [ 0.0, 0.0 ],
+        "size": [287, 287]
+      }
+    },
+    "top": {
+      "transformProperty": {
+        "pivot": [ 0.5, 1 ],
+        "anchor": [ 0.5, 0 ]
+      },
+      "spriteProperty": {
+        "image": "images/widgets/controllerWidget/top.png"
+      }
+    },
+    "down": {
+      "transformProperty": {
+        "pivot": [ 0.5, 0 ],
+        "anchor": [ 0.5, 1 ]
+      },
+      "spriteProperty": {
+        "image": "images/widgets/controllerWidget/down.png"
+      }
+    },
+    "right": {
+      "transformProperty": {
+        "pivot": [ 1, 0.5 ],
+        "anchor": [ 0, 0.5 ]
+      },
+      "spriteProperty": {
+        "image": "images/widgets/controllerWidget/right.png"
+      }
+    },
+    "left": {
+      "transformProperty": {
+        "pivot": [ 0, 0.5 ],
+        "anchor": [ 1, 0.5 ]
+      },
+      "spriteProperty": {
+        "image": "images/widgets/controllerWidget/left.png"
+      }
+    },
+    "center": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ]
+      },
+      "spriteProperty": {
+        "image": "images/widgets/controllerWidget/center.png"
+      }
+    }
+  }
+}
