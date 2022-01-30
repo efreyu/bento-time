@@ -1,19 +1,18 @@
-#include "playerObject.h"
+#include "bentoNode.h"
 #include "databaseModule/mapObjectsDatabase.h"
 #include "generic/coreModule/nodes/types/asepriteNode.h"
 
 using namespace bt::gameplayModule;
 
-playerObject::playerObject() {
-    this->setName("playerObject");
-    initWithProperties("battle/" + this->getName());
+bentoNode::bentoNode() {
+    this->setName("bentoNode");
+    initWithProperties(this->getName());
     removeJsonData();
 }
 
-playerObject::~playerObject() {}
+bentoNode::~bentoNode() {}
 
-void playerObject::initWithData(const databaseModule::sMapObjectsData& data) {
-    this->setName("playerObject");
+void bentoNode::initWithData(const databaseModule::sMapObjectsData& data) {
     if (data.nodeType == databaseModule::eNodeType::SPRITE) {
         auto sprite = new generic::coreModule::nodeWithProperties<cocos2d::Sprite>();
         sprite->setName("spriteNode");

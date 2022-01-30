@@ -1,11 +1,11 @@
 {
   "struct": {
     "type": "node",
-    "name": "playerObject",
+    "name": "bentoNode",
     "child": []
   },
   "props": {
-    "playerObject": {
+    "bentoNode": {
       "transformProperty": {
         "anchor": [0.0, 0.0],
         "pivot": [0.0, 0.0]

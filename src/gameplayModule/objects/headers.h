@@ -1,7 +1,0 @@
-#ifndef BENTO_TIME_GAMEPLAY_MODULE_HEADERS_H
-#define BENTO_TIME_GAMEPLAY_MODULE_HEADERS_H
-
-#include "playerObject.h"
-#include "enemyObject.h"
-
-#endif// BENTO_TIME_GAMEPLAY_MODULE_HEADERS_H

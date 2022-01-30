@@ -7,7 +7,7 @@
         "scale": 4
       },
       "asepriteProperty": {
-        "file": "images/mapObjects/20001/anim",
+        "file": "images/mapObjects/20003/anim",
         "animation": "idle",
         "loop": true,
         "usePixelMode": true

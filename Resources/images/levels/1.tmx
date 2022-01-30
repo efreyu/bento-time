@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="right-down" width="7" height="10" tilewidth="128" tileheight="128" infinite="0" nextlayerid="22" nextobjectid="36">
+<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="right-down" width="7" height="10" tilewidth="128" tileheight="128" infinite="0" nextlayerid="22" nextobjectid="39">
  <editorsettings>
   <chunksize width="40" height="40"/>
  </editorsettings>
@@ -95,5 +95,8 @@
   <object id="25" name="food_20002_1" type="food_20002_1" x="516.072" y="515.294" width="120" height="120"/>
   <object id="26" name="food_20003_1" type="food_20003_1" x="387.533" y="772.148" width="120" height="120"/>
   <object id="35" name="start" type="start" x="388.324" y="259.245" width="120" height="120"/>
+  <object id="36" name="end" type="end" x="259.521" y="900.023" width="120" height="120"/>
+  <object id="37" name="end" type="end" x="387.876" y="900.071" width="120" height="120"/>
+  <object id="38" name="end" type="end" x="515.086" y="900.045" width="120" height="120"/>
  </objectgroup>
 </map>

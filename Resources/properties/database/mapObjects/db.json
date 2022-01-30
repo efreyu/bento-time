@@ -2,19 +2,19 @@
   "mapObjects": [
     {
       "id": 20001,
-      "propertyPath": "objects/mapObjects/20001",
+      "propertyPath": "mapObjects/20001",
       "objectType": "hero",
       "nodeType": "aseprite"
     },
     {
       "id": 20002,
-      "propertyPath": "objects/mapObjects/20002",
+      "propertyPath": "mapObjects/20002",
       "objectType": "food",
       "nodeType": "aseprite"
     },
     {
       "id": 20003,
-      "propertyPath": "objects/mapObjects/20003",
+      "propertyPath": "mapObjects/20003",
       "objectType": "food",
       "nodeType": "aseprite"
     }

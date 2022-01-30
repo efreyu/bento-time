@@ -1,7 +1,6 @@
 #include "gameBoard.h"
 #include "databaseModule/databaseManager.h"
 #include "databaseModule/levelsDatabase.h"
-#include "gameplayModule/objects/headers.h"
 #include "generic/audioModule/audioEngineInstance.h"
 #include "generic/coreModule/nodes/types/node3d.h"
 #include "generic/debugModule/imGuiLayer.h"
@@ -132,49 +131,33 @@ void gameBoard::spawnObjects(int id) {
             LOG_ERROR(CSTRING_FORMAT("Can't find element on layer by pos %d, %d", item.x, item.y));
             continue;
         }
-        objectOnMap* unitObject = nullptr;
         switch (item.type) {
         case eLocationObject::FOOD:
         case eLocationObject::LEVEL_START: {
-            if (item.type == eLocationObject::LEVEL_START) {
-                unitObject = new playerObject();
-                auto player = dynamic_cast<playerObject*>(unitObject);
-                unitObject->type = databaseModule::eMapObjectType::HERO;
-                // todo change id after testing, need setup id when we run scene
-                unitObject->objectId = 20001;
-                if (unitObject->objectId == 0 || !characterDb->hasMapObjectById(unitObject->objectId)) {
-                    LOG_ERROR(CSTRING_FORMAT("Character with id '%d' not found!", unitObject->objectId));
-                    CC_SAFE_DELETE(unitObject);
-                    return;
-                }
-                unitObject->setName("playerObject");
-                auto characterData = characterDb->getMapObjectById(unitObject->objectId);
-                player->initWithData(characterData);
+            auto id = 0;
+            if (item.properties.count("id") && item.properties.at("id").getType() == cocos2d::Value::Type::INTEGER) {
+                id = item.properties.at("id").asInt();
             } else {
-                unitObject = new enemyObject();
-                auto enemy = dynamic_cast<enemyObject*>(unitObject);
-                unitObject->type = databaseModule::eMapObjectType::FOOD;
-                auto characterId = item.properties.find("id");
-                if (characterId != item.properties.end() && characterId->second.getType() == cocos2d::Value::Type::INTEGER) {
-                    unitObject->objectId = characterId->second.asInt();
-                }
-                if (unitObject->objectId == 0 || !characterDb->hasMapObjectById(unitObject->objectId)) {
-                    LOG_ERROR(CSTRING_FORMAT("Character with id '%d' not found!", unitObject->objectId));
-                    CC_SAFE_DELETE(unitObject);
-                    return;
-                }
-                unitObject->setName("enemyObject");
-                auto characterData = characterDb->getMapObjectById(unitObject->objectId);
-                enemy->initWithData(characterData);
+                LOG_ERROR("Object don't have 'id'");
+                continue;
             }
+            auto unitObject = new bentoNode();
+            unitObject->type = databaseModule::eMapObjectType::HERO;
+            unitObject->objectId = id;
+            if (!characterDb->hasMapObjectById(unitObject->objectId)) {
+                LOG_ERROR(CSTRING_FORMAT("Character with id '%d' not found!", unitObject->objectId));
+                CC_SAFE_DELETE(unitObject);
+                continue;
+            }
+            auto characterData = characterDb->getMapObjectById(unitObject->objectId);
+            unitObject->initWithData(characterData);
             objectsLayer->addChild(unitObject);
             unitObject->setPosition(tile->getPosition());
             unitObject->setContentSize(tiledMap->getTileSize());
 
             tilesOnMap[item.x][item.y] = unitObject;
         } break;
-        case eLocationObject::LEVEL_END:
-        case eLocationObject::UNDEFINED:
+        default:
             break;
         }
     }

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objecttypes>
- <objecttype name="end" color="#00f900">
+ <objecttype name="end" color="#224bf1">
   <property name="type" type="string" default="levelEnd"/>
  </objecttype>
  <objecttype name="food_20002_1" color="#ff2600">
-  <property name="id" type="int" default="20002"/>
   <property name="follow" type="bool" default="true"/>
+  <property name="id" type="int" default="20002"/>
   <property name="type" type="string" default="food"/>
  </objecttype>
  <objecttype name="food_20003_1" color="#ff2600">
-  <property name="id" type="int" default="20003"/>
   <property name="follow" type="bool" default="true"/>
-  <property name="type" type="string" default="food"/>>
+  <property name="id" type="int" default="20003"/>
+  <property name="type" type="string" default="food"/>
  </objecttype>
  <objecttype name="start" color="#00f900">
+  <property name="id" type="int" default="20001"/>
   <property name="type" type="string" default="levelStart"/>
  </objecttype>
 </objecttypes>

@@ -1,6 +1,10 @@
 {
   "objectsTypes": {
-    "levelStart": {},
+    "levelStart": {
+      "required": {
+        "id": "int"
+      }
+    },
     "levelEnd": {},
     "food": {
       "required": {
@@ -8,14 +12,6 @@
       },
       "allowed": {
         "follow": "bool"
-      }
-    },
-    "staticWall": {
-      "required": {
-        "id": "int"
-      },
-      "allowed": {
-        "push": "bool"
       }
     }
   },
