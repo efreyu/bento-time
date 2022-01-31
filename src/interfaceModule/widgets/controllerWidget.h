@@ -2,6 +2,7 @@
 #define BENTO_TIME_CONTROLLERWIDGET_H
 
 #include "cocos2d.h"
+#include "gameplayModule/moveEnum.h"
 #include "generic/coreModule/nodes/nodeProperties.h"
 #include "generic/coreModule/nodes/types/asepriteNode.h"
 #include "generic/coreModule/nodes/types/buttonType.h"
@@ -10,16 +11,8 @@
 
 namespace bt::interfaceModule {
 
-    enum class eMoveDirection {
-        UNDEFINED = 0,
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT
-    };
-
     struct sControllerEvents {
-        generic::signal::signalHolder<eMoveDirection> onPressed;
+        generic::signal::signalHolder<gameplayModule::eMoveDirection> onPressed;
         generic::signal::signalHolder<> onReleased;
     };
 
@@ -43,8 +36,8 @@ namespace bt::interfaceModule {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
         cocos2d::EventListenerKeyboard* keyboardListener = nullptr;
 #endif
-        std::map<eMoveDirection, cocos2d::Node*> nodesWithDirections;
-        eMoveDirection currentPressed = eMoveDirection::UNDEFINED;
+        std::map<gameplayModule::eMoveDirection, cocos2d::Node*> nodesWithDirections;
+        gameplayModule::eMoveDirection currentPressed = gameplayModule::eMoveDirection::UNDEFINED;
         generic::coreModule::asepriteNode* arrowsNode = nullptr;
         sControllerEvents eventHolder;
     };

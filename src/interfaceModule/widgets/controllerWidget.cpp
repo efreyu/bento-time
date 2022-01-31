@@ -3,6 +3,7 @@
 #include "generic/debugModule/logManager.h"
 
 using namespace bt::interfaceModule;
+using namespace bt::gameplayModule;
 
 const std::map<std::string, eMoveDirection> moveTypesMap = {
     {"up", eMoveDirection::UP},

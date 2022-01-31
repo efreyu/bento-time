@@ -6,6 +6,7 @@
 #include "generic/debugModule/imGuiLayer.h"
 #include "generic/debugModule/logManager.h"
 #include "generic/utilityModule/stringUtility.h"
+#include "interfaceModule/widgets/controllerWidget.h"
 #include <iterator>
 
 using namespace bt::gameplayModule;
@@ -161,6 +162,12 @@ void gameBoard::spawnObjects(int id) {
     }
 }
 
-void gameBoard::attachController(const interfaceModule::sControllerEvents& emitter) {
-    //todo add controller tomorrow
+void gameBoard::attachController(interfaceModule::sControllerEvents* emitter) {
+    emitter->onPressed.connect([this](auto direction){
+        if (moveCallback)
+            moveCallback(direction);
+    });
+    moveCallback = [](auto dir) {
+        LOG_ERROR(cocos2d::StringUtils::format("%d", dir).c_str());
+    };
 }

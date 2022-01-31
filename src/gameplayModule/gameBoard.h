@@ -6,12 +6,16 @@
 #include "gameplayModule/bentoNode.h"
 #include "generic/coreModule/nodes/nodeProperties.h"
 #include "generic/coreModule/signals/signalHolder.h"
-#include "interfaceModule/widgets/controllerWidget.h"
+#include "moveEnum.h"
 #include <functional>
 #include <string>
 #include <tuple>
 #include <vector>
 
+
+namespace bt::interfaceModule {
+    class sControllerEvents;
+}
 
 namespace bt::gameplayModule {
 
@@ -38,7 +42,7 @@ namespace bt::gameplayModule {
             return &eventHolder;
         }
 
-        void attachController(const interfaceModule::sControllerEvents& emitter);
+        void attachController(interfaceModule::sControllerEvents* emitter);
 
     private:
         void reloadWalls(const databaseModule::sLevelData&);
@@ -47,6 +51,7 @@ namespace bt::gameplayModule {
         cocos2d::Node* gameFieldNode = nullptr;
         cocos2d::Node* objectsLayer = nullptr;
         int currentLevelId = -1;
+        std::function<void(eMoveDirection)> moveCallback = nullptr;
 
         // tiled
         cocos2d::TMXTiledMap* tiledMap = nullptr;
