@@ -24,17 +24,28 @@ mapDispatcher* mapDispatcher::createWithObjectsNode(cocos2d::Node* node, cocos2d
 }
 
 mapDispatcher::~mapDispatcher() {
-    for (auto& [_, list] : cells) {
-        for (auto& [_y, cell] : list) {
-            CC_SAFE_RELEASE_NULL(cell.first);
-            CC_SAFE_DELETE(cell.first);
-        }
+    for (auto& cell : cells) {
+        CC_SAFE_RELEASE_NULL(cell->node);
+        CC_SAFE_DELETE(cell);
     }
     cells.clear();
 }
 
 bool mapDispatcher::move(eMoveDirection direction) {
-    return false;
+    auto player = std::find_if(cells.begin(), cells.end(), [](mapCell* c) {
+        return c->node && c->node->type == databaseModule::eMapObjectType::HERO;
+    });
+    if (player == cells.end())
+        return false;
+    //todo move player cell
+//    auto playerPos = std::make_pair((*player)->x, (*player)->y);
+    getNextCell(direction, (*player)->pos);
+    auto nextCoordinates = getNextPosition(direction, (*player)->node->getPosition(), (*player)->node->getContentSize(), (*player)->node->getScaleX());
+    auto moveAction = cocos2d::MoveTo::create(0.2f, nextCoordinates);
+    (*player)->node->runAction(moveAction);
+    //todo find connected cell and move them too
+
+    return true;
 }
 
 void mapDispatcher::loadWalls(const databaseModule::sLevelData& levelData, cocos2d::TMXTiledMap* tiled) {
@@ -42,10 +53,11 @@ void mapDispatcher::loadWalls(const databaseModule::sLevelData& levelData, cocos
     auto wallsPropPattern = levelData.wallPropPattern;
     auto wallsLayer = tiled->getLayer(wallsLayerName);
     if (!wallsLayer) {
-        LOG_ERROR(CSTRING_FORMAT("wallsLayerName %s not found!", wallsLayerName.c_str()));
+        LOG_ERROR(cocos2d::StringUtils::format("wallsLayerName %s not found!", wallsLayerName.c_str()));
         return;
     }
     const auto& layerSize = wallsLayer->getLayerSize();
+    mapSize = std::make_pair(static_cast<unsigned>(layerSize.width), static_cast<unsigned>(layerSize.height));
     const auto wallsCount = levelTool.getWallCount();
     std::vector<std::string> wallsIds;
     for (int i = 0; i < wallsCount; ++i) {
@@ -65,7 +77,7 @@ void mapDispatcher::loadWalls(const databaseModule::sLevelData& levelData, cocos
                     if (item.getType() == cocos2d::Value::Type::STRING) {
                         auto wallType = levelTool.getWallTypeByString(item.asString());
                         if (wallType != eLocationWallType::UNDEFINED) {
-                            cells[x][y].second.insert(wallType);
+                            walls[x][y].insert(wallType);
                         }
                     }
                 }
@@ -101,10 +113,14 @@ void mapDispatcher::spawnObjects(const databaseModule::sLevelData& levelData, co
                 continue;
             }
             auto unitObject = new bentoNode();
-            unitObject->type = databaseModule::eMapObjectType::HERO;
+            if (item.type == eLocationObject::FOOD) {
+                unitObject->type = databaseModule::eMapObjectType::FOOD;
+            } else {
+                unitObject->type = databaseModule::eMapObjectType::HERO;
+            }
             unitObject->objectId = id;
             if (!characterDb->hasMapObjectById(unitObject->objectId)) {
-                LOG_ERROR(CSTRING_FORMAT("Character with id '%d' not found!", unitObject->objectId));
+                LOG_ERROR(cocos2d::StringUtils::format("Character with id '%d' not found!", unitObject->objectId));
                 CC_SAFE_DELETE(unitObject);
                 continue;
             }
@@ -113,11 +129,31 @@ void mapDispatcher::spawnObjects(const databaseModule::sLevelData& levelData, co
             objectsNode->addChild(unitObject);
             unitObject->setPosition(tile->getPosition());
             unitObject->setContentSize(tiled->getTileSize());
-
-            cells[item.x][item.y].first = unitObject;
+            cells.push_back(new mapCell(unitObject, { item.x, item.y }));
         } break;
         default:
             break;
         }
     }
+}
+
+void mapDispatcher::getNextCell(eMoveDirection direction, std::pair<int, int>& nextPosition) {
+    switch (direction) {
+    case eMoveDirection::UP: nextPosition.second += 1; break;
+    case eMoveDirection::DOWN: nextPosition.second -= 1; break;
+    case eMoveDirection::RIGHT: nextPosition.first -= 1; break;
+    case eMoveDirection::LEFT: nextPosition.first += 1; break;
+    default: break;
+    }
+}
+
+cocos2d::Vec2 mapDispatcher::getNextPosition(eMoveDirection direction, cocos2d::Vec2 pos, const cocos2d::Size& size, float scale) {
+    switch (direction) {
+    case eMoveDirection::UP: pos.y += size.height * scale; break;
+    case eMoveDirection::DOWN: pos.y -= size.height * scale; break;
+    case eMoveDirection::RIGHT: pos.x += size.width * scale; break;
+    case eMoveDirection::LEFT: pos.x -= size.width * scale; break;
+    default: break;
+    }
+    return pos;
 }

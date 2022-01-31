@@ -7,7 +7,7 @@
 #include "interfaceModule/widgets/rollbackButton.h"
 
 // all windows
-#include "interfaceModule/windows/notifyWindow.h"
+//#include "interfaceModule/windows/notifyWindow.h"
 
 void bt::interfaceModule::registerAllCustomNodes() {
     GET_NODE_FACTORY().registerCustomNodeType("buttonWidget", []() { return new buttonWidget(); });
