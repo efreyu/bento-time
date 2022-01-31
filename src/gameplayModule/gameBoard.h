@@ -2,8 +2,6 @@
 #define BENTO_TIME_GAMEBOARD_H
 
 #include "cocos2d.h"
-#include "databaseModule/levelsTool.h"
-#include "gameplayModule/bentoNode.h"
 #include "generic/coreModule/nodes/nodeProperties.h"
 #include "generic/coreModule/signals/signalHolder.h"
 #include "moveEnum.h"
@@ -19,6 +17,8 @@ namespace bt::interfaceModule {
 
 namespace bt::gameplayModule {
 
+    class mapDispatcher;
+
     struct battleBoardEvents {
         generic::signal::signalHolder<> onPlayerMove;
         generic::signal::signalHolder<> onPlayerConnect;
@@ -31,9 +31,7 @@ namespace bt::gameplayModule {
         gameBoard();
         void loadLevel(int id);
         ~gameBoard() override;
-        const std::map<int, std::map<int, bentoNode*>>& getTiles() {
-            return tilesOnMap;
-        };
+
         cocos2d::TMXTiledMap* getTiled() const {
             return tiledMap;
         }
@@ -45,23 +43,11 @@ namespace bt::gameplayModule {
         void attachController(interfaceModule::sControllerEvents* emitter);
 
     private:
-        void reloadWalls(const databaseModule::sLevelData&);
-        void spawnObjects(int id);
+
         battleBoardEvents eventHolder;
         cocos2d::Node* gameFieldNode = nullptr;
-        cocos2d::Node* objectsLayer = nullptr;
-        int currentLevelId = -1;
-        std::function<void(eMoveDirection)> moveCallback = nullptr;
-
-        // tiled
+        mapDispatcher* dispatcher = nullptr;
         cocos2d::TMXTiledMap* tiledMap = nullptr;
-        databaseModule::levelsTool levelTool;
-        // (x, y from tiled) -> Node*
-        std::map<int, std::map<int, bentoNode*>> tilesOnMap;
-
-        // walls
-        // (x, y from tiled) -> [wallType]
-        std::map<int, std::map<int, std::vector<databaseModule::eLocationWallType>>> wallOnMap;
     };
 }// namespace bt::gameplayModule
 
