@@ -29,7 +29,7 @@ namespace bt::gameplayModule {
         void setObjectNode(cocos2d::Node* node) { objectsNode = node; }
         void loadWalls(const databaseModule::sLevelData&, cocos2d::TMXTiledMap* tiled);
         void spawnObjects(const databaseModule::sLevelData&, cocos2d::TMXTiledMap* tiled);
-        void getNextCell(eMoveDirection direction, std::pair<int, int>& nextPosition);
+        void updateNextCell(eMoveDirection direction, std::pair<int, int>& nextPosition);
         cocos2d::Vec2 getNextPosition(eMoveDirection direction, cocos2d::Vec2 pos, const cocos2d::Size& size, float scale);
 
         databaseModule::levelsTool levelTool;

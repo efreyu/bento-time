@@ -37,13 +37,27 @@ bool mapDispatcher::move(eMoveDirection direction) {
     });
     if (player == cells.end())
         return false;
-    //todo move player cell
-//    auto playerPos = std::make_pair((*player)->x, (*player)->y);
-    getNextCell(direction, (*player)->pos);
-    auto nextCoordinates = getNextPosition(direction, (*player)->node->getPosition(), (*player)->node->getContentSize(), (*player)->node->getScaleX());
+    auto& playerCell = (*player);
+    // move player cell
+    updateNextCell(direction, playerCell->pos);
+    auto nextCoordinates = getNextPosition(direction, playerCell->node->getPosition(), playerCell->node->getContentSize(), playerCell->node->getScaleX());
     auto moveAction = cocos2d::MoveTo::create(0.2f, nextCoordinates);
-    (*player)->node->runAction(moveAction);
-    //todo find connected cell and move them too
+    playerCell->node->runAction(moveAction);
+
+
+    // find connected cell for next step
+    std::for_each(cells.begin(), cells.end(), [this, direction, playerCell](mapCell* c) {
+        if (c->node->type == eMapObjectType::FOOD) {
+            if (c->connected) {
+                updateNextCell(direction, c->pos);
+                auto nextPos = getNextPosition(direction, c->node->getPosition(), c->node->getContentSize(), c->node->getScaleX());
+                auto action = cocos2d::MoveTo::create(0.2f, nextPos);
+                c->node->runAction(action);
+            }
+            c->connected = (c->pos.second == playerCell->pos.second && (c->pos.first == playerCell->pos.first -1 || playerCell->pos.first + 1 == c->pos.first))
+                || (c->pos.first == playerCell->pos.first && (c->pos.second == playerCell->pos.second - 1 || playerCell->pos.second + 1 == c->pos.second));
+        }
+    });
 
     return true;
 }
@@ -137,12 +151,12 @@ void mapDispatcher::spawnObjects(const databaseModule::sLevelData& levelData, co
     }
 }
 
-void mapDispatcher::getNextCell(eMoveDirection direction, std::pair<int, int>& nextPosition) {
+void mapDispatcher::updateNextCell(eMoveDirection direction, std::pair<int, int>& nextPosition) {
     switch (direction) {
-    case eMoveDirection::UP: nextPosition.second += 1; break;
-    case eMoveDirection::DOWN: nextPosition.second -= 1; break;
-    case eMoveDirection::RIGHT: nextPosition.first -= 1; break;
-    case eMoveDirection::LEFT: nextPosition.first += 1; break;
+    case eMoveDirection::UP: nextPosition.second -= 1; break;
+    case eMoveDirection::DOWN: nextPosition.second += 1; break;
+    case eMoveDirection::RIGHT: nextPosition.first += 1; break;
+    case eMoveDirection::LEFT: nextPosition.first -= 1; break;
     default: break;
     }
 }
