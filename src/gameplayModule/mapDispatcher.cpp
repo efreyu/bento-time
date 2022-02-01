@@ -39,7 +39,9 @@ bool mapDispatcher::move(eMoveDirection direction) {
         return false;
     auto& playerCell = (*player);
     // move player cell
-    updateNextCell(direction, playerCell->pos);
+    if (!isCanMove(direction, playerCell->pos))
+        return false;
+    playerCell->pos = getNextCell(direction, playerCell->pos);
     auto nextCoordinates = getNextPosition(direction, playerCell->node->getPosition(), playerCell->node->getContentSize(), playerCell->node->getScaleX());
     auto moveAction = cocos2d::MoveTo::create(0.2f, nextCoordinates);
     playerCell->node->runAction(moveAction);
@@ -49,7 +51,8 @@ bool mapDispatcher::move(eMoveDirection direction) {
     std::for_each(cells.begin(), cells.end(), [this, direction, playerCell](mapCell* c) {
         if (c->node->type == eMapObjectType::FOOD) {
             if (c->connected) {
-                updateNextCell(direction, c->pos);
+                auto nextFoodPos = getNextCell(direction, c->pos);
+                c->pos = nextFoodPos;
                 auto nextPos = getNextPosition(direction, c->node->getPosition(), c->node->getContentSize(), c->node->getScaleX());
                 auto action = cocos2d::MoveTo::create(0.2f, nextPos);
                 c->node->runAction(action);
@@ -151,14 +154,16 @@ void mapDispatcher::spawnObjects(const databaseModule::sLevelData& levelData, co
     }
 }
 
-void mapDispatcher::updateNextCell(eMoveDirection direction, std::pair<int, int>& nextPosition) {
+std::pair<int, int> mapDispatcher::getNextCell(eMoveDirection direction, const std::pair<int, int>& nextPosition) {
+    auto result = nextPosition;
     switch (direction) {
-    case eMoveDirection::UP: nextPosition.second -= 1; break;
-    case eMoveDirection::DOWN: nextPosition.second += 1; break;
-    case eMoveDirection::RIGHT: nextPosition.first += 1; break;
-    case eMoveDirection::LEFT: nextPosition.first -= 1; break;
+    case eMoveDirection::UP: result.second -= 1; break;
+    case eMoveDirection::DOWN: result.second += 1; break;
+    case eMoveDirection::RIGHT: result.first += 1; break;
+    case eMoveDirection::LEFT: result.first -= 1; break;
     default: break;
     }
+    return result;
 }
 
 cocos2d::Vec2 mapDispatcher::getNextPosition(eMoveDirection direction, cocos2d::Vec2 pos, const cocos2d::Size& size, float scale) {
@@ -170,4 +175,49 @@ cocos2d::Vec2 mapDispatcher::getNextPosition(eMoveDirection direction, cocos2d::
     default: break;
     }
     return pos;
+}
+
+bool mapDispatcher::isCanMove(eMoveDirection direction, const std::pair<int, int>& currentPos) {
+    bool collisionCurrent = true;
+    bool collisionNext = false;
+    std::set<eLocationWallType> wallsCurrent;
+    //detect current cell
+    if (walls.count(currentPos.first) && walls[currentPos.first].count(currentPos.second)) {
+        wallsCurrent = walls[currentPos.first][currentPos.second];
+    }
+
+    auto nextPosition = getNextCell(direction, currentPos);
+
+    eLocationWallType currentType;
+    eLocationWallType nextType;
+
+    switch (direction) {
+    case eMoveDirection::UNDEFINED: {
+        return true;
+    } break;
+    case eMoveDirection::UP: {
+        currentType = eLocationWallType::WALL_TOP;
+        nextType = eLocationWallType::WALL_DOWN;
+    } break;
+    case eMoveDirection::DOWN: {
+        currentType = eLocationWallType::WALL_DOWN;
+        nextType = eLocationWallType::WALL_TOP;
+    } break;
+    case eMoveDirection::RIGHT: {
+        currentType = eLocationWallType::WALL_RIGHT;
+        nextType = eLocationWallType::WALL_LEFT;
+    } break;
+    case eMoveDirection::LEFT: {
+        currentType = eLocationWallType::WALL_LEFT;
+        nextType = eLocationWallType::WALL_RIGHT;
+    } break;
+    }
+    collisionCurrent = wallsCurrent.count(currentType) == 0u;
+    if (walls.count(nextPosition.first) && walls[nextPosition.first].count(nextPosition.second)) {
+        auto wallsNext = walls[nextPosition.first][nextPosition.second];
+        collisionNext = wallsNext.count(nextType) == 0u;
+    } else {
+        collisionNext = true;
+    }
+    return collisionCurrent && collisionNext;
 }
