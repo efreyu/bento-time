@@ -137,12 +137,12 @@
  </layer>
  <layer id="21" name="borders" width="7" height="8">
   <data encoding="base64" compression="zlib">
-   eJzTYmBg0MKDsYHBKIcLAwDnNwRF
+   eJzTYmBg0MKDsQFS5NDZ1DATmxwuDAD8NwRv
   </data>
  </layer>
  <layer id="19" name="wallsLayer" width="7" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYMAPGIGYCQkzI8mxo6nlpLEcLxDzIWF+NLVSSBgGADUYAN8=
+   eJxjYMAPGIGYCQkzI8mxo6nlxCLHgUcOnz5scrxAzIeE+dHUSiFhGAAAORgA5w==
   </data>
  </layer>
  <objectgroup id="15" name="spawnLayer">

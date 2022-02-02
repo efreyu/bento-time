@@ -43,18 +43,21 @@ bool mapDispatcher::move(eMoveDirection direction) {
         return false;
     playerCell->pos = getNextCell(direction, playerCell->pos);
     auto nextCoordinates = getNextPosition(direction, playerCell->node->getPosition(), playerCell->node->getContentSize(), playerCell->node->getScaleX());
-    auto moveAction = cocos2d::MoveTo::create(0.2f, nextCoordinates);
+    auto moveAction = cocos2d::MoveTo::create(0.13f, nextCoordinates);
     playerCell->node->runAction(moveAction);
 
 
     // find connected cell for next step
     std::for_each(cells.begin(), cells.end(), [this, direction, playerCell](mapCell* c) {
         if (c->node->type == eMapObjectType::FOOD) {
+            if (!isCanMove(direction, c->pos)) {
+                c->connected = false;
+            }
             if (c->connected) {
                 auto nextFoodPos = getNextCell(direction, c->pos);
                 c->pos = nextFoodPos;
                 auto nextPos = getNextPosition(direction, c->node->getPosition(), c->node->getContentSize(), c->node->getScaleX());
-                auto action = cocos2d::MoveTo::create(0.2f, nextPos);
+                auto action = cocos2d::MoveTo::create(0.13f, nextPos);
                 c->node->runAction(action);
             }
             c->connected = (c->pos.second == playerCell->pos.second && (c->pos.first == playerCell->pos.first -1 || playerCell->pos.first + 1 == c->pos.first))
