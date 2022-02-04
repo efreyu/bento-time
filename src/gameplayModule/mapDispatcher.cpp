@@ -24,44 +24,29 @@ mapDispatcher* mapDispatcher::createWithObjectsNode(cocos2d::Node* node, cocos2d
 }
 
 mapDispatcher::~mapDispatcher() {
-    for (auto& cell : cells) {
-        CC_SAFE_RELEASE_NULL(cell->node);
-        CC_SAFE_DELETE(cell);
+    for (auto& [_, col] : cells) {
+        for (auto& [_, cell] : col) {
+            CC_SAFE_RELEASE_NULL(cell->node);
+            CC_SAFE_DELETE(cell);
+        }
     }
     cells.clear();
 }
 
 bool mapDispatcher::move(eMoveDirection direction) {
-    auto player = std::find_if(cells.begin(), cells.end(), [](mapCell* c) {
-        return c->node && c->node->type == databaseModule::eMapObjectType::HERO;
-    });
-    if (player == cells.end())
-        return false;
-    auto& playerCell = (*player);
-    // move player cell
-    if (!isCanMove(direction, playerCell->pos))
-        return false;
-    playerCell->pos = getNextCell(direction, playerCell->pos);
-    auto nextCoordinates = getNextPosition(direction, playerCell->node->getPosition(), playerCell->node->getContentSize(), playerCell->node->getScaleX());
-    auto moveAction = cocos2d::MoveTo::create(0.13f, nextCoordinates);
-    playerCell->node->runAction(moveAction);
-
-
-    // find connected cell for next step
-    std::for_each(cells.begin(), cells.end(), [this, direction, playerCell](mapCell* c) {
-        if (c->node->type == eMapObjectType::FOOD) {
-            if (!isCanMove(direction, c->pos)) {
-                c->connected = false;
-            }
-            if (c->connected) {
-                auto nextFoodPos = getNextCell(direction, c->pos);
-                c->pos = nextFoodPos;
-                auto nextPos = getNextPosition(direction, c->node->getPosition(), c->node->getContentSize(), c->node->getScaleX());
-                auto action = cocos2d::MoveTo::create(0.13f, nextPos);
-                c->node->runAction(action);
-            }
-            c->connected = (c->pos.second == playerCell->pos.second && (c->pos.first == playerCell->pos.first -1 || playerCell->pos.first + 1 == c->pos.first))
-                || (c->pos.first == playerCell->pos.first && (c->pos.second == playerCell->pos.second - 1 || playerCell->pos.second + 1 == c->pos.second));
+    std::for_each(playerCells.begin(), playerCells.end(), [this, direction](mapCell* p){
+        auto connectedCells = std::make_shared<mapCellItems>(p);
+        std::vector<mapCell*> exclude = { p };
+        getClosestCells(connectedCells, exclude, direction);
+        if (connectedCells->move(direction)) {
+            getEmitter()->onPlayerMove.emit();
+        }
+        connectedCells->reset();
+        auto it = std::find_if(exitCells.begin(), exitCells.end(), [this](const std::pair<int, int>& p){
+            return !getCellByPos(p);
+        });
+        if (it == exitCells.end()) {
+            getEmitter()->onWin.emit();
         }
     });
 
@@ -77,14 +62,14 @@ void mapDispatcher::loadWalls(const databaseModule::sLevelData& levelData, cocos
         return;
     }
     const auto& layerSize = wallsLayer->getLayerSize();
-    mapSize = std::make_pair(static_cast<unsigned>(layerSize.width), static_cast<unsigned>(layerSize.height));
+    mapSize = std::make_pair(static_cast<int>(layerSize.width), static_cast<int>(layerSize.height));
     const auto wallsCount = levelTool.getWallCount();
     std::vector<std::string> wallsIds;
     for (int i = 0; i < wallsCount; ++i) {
         wallsIds.push_back(cocos2d::StringUtils::format(wallsPropPattern.c_str(), i));
     }
-    for (auto x = 0; x < static_cast<int>(layerSize.width); ++x) {
-        for (auto y = 0; y < static_cast<int>(layerSize.height); ++y) {
+    for (auto x = 0; x < mapSize.first; ++x) {
+        for (auto y = 0; y < mapSize.second; ++y) {
             auto gid = wallsLayer->getTileGIDAt({ static_cast<float>(x), static_cast<float>(y) });
             auto prop = tiled->getPropertiesForGID(gid);
             if (prop.getType() != cocos2d::Value::Type::MAP) {
@@ -112,7 +97,7 @@ void mapDispatcher::spawnObjects(const databaseModule::sLevelData& levelData, co
         LOG_ERROR("ObjectNode is not inited.");
         return;
     }
-    auto characterDb = GET_DATABASE_MANAGER().getDatabase<mapObjectsDatabase>(databaseManager::eDatabaseType::MAP_OBJECTS_DB);
+    auto mapObjectsDb = GET_DATABASE_MANAGER().getDatabase<mapObjectsDatabase>(databaseManager::eDatabaseType::MAP_OBJECTS_DB);
     auto layer = tiled->getLayer(levelData.backgroundLayer);
     auto allSpawnPos = levelTool.getAllObjects(tiled, levelData);
 
@@ -139,25 +124,39 @@ void mapDispatcher::spawnObjects(const databaseModule::sLevelData& levelData, co
                 unitObject->type = databaseModule::eMapObjectType::HERO;
             }
             unitObject->objectId = id;
-            if (!characterDb->hasMapObjectById(unitObject->objectId)) {
+            if (!mapObjectsDb->hasMapObjectById(unitObject->objectId)) {
                 LOG_ERROR(cocos2d::StringUtils::format("Character with id '%d' not found!", unitObject->objectId));
                 CC_SAFE_DELETE(unitObject);
                 continue;
             }
-            auto characterData = characterDb->getMapObjectById(unitObject->objectId);
+            auto characterData = mapObjectsDb->getMapObjectById(unitObject->objectId);
             unitObject->initWithData(characterData);
             objectsNode->addChild(unitObject);
             unitObject->setPosition(tile->getPosition());
             unitObject->setContentSize(tiled->getTileSize());
-            cells.push_back(new mapCell(unitObject, { item.x, item.y }));
+            if (!getCellByPos({ item.x, item.y })) {
+                auto cell = new mapCell(unitObject, { item.x, item.y });
+                cell->registerMoveClb([this](auto dir, auto nextPos){
+                    return moveCell(dir, nextPos);
+                });
+                cells[item.x][item.y] = cell;
+                if (unitObject->type == databaseModule::eMapObjectType::HERO) {
+                    playerCells.push_back(cell);
+                }
+            } else {
+                LOG_ERROR(cocos2d::StringUtils::format("Node '%d' has position same as the placed one.", unitObject->objectId));
+                CC_SAFE_DELETE(unitObject);
+            }
         } break;
+        case eLocationObject::LEVEL_END:
+            exitCells.emplace_back(item.x, item.y);
         default:
             break;
         }
     }
 }
 
-std::pair<int, int> mapDispatcher::getNextCell(eMoveDirection direction, const std::pair<int, int>& nextPosition) {
+std::pair<int, int> mapDispatcher::getNextIndex(eMoveDirection direction, const std::pair<int, int>& nextPosition) {
     auto result = nextPosition;
     switch (direction) {
     case eMoveDirection::UP: result.second -= 1; break;
@@ -169,31 +168,14 @@ std::pair<int, int> mapDispatcher::getNextCell(eMoveDirection direction, const s
     return result;
 }
 
-cocos2d::Vec2 mapDispatcher::getNextPosition(eMoveDirection direction, cocos2d::Vec2 pos, const cocos2d::Size& size, float scale) {
-    switch (direction) {
-    case eMoveDirection::UP: pos.y += size.height * scale; break;
-    case eMoveDirection::DOWN: pos.y -= size.height * scale; break;
-    case eMoveDirection::RIGHT: pos.x += size.width * scale; break;
-    case eMoveDirection::LEFT: pos.x -= size.width * scale; break;
-    default: break;
-    }
-    return pos;
-}
-
-bool mapDispatcher::isCanMove(eMoveDirection direction, const std::pair<int, int>& currentPos) {
-    bool collisionCurrent = true;
-    bool collisionNext = false;
+bool mapDispatcher::hasCollision(eMoveDirection direction, const std::pair<int, int>& currentPos) {
     std::set<eLocationWallType> wallsCurrent;
-    //detect current cell
     if (walls.count(currentPos.first) && walls[currentPos.first].count(currentPos.second)) {
         wallsCurrent = walls[currentPos.first][currentPos.second];
     }
-
-    auto nextPosition = getNextCell(direction, currentPos);
-
-    eLocationWallType currentType;
-    eLocationWallType nextType;
-
+    auto nextPosition = getNextIndex(direction, currentPos);
+    auto currentType = eLocationWallType::UNDEFINED;
+    auto nextType = eLocationWallType::UNDEFINED;
     switch (direction) {
     case eMoveDirection::UNDEFINED: {
         return true;
@@ -215,12 +197,93 @@ bool mapDispatcher::isCanMove(eMoveDirection direction, const std::pair<int, int
         nextType = eLocationWallType::WALL_RIGHT;
     } break;
     }
-    collisionCurrent = wallsCurrent.count(currentType) == 0u;
+    if (wallsCurrent.count(currentType))
+        return true;
     if (walls.count(nextPosition.first) && walls[nextPosition.first].count(nextPosition.second)) {
         auto wallsNext = walls[nextPosition.first][nextPosition.second];
-        collisionNext = wallsNext.count(nextType) == 0u;
-    } else {
-        collisionNext = true;
+        if (wallsNext.count(nextType))
+            return true;
     }
-    return collisionCurrent && collisionNext;
+    return false;
+}
+
+mapCell* mapDispatcher::getCellByPos(const std::pair<int, int>& pos) {
+    if (cells.count(pos.first) && cells[pos.first].count(pos.second) && cells[pos.first][pos.second]) {
+        return cells[pos.first][pos.second];
+    }
+    return nullptr;
+}
+
+bool mapDispatcher::moveCell(eMoveDirection direction, const std::pair<int, int>& currentPos) {
+    if (currentPos.first < 0 || currentPos.second < 0 || currentPos.first > mapSize.first || currentPos.second > mapSize.second)
+        return false;
+    if (hasCollision(direction, currentPos))
+        return false;
+    auto nextPosition = getNextIndex(direction, currentPos);
+    if (auto neighborCell = getCellByPos(nextPosition)) {
+        if (!neighborCell->move(direction))
+            return false;
+    }
+    if (!cells.count(nextPosition.first) || !cells[nextPosition.first].count(nextPosition.second) || !cells[nextPosition.first][nextPosition.first]) {
+        cells[nextPosition.first][nextPosition.second] = {};
+    }
+    auto& prevPos = cells[currentPos.first][currentPos.second];
+    auto& nextPos = cells[nextPosition.first][nextPosition.second];
+    std::swap(prevPos, nextPos);
+    nextPos->pos = nextPosition;
+    return true;
+}
+
+void mapDispatcher::getClosestCells(mapCellItemsPtr& closest, std::vector<mapCell*>& exclude, eMoveDirection direction) {
+    std::set<eMoveDirection> closestPattern = {
+        eMoveDirection::UP, eMoveDirection::DOWN, eMoveDirection::LEFT, eMoveDirection::RIGHT
+    };
+//    if (closestPattern.count(direction)) {
+//        closestPattern.erase(direction);
+//    }
+    for (auto& dir : closestPattern) {
+        auto nextPosition = getNextIndex(dir, closest->cell->pos);
+        if (auto neighborCell = getCellByPos(nextPosition)) {
+            auto it = std::find(exclude.begin(), exclude.end(), neighborCell);
+            if (it == exclude.end()) {
+                exclude.push_back(neighborCell);
+                closest->cells[dir] = std::make_shared<mapCellItems>(neighborCell);
+                getClosestCells(closest->cells[dir], exclude, dir);
+            }
+        }
+    }
+}
+
+bool mapCell::move(eMoveDirection direction) {
+    if (!moved && moveClb && moveClb(direction, pos)) {
+        moved = true;
+        auto actionPos = node->getPosition();
+        switch (direction) {
+        case eMoveDirection::UP: actionPos.y += node->getContentSize().height * node->getScale(); break;
+        case eMoveDirection::DOWN: actionPos.y -= node->getContentSize().height * node->getScale(); break;
+        case eMoveDirection::RIGHT: actionPos.x += node->getContentSize().width * node->getScale(); break;
+        case eMoveDirection::LEFT: actionPos.x -= node->getContentSize().width * node->getScale(); break;
+        default: break;
+        }
+        auto action = cocos2d::MoveTo::create(0.13f, actionPos);
+        node->runAction(action);
+        return true;
+    }
+    return false;
+}
+
+bool mapCellItems::move(eMoveDirection direction) {
+    if (cell->moved || cell->move(direction)) {
+        for (const auto& [_, item] : cells) {
+            item->move(direction);
+        }
+    }
+    return true;
+}
+
+void mapCellItems::reset() {
+    for (const auto& [_, item] : cells) {
+        item->reset();
+    }
+    cell->moved = false;
 }

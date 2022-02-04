@@ -40,6 +40,7 @@ void gameBoard::loadLevel(int id) {
         delete tiledMap;
         tiledMap = nullptr;
     }
+    currentLevel = id;
     auto levelData = levelsDb->getLevelById(id);
     tiledMap = new cocos2d::TMXTiledMap();
     tiledMap->initWithTMXFile(levelData.tmxPath);
@@ -67,12 +68,14 @@ void gameBoard::loadLevel(int id) {
     objectsLayer->setName("objectsLayer");
     gameFieldNode->addChild(objectsLayer);
     dispatcher = mapDispatcher::createWithObjectsNode(objectsLayer, tiledMap, id);
+    dispatcher->getEmitter()->onWin.connect([this](){
+        loadLevel(currentLevel + 1);
+    });
 }
 
 void gameBoard::attachController(interfaceModule::sControllerEvents* emitter) {
     emitter->onPressed.connect([this](auto direction){
         if (dispatcher)
             dispatcher->move(direction);
-            LOG_ERROR(cocos2d::StringUtils::format("%d", direction).c_str());
     });
 }

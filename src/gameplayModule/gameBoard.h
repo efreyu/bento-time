@@ -19,11 +19,6 @@ namespace bt::gameplayModule {
 
     class mapDispatcher;
 
-    struct battleBoardEvents {
-        generic::signal::signalHolder<> onPlayerMove;
-        generic::signal::signalHolder<> onPlayerConnect;
-    };
-
     class gameBoard
       : public generic::coreModule::nodeProperties
       , public cocos2d::Layer {
@@ -36,18 +31,13 @@ namespace bt::gameplayModule {
             return tiledMap;
         }
 
-        battleBoardEvents* getEmitter() {
-            return &eventHolder;
-        }
-
         void attachController(interfaceModule::sControllerEvents* emitter);
 
     private:
-
-        battleBoardEvents eventHolder;
         cocos2d::Node* gameFieldNode = nullptr;
         mapDispatcher* dispatcher = nullptr;
         cocos2d::TMXTiledMap* tiledMap = nullptr;
+        int currentLevel;
     };
 }// namespace bt::gameplayModule
 

@@ -27,7 +27,16 @@
     },
     {
       "id": 10002,
-      "tmxPath": "images/levels/1.tmx",
+      "tmxPath": "images/levels/2.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10003,
+      "tmxPath": "images/levels/3.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
       "backgroundLayer": "background_ground",
