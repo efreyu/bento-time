@@ -23,8 +23,8 @@
     },
     "gameField": {
       "transformProperty": {
-        "anchor": [ 0.0, 1.0 ],
-        "pivot": [ 0.0, 1.0 ]
+        "anchor": [ 0.5, 1.0 ],
+        "pivot": [ 0.5, 1.0 ]
       }
     },
     "movesLabel": {
@@ -33,7 +33,7 @@
         "anchor": [ 0.0, 0.0 ]
       },
       "labelProperty": {
-        "text": "moves:%d",
+        "text": "moves:--",
         "fontType": "ttf",
         "fontSize": 64.0,
         "fontFile": "fonts/VT323-Regular.ttf",

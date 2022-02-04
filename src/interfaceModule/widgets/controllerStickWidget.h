@@ -1,5 +1,5 @@
-#ifndef BENTO_TIME_CONTROLLERWIDGET_H
-#define BENTO_TIME_CONTROLLERWIDGET_H
+#ifndef BENTO_TIME_CONTROLLERSTICKWIDGET_H
+#define BENTO_TIME_CONTROLLERSTICKWIDGET_H
 
 #include "cocos2d.h"
 #include "gameplayModule/moveEnum.h"
@@ -11,19 +11,19 @@
 
 namespace bt::interfaceModule {
 
-    struct sControllerEvents {
+    struct sControllerStickEvents {
         generic::signal::signalHolder<gameplayModule::eMoveDirection> onPressed;
         generic::signal::signalHolder<> onReleased;
     };
 
-    class controllerWidget
+    class controllerStickWidget
       : public generic::coreModule::buttonType<cocos2d::Node>
       , public generic::coreModule::nodeProperties {
     public:
-        controllerWidget();
+        controllerStickWidget();
         bool init() override;
 
-        sControllerEvents* getEmitter() {
+        sControllerStickEvents* getEmitter() {
             return &eventHolder;
         }
 
@@ -39,9 +39,9 @@ namespace bt::interfaceModule {
         std::map<gameplayModule::eMoveDirection, cocos2d::Node*> nodesWithDirections;
         gameplayModule::eMoveDirection currentPressed = gameplayModule::eMoveDirection::UNDEFINED;
         generic::coreModule::asepriteNode* arrowsNode = nullptr;
-        sControllerEvents eventHolder;
+        sControllerStickEvents eventHolder;
     };
 }// namespace bt::interfaceModule
 
 
-#endif// BENTO_TIME_CONTROLLERWIDGET_H
+#endif// BENTO_TIME_CONTROLLERSTICKWIDGET_H

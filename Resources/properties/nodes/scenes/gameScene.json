@@ -12,7 +12,7 @@
             "name": "downPanel",
             "child": [
               {
-                "type": "controllerWidget",
+                "type": "controllerStickWidget",
                 "name": "controller"
               }
             ]

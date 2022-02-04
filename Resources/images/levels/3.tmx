@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="right-down" width="7" height="8" tilewidth="128" tileheight="128" infinite="0" nextlayerid="23" nextobjectid="39">
+<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="right-down" width="9" height="10" tilewidth="128" tileheight="128" infinite="0" nextlayerid="23" nextobjectid="39">
  <editorsettings>
   <chunksize width="40" height="40"/>
  </editorsettings>
@@ -130,32 +130,35 @@
  <tileset firstgid="37" name="bg" tilewidth="128" tileheight="128" tilecount="10" columns="5">
   <image source="assets/bg.png" trans="ff00ff" width="640" height="256"/>
  </tileset>
- <layer id="20" name="background_ground" width="7" height="8">
+ <tileset firstgid="47" name="borders-sheet" tilewidth="128" tileheight="128" tilecount="10" columns="5">
+  <image source="assets/borders-sheet.png" trans="ff00ff" width="640" height="256"/>
+ </tileset>
+ <layer id="20" name="background_ground" width="9" height="10">
   <data encoding="base64" compression="zlib">
-   eJzTYGBgUAdiNSBWhdIgvgYQa0JpdRziyPL4+ITMwWU/ujiyPD4+sjgA1X0IiQ==
+   eJyNkFEKADAIQruMrd3/gmtQILJgH36oj4RgZvhQpFbKy3v5IGYL1/2WO8yxb0Zz5vHY110M3NQz55JjyJv/+d3VAZsbDXM=
   </data>
  </layer>
- <layer id="21" name="borders" width="7" height="8">
+ <layer id="21" name="borders" width="9" height="10">
   <data encoding="base64" compression="zlib">
-   eJzTYmBg0MKDsQFS5NDZ1DATmxwuDAD8NwRv
+   eJwzZmBgMMCDjYHYkAE/MKKRGmMkTGu7KFEDcp8+HgySBwAaBwcX
   </data>
  </layer>
- <layer id="19" name="wallsLayer" width="7" height="8">
+ <layer id="19" name="wallsLayer" width="9" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYMAPGIGYCQkzI8mxo6nlxCLHgUcOnz5scrxAzIeE+dHUSiFhGAAAORgA5w==
+   eJxjYGBg4MODQYCTAT9gp5EaDiRMa7uIUSOFhJHVgAATHgwCAAYPAVc=
   </data>
  </layer>
- <layer id="22" name="exitLayer" width="7" height="8">
+ <layer id="22" name="exitLayer" width="9" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBh8QBuPOC45XAAAHnAAgg==
+   eJxjYBj+QJsIeUJqKAUAOIAAgg==
   </data>
  </layer>
  <objectgroup id="15" name="spawnLayer">
-  <object id="25" name="food_20002_1" type="food_20002_1" x="644.09" y="258.219" width="120" height="120"/>
-  <object id="26" name="food_20003_1" type="food_20003_1" x="258.505" y="514.839" width="120" height="120"/>
-  <object id="35" name="start" type="start" x="388.324" y="259.245" width="120" height="120"/>
-  <object id="36" name="end" type="end" x="133.967" y="772.051" width="120" height="120"/>
-  <object id="37" name="end" type="end" x="257.279" y="771.583" width="120" height="120"/>
-  <object id="38" name="end" type="end" x="258.65" y="643.198" width="120" height="120"/>
+  <object id="25" name="food_20002_1" type="food_20002_1" x="772.09" y="386.219" width="120" height="120"/>
+  <object id="26" name="food_20003_1" type="food_20003_1" x="386.505" y="642.839" width="120" height="120"/>
+  <object id="35" name="start" type="start" x="516.324" y="387.245" width="120" height="120"/>
+  <object id="36" name="end" type="end" x="261.967" y="900.051" width="120" height="120"/>
+  <object id="37" name="end" type="end" x="385.279" y="899.583" width="120" height="120"/>
+  <object id="38" name="end" type="end" x="386.65" y="771.198" width="120" height="120"/>
  </objectgroup>
 </map>

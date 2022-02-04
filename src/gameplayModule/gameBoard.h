@@ -12,7 +12,7 @@
 
 
 namespace bt::interfaceModule {
-    class sControllerEvents;
+    class sControllerStickEvents;
 }
 
 namespace bt::gameplayModule {
@@ -29,7 +29,7 @@ namespace bt::gameplayModule {
         cocos2d::TMXTiledMap* getTiled() const {
             return tiledMap;
         }
-        void attachController(interfaceModule::sControllerEvents* emitter);
+        void attachController(interfaceModule::sControllerStickEvents* emitter);
 
     private:
         void loadSettings();

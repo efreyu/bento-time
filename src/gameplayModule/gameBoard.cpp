@@ -6,7 +6,7 @@
 #include "generic/coreModule/nodes/types/node3d.h"
 #include "generic/debugModule/imGuiLayer.h"
 #include "generic/debugModule/logManager.h"
-#include "interfaceModule/widgets/controllerWidget.h"
+#include "interfaceModule/widgets/controllerStickWidget.h"
 
 using namespace bt::gameplayModule;
 using namespace bt::databaseModule;
@@ -76,8 +76,9 @@ void gameBoard::loadLevel(int id) {
     {
         auto width = tiledMap->getTileSize().width;
         auto mapSize = tiledMap->getMapSize();
-        auto scale = cocos2d::Director::getInstance()->getVisibleSize().width / (mapSize.width * width);
+        auto scale = cocos2d::Director::getInstance()->getVisibleSize().width / (mapSize.width * width - width);
         gameFieldNode->setScale(scale);
+        gameFieldNode->setPositionY((width / 2) * scale);
     }
 
     if (auto objectsLayer = gameFieldNode->findNode("objectsLayer")) {
@@ -107,7 +108,7 @@ void gameBoard::loadLevel(int id) {
     });
 }
 
-void gameBoard::attachController(interfaceModule::sControllerEvents* emitter) {
+void gameBoard::attachController(interfaceModule::sControllerStickEvents* emitter) {
     emitter->onPressed.connect([this](auto direction){
         if (!boardBlocked && dispatcher)
             dispatcher->move(direction);

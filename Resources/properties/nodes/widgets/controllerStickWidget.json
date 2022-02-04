@@ -1,7 +1,7 @@
 {
   "struct": {
     "type": "node",
-    "name": "controllerWidget",
+    "name": "controllerStickWidget",
     "child": [
       {
         "type": "aseprite",
@@ -32,7 +32,7 @@
     ]
   },
   "props": {
-    "controllerWidget": {
+    "controllerStickWidget": {
       "transformProperty": {
         "anchor": [ 0.0, 0.0 ],
         "pivot": [ 0.0, 0.0 ],
@@ -82,7 +82,7 @@
         "scale": 2.5
       },
       "asepriteProperty": {
-        "file": "images/widgets/controllerWidget/arrows",
+        "file": "images/widgets/controllerStickWidget/arrows",
         "animation": "default",
         "usePixelMode": true
       }

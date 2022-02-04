@@ -1,7 +1,7 @@
 #include "gameScene.h"
 #include "gameplayModule/gameBoard.h"
 #include "generic/debugModule/logManager.h"
-#include "interfaceModule/widgets/controllerWidget.h"
+#include "interfaceModule/widgets/controllerStickWidget.h"
 
 using namespace bt::sceneModule;
 
@@ -13,7 +13,7 @@ gameScene::gameScene() {
 void gameScene::onSceneLoading() {
     sceneInterface::onSceneLoading();
     auto panelHolder = findNode("panelHolder");
-    auto controllerNode = dynamic_cast<interfaceModule::controllerWidget*>(findNode("controller"));
+    auto controllerNode = dynamic_cast<interfaceModule::controllerStickWidget*>(findNode("controller"));
     if (!panelHolder || !controllerNode) {
         LOG_ERROR("Problems with loading nodes.");
         return;

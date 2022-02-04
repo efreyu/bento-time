@@ -1,4 +1,4 @@
-#include "controllerWidget.h"
+#include "controllerStickWidget.h"
 #include "generic/coreModule/scenes/scenesFactoryInstance.h"
 #include "generic/debugModule/logManager.h"
 
@@ -23,8 +23,8 @@ const std::map<eMoveDirection, std::string> animationTypesMap = {
 const int buttonActionTag = 1;
 const float animDelay = 0.2f;
 
-controllerWidget::controllerWidget() {
-    this->setName("controllerWidget");
+controllerStickWidget::controllerStickWidget() {
+    this->setName("controllerStickWidget");
     initWithProperties("widgets/" + this->getName());
     removeJsonData();
     arrowsNode = dynamic_cast<generic::coreModule::asepriteNode*>(findNode("arrows"));
@@ -32,7 +32,7 @@ controllerWidget::controllerWidget() {
         LOG_ERROR("Can't find 'arrows' node.");
 }
 
-void controllerWidget::initHandler() {
+void controllerStickWidget::initHandler() {
     listener = cocos2d::EventListenerTouchOneByOne::create();
     listener->onTouchBegan = [this](auto touch, auto event) {
         return touchProceed(touch, event);
@@ -83,7 +83,7 @@ void controllerWidget::initHandler() {
 #endif
 }
 
-bool controllerWidget::init() {
+bool controllerStickWidget::init() {
     for (const auto& [nodeName, direction] : moveTypesMap) {
         if (auto node = findNode(nodeName)) {
             nodesWithDirections[direction] = node;
@@ -93,7 +93,7 @@ bool controllerWidget::init() {
     return Node::init();
 }
 
-bool controllerWidget::touchProceed(cocos2d::Touch* touch, cocos2d::Event* event) {
+bool controllerStickWidget::touchProceed(cocos2d::Touch* touch, cocos2d::Event* event) {
     auto touchLocation = event->getCurrentTarget()->convertToNodeSpace(touch->getLocation());
     for (const auto& [direction, buttonNode] : nodesWithDirections) {
         auto boundingBox = buttonNode->getBoundingBox();
@@ -112,7 +112,7 @@ bool controllerWidget::touchProceed(cocos2d::Touch* touch, cocos2d::Event* event
     return false;
 }
 
-void controllerWidget::onButtonHold() {
+void controllerStickWidget::onButtonHold() {
     if (!arrowsNode || currentPressed == eMoveDirection::UNDEFINED || getActionByTag(buttonActionTag))
         return;
     auto delayAction = cocos2d::DelayTime::create(animDelay);
