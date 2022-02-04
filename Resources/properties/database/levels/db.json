@@ -42,6 +42,15 @@
       "backgroundLayer": "background_ground",
       "wallsLayer": "wallsLayer",
       "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10004,
+      "tmxPath": "images/levels/4.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
     }
   ]
 }

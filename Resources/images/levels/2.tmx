@@ -140,24 +140,22 @@
  </layer>
  <layer id="21" name="borders" width="9" height="10">
   <data encoding="base64" compression="zlib">
-   eJwzZmBgMMCDjYHYkAE/MKKhGmM62kWuGpAb9fFgkDwAykgGsQ==
+   eJwzZmBgMMCDjYHYkAE/MBrhakBhpI8Hg+QBonAGfg==
   </data>
  </layer>
  <layer id="19" name="wallsLayer" width="9" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYGBg4MODQYCTAT9gp6EaDjraRUiNFBJGVgMCTHgwCAAA+YABRw==
+   eJxjYGBg4MODQYCTAT9gHyFqpJAwshoQYMKDQQAA80ABPw==
   </data>
  </layer>
  <layer id="22" name="exitLayer" width="9" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBj+QBsJDxQAAEHoAII=
+   eJxjYBj+QBuKBxIAAC0UAFc=
   </data>
  </layer>
  <objectgroup id="15" name="spawnLayer">
-  <object id="25" name="food_20002_1" type="food_20002_1" x="643.939" y="516.471" width="120" height="120"/>
   <object id="26" name="food_20003_1" type="food_20003_1" x="258.354" y="643.539" width="120" height="120"/>
   <object id="35" name="start" type="start" x="516.324" y="387.245" width="120" height="120"/>
-  <object id="36" name="end" type="end" x="642.919" y="771.199" width="120" height="120"/>
   <object id="37" name="end" type="end" x="516.231" y="770.731" width="120" height="120"/>
   <object id="38" name="end" type="end" x="386.65" y="771.198" width="120" height="120"/>
  </objectgroup>

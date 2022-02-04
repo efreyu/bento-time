@@ -29,5 +29,8 @@ void gameScene::onSceneLoading() {
     controllerNode->init();
     buttonA->initListener();
     buttonB->initListener();
+    buttonA->setOnTouchBegan([](){
+        GET_SCENES_FACTORY().runScene("menuScene");
+    });
     board->attachController(controllerNode->getEmitter(), buttonB);
 }

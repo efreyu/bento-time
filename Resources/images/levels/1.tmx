@@ -150,13 +150,11 @@
  </layer>
  <layer id="22" name="exitLayer" width="9" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgZQJtKasgFACZcAFc=
+   eJxjYBgZQHuA7QcAFugALA==
   </data>
  </layer>
  <objectgroup id="15" name="spawnLayer">
-  <object id="25" name="food_20002_1" type="food_20002_1" x="515.939" y="644.471" width="120" height="120"/>
   <object id="35" name="start" type="start" x="516.324" y="387.245" width="120" height="120"/>
   <object id="37" name="end" type="end" x="516.231" y="770.731" width="120" height="120"/>
-  <object id="38" name="end" type="end" x="515.65" y="900.198" width="120" height="120"/>
  </objectgroup>
 </map>

@@ -121,7 +121,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     });
 
     // run first scene
-    GET_SCENES_FACTORY().runScene("gameScene");
+    GET_SCENES_FACTORY().runScene("menuScene");
 
     return true;
 }
