@@ -42,7 +42,7 @@
         "text": "1",
         "fontType": "ttf",
         "fontSize": 20.0,
-        "fontFile": "fonts/SFProText_Regular.ttf",
+        "fontFile": "fonts/VT323-Regular.ttf",
         "bold": true,
         "italics": false,
         "align": "center",

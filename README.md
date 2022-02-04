@@ -42,3 +42,7 @@ cd bento-time
 cmake -S . -B build-win32 -G"Visual Studio 16 2019" -Tv142 -A Win32 -DDEBUG=1
 and open .sln file from `build-win32` folder
 ```
+
+
+# Credits
+- [Pixel Font 'VT323' Designed by Peter Hull](https://fonts.google.com/specimen/VT323)

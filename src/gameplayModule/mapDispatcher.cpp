@@ -277,8 +277,9 @@ bool mapCellItems::move(eMoveDirection direction) {
         for (const auto& [_, item] : cells) {
             item->move(direction);
         }
+        return true;
     }
-    return true;
+    return false;
 }
 
 void mapCellItems::reset() {

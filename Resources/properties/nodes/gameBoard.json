@@ -6,6 +6,10 @@
       {
         "type": "node",
         "name": "gameField"
+      },
+      {
+        "type": "label",
+        "name": "movesLabel"
       }
     ]
   },
@@ -22,6 +26,27 @@
         "anchor": [ 0.0, 1.0 ],
         "pivot": [ 0.0, 1.0 ]
       }
+    },
+    "movesLabel": {
+      "transformProperty": {
+        "pivot": [ 0.04, 0.37 ],
+        "anchor": [ 0.0, 0.0 ]
+      },
+      "labelProperty": {
+        "text": "moves:%d",
+        "fontType": "ttf",
+        "fontSize": 64.0,
+        "fontFile": "fonts/VT323-Regular.ttf",
+        "bold": true,
+        "align": "left"
+      }
+    },
+    "settings": {
+      "movesPattern": "moves:%d",
+      "fadeDuration": 0.75,
+      "delayDuration": 0.8,
+      "gridSizeX":8,
+      "gridSizeY": 15
     }
   }
 }

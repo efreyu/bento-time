@@ -21,23 +21,37 @@ namespace bt::gameplayModule {
 
     class gameBoard
       : public generic::coreModule::nodeProperties
-      , public cocos2d::Layer {
+      , public cocos2d::NodeGrid {
     public:
         gameBoard();
         void loadLevel(int id);
         ~gameBoard() override;
-
         cocos2d::TMXTiledMap* getTiled() const {
             return tiledMap;
         }
-
         void attachController(interfaceModule::sControllerEvents* emitter);
 
     private:
+        void loadSettings();
+        void updateMovesScore();
+        void runShowAnimation(const std::function<void()>& clb);
+        void runHideAnimation(const std::function<void()>& clb);
+
         cocos2d::Node* gameFieldNode = nullptr;
         mapDispatcher* dispatcher = nullptr;
         cocos2d::TMXTiledMap* tiledMap = nullptr;
+        cocos2d::Label* movesLabel = nullptr;
         int currentLevel;
+        int movesCnt;
+        bool boardBlocked = true;
+
+        struct gameBoardSettings {
+            std::string movesPattern;
+            float fadeDuration;
+            float delayDuration;
+            cocos2d::Size gridSize;
+        };
+        gameBoardSettings settings;
     };
 }// namespace bt::gameplayModule
 

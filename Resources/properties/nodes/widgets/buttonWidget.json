@@ -35,7 +35,7 @@
       "labelProperty": {
         "fontType": "ttf",
         "fontSize": 36.0,
-        "fontFile": "fonts/SFProText_Regular.ttf",
+        "fontFile": "fonts/VT323-Regular.ttf",
         "bold": true,
         "italics": false,
         "align": "center"

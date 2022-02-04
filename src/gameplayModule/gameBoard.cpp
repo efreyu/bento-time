@@ -18,10 +18,31 @@ gameBoard::gameBoard() {
     if (!gameFieldNode) {
         LOG_ERROR("gameField was not loaded correctly!");
     }
+    movesLabel = dynamic_cast<cocos2d::Label*>(findNode("movesLabel"));
+    loadSettings();
 
     GET_AUDIO_ENGINE().preload("ui.click");
     GET_AUDIO_ENGINE().preload("music.main");
     //    GET_AUDIO_ENGINE().play("music.main");
+    removeJsonData();
+}
+
+void gameBoard::loadSettings() {
+    if (!hasPropertyObject("settings"))
+        return;
+    const auto& json = getPropertyObject("settings");
+    if (json.HasMember("movesPattern") && json["movesPattern"].IsString()) {
+        settings.movesPattern = json["movesPattern"].GetString();
+    }
+    if (json.HasMember("fadeDuration") && json["fadeDuration"].IsNumber()) {
+        settings.fadeDuration = json["fadeDuration"].GetFloat();
+    }
+    if (json.HasMember("delayDuration") && json["delayDuration"].IsNumber()) {
+        settings.delayDuration = json["delayDuration"].GetFloat();
+    }
+    if (json.HasMember("gridSizeX") && json.HasMember("gridSizeY")) {
+        settings.gridSize = cocos2d::Size(json["gridSizeX"].GetFloat(), json["gridSizeY"].GetFloat());
+    }
 }
 
 gameBoard::~gameBoard() {
@@ -67,15 +88,59 @@ void gameBoard::loadLevel(int id) {
     auto objectsLayer = new generic::coreModule::node3d();
     objectsLayer->setName("objectsLayer");
     gameFieldNode->addChild(objectsLayer);
+    boardBlocked = true;
+    runShowAnimation([this](){
+        boardBlocked = false;
+    });
     dispatcher = mapDispatcher::createWithObjectsNode(objectsLayer, tiledMap, id);
     dispatcher->getEmitter()->onWin.connect([this](){
-        loadLevel(currentLevel + 1);
+        boardBlocked = true;
+        runHideAnimation([this](){
+            loadLevel(currentLevel + 1);
+        });
+    });
+    movesCnt = 0;
+    updateMovesScore();
+    dispatcher->getEmitter()->onPlayerMove.connect([this](){
+        movesCnt++;
+        updateMovesScore();
     });
 }
 
 void gameBoard::attachController(interfaceModule::sControllerEvents* emitter) {
     emitter->onPressed.connect([this](auto direction){
-        if (dispatcher)
+        if (!boardBlocked && dispatcher)
             dispatcher->move(direction);
     });
+}
+
+void gameBoard::updateMovesScore() {
+    if (movesLabel) {
+        if (!settings.movesPattern.empty()) {
+            movesLabel->setString(cocos2d::StringUtils::format(settings.movesPattern.c_str(), movesCnt));
+        } else {
+            movesLabel->setString(std::to_string(movesCnt));
+        }
+    }
+}
+
+void gameBoard::runShowAnimation(const std::function<void()>& clb) {
+    auto action = cocos2d::FadeOutBLTiles::create(settings.fadeDuration, settings.gridSize);
+    auto show = action->reverse();
+    auto clbDone = cocos2d::CallFunc::create([clb](){
+        if (clb)
+            clb();
+    });
+    CC_SAFE_RETAIN(action);
+    runAction(cocos2d::Sequence::create(show, clbDone, nullptr));
+}
+
+void gameBoard::runHideAnimation(const std::function<void()>& clb) {
+    auto fadeout = cocos2d::FadeOutBLTiles::create(settings.fadeDuration, settings.gridSize);
+    auto delay = cocos2d::DelayTime::create(settings.delayDuration);
+    auto clbDone = cocos2d::CallFunc::create([clb](){
+        if (clb)
+            clb();
+    });
+    runAction(cocos2d::Sequence::create(fadeout, delay, clbDone, nullptr));
 }
