@@ -108,10 +108,18 @@ void gameBoard::loadLevel(int id) {
     });
 }
 
-void gameBoard::attachController(interfaceModule::sControllerStickEvents* emitter) {
+void gameBoard::attachController(interfaceModule::sControllerStickEvents* emitter, generic::coreModule::eventNode* replayBtn) {
     emitter->onPressed.connect([this](auto direction){
         if (!boardBlocked && dispatcher)
             dispatcher->move(direction);
+    });
+    replayBtn->setOnTouchBegan([this](){
+        if (!boardBlocked) {
+            boardBlocked = true;
+            runHideAnimation([this](){
+                loadLevel(currentLevel);
+            });
+        }
     });
 }
 

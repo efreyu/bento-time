@@ -14,6 +14,24 @@
               {
                 "type": "controllerStickWidget",
                 "name": "controller"
+              },
+              {
+                "type": "controllerButtonWidget",
+                "name": "buttonA",
+                "settings": {
+                  "buttonType": "typeA",
+                  "iconType": "replay",
+                  "iconAnimation": "on"
+                }
+              },
+              {
+                "type": "controllerButtonWidget",
+                "name": "buttonB",
+                "settings": {
+                  "buttonType": "typeB",
+                  "iconType": "menu",
+                  "iconAnimation": "on"
+                }
               }
             ]
           }
@@ -36,6 +54,16 @@
       "transformProperty": {
         "size": [ 640, 250 ],
         "position": [25, 25]
+      }
+    },
+    "buttonA": {
+      "transformProperty": {
+        "pivot": [0.58, 0.38]
+      }
+    },
+    "buttonB": {
+      "transformProperty": {
+        "pivot": [0.76, 0.65]
       }
     }
   }

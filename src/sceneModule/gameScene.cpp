@@ -2,6 +2,7 @@
 #include "gameplayModule/gameBoard.h"
 #include "generic/debugModule/logManager.h"
 #include "interfaceModule/widgets/controllerStickWidget.h"
+#include "interfaceModule/widgets/controllerButtonWidget.h"
 
 using namespace bt::sceneModule;
 
@@ -14,7 +15,10 @@ void gameScene::onSceneLoading() {
     sceneInterface::onSceneLoading();
     auto panelHolder = findNode("panelHolder");
     auto controllerNode = dynamic_cast<interfaceModule::controllerStickWidget*>(findNode("controller"));
-    if (!panelHolder || !controllerNode) {
+    auto buttonA = dynamic_cast<interfaceModule::controllerButtonWidget*>(findNode("buttonA"));
+    auto buttonB = dynamic_cast<interfaceModule::controllerButtonWidget*>(findNode("buttonB"));
+    if (!panelHolder || !controllerNode
+        || !buttonA || !buttonB) {
         LOG_ERROR("Problems with loading nodes.");
         return;
     }
@@ -23,5 +27,7 @@ void gameScene::onSceneLoading() {
     // todo this is fake value, I will change this after testing
     board->loadLevel(10001);
     controllerNode->init();
-    board->attachController(controllerNode->getEmitter());
+    buttonA->initListener();
+    buttonB->initListener();
+    board->attachController(controllerNode->getEmitter(), buttonB);
 }

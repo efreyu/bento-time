@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "generic/coreModule/nodes/nodeProperties.h"
+#include "generic/coreModule/nodes/types/eventNode.h"
 #include "generic/coreModule/signals/signalHolder.h"
 #include "moveEnum.h"
 #include <functional>
@@ -29,7 +30,7 @@ namespace bt::gameplayModule {
         cocos2d::TMXTiledMap* getTiled() const {
             return tiledMap;
         }
-        void attachController(interfaceModule::sControllerStickEvents* emitter);
+        void attachController(interfaceModule::sControllerStickEvents* emitter, generic::coreModule::eventNode* replayBtn);
 
     private:
         void loadSettings();

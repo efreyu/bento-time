@@ -1,0 +1,56 @@
+{ "frames": [
+   {
+    "filename": "icon_menu 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 13, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 12 },
+    "sourceSize": { "w": 13, "h": 12 },
+    "duration": 100
+   },
+   {
+    "filename": "icon_menu 1.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 13, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 12 },
+    "sourceSize": { "w": 13, "h": 12 },
+    "duration": 100
+   },
+   {
+    "filename": "icon_menu 2.aseprite",
+    "frame": { "x": 13, "y": 0, "w": 13, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 12 },
+    "sourceSize": { "w": 13, "h": 12 },
+    "duration": 100
+   },
+   {
+    "filename": "icon_menu 3.aseprite",
+    "frame": { "x": 13, "y": 0, "w": 13, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 12 },
+    "sourceSize": { "w": 13, "h": 12 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.32-x64",
+  "image": "icon_menu.png",
+  "format": "RGBA8888",
+  "size": { "w": 26, "h": 12 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "off", "from": 0, "to": 1, "direction": "forward" },
+   { "name": "on", "from": 2, "to": 3, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "icon_menu", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

@@ -1,0 +1,75 @@
+{
+  "struct": {
+    "type": "node",
+    "name": "controllerButtonWidget",
+    "child": [
+      {
+        "type": "aseprite",
+        "name": "button"
+      },
+      {
+        "type": "aseprite",
+        "name": "icon"
+      }
+    ]
+  },
+  "props": {
+    "controllerButtonWidget": {
+      "transformProperty": {
+        "anchor": [ 0.0, 0.0 ],
+        "pivot": [ 0.0, 0.0 ],
+        "size": [100, 100]
+      }
+    },
+    "typeA": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ],
+        "scale": 2.5
+      },
+      "asepriteProperty": {
+        "file": "images/widgets/controllerButtonWidget/a",
+        "animation": "default",
+        "usePixelMode": true
+      }
+    },
+    "typeB": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ],
+        "scale": 2.5
+      },
+      "asepriteProperty": {
+        "file": "images/widgets/controllerButtonWidget/b",
+        "animation": "default",
+        "usePixelMode": true
+      }
+    },
+    "iconReplay": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ],
+        "position": [ 0, -80 ],
+        "scale": 2.5
+      },
+      "asepriteProperty": {
+        "file": "images/widgets/controllerButtonWidget/icon_replay",
+        "animation": "off",
+        "usePixelMode": true
+      }
+    },
+    "iconMenu": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ],
+        "position": [ 0, -80 ],
+        "scale": 2.5
+      },
+      "asepriteProperty": {
+        "file": "images/widgets/controllerButtonWidget/icon_menu",
+        "animation": "off",
+        "usePixelMode": true
+      }
+    }
+  }
+}

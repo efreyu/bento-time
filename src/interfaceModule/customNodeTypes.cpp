@@ -3,6 +3,7 @@
 #include "generic/coreModule/scenes/scenesFactoryInstance.h"
 #include "interfaceModule/widgets/buttonWidget.h"
 #include "interfaceModule/widgets/controllerStickWidget.h"
+#include "interfaceModule/widgets/controllerButtonWidget.h"
 #include "interfaceModule/widgets/menuButton.h"
 #include "interfaceModule/widgets/rollbackButton.h"
 
@@ -14,6 +15,7 @@ void bt::interfaceModule::registerAllCustomNodes() {
     GET_NODE_FACTORY().registerCustomNodeType("menuButton", []() { return new menuButton(); });
     GET_NODE_FACTORY().registerCustomNodeType("rollbackButton", []() { return new rollbackButton(); });
     GET_NODE_FACTORY().registerCustomNodeType("controllerStickWidget", []() { return new controllerStickWidget(); });
+    GET_NODE_FACTORY().registerCustomNodeType("controllerButtonWidget", []() { return new controllerButtonWidget(); });
 
     // register all windows
 //    GET_CURRENT_SCENE()->getWindowSystem()->registerWindow("notifyWindow", []() { return new notifyWindow(); });
