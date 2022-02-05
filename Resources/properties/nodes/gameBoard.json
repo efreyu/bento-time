@@ -16,9 +16,8 @@
   "props": {
     "gameBoard": {
       "transformProperty": {
-        "stretch": [ 1, 1 ],
-        "anchor": [ 0.0, 0.0 ],
-        "pivot": [ 0.0, 0.0 ]
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ]
       }
     },
     "gameField": {
@@ -29,8 +28,9 @@
     },
     "movesLabel": {
       "transformProperty": {
-        "pivot": [ 0.04, 0.37 ],
-        "anchor": [ 0.0, 0.0 ]
+        "pivot": [ 0.0, 0.0 ],
+        "anchor": [ 0.0, 0.0 ],
+        "position": [94, 84]
       },
       "labelProperty": {
         "text": "moves:--",
@@ -42,11 +42,9 @@
       }
     },
     "settings": {
-      "movesPattern": "moves:%d",
+      "movesPattern": "Moves:%d",
       "fadeDuration": 0.75,
-      "delayDuration": 0.8,
-      "gridSizeX":8,
-      "gridSizeY": 15
+      "delayDuration": 0.8
     }
   }
 }

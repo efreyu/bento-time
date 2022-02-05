@@ -38,6 +38,9 @@
       "spriteProperty": {
         "image": "images/scenes/menuScene/bg.png"
       }
+    },
+    "settings": {
+      "bgColor": [114,101,181]
     }
   }
 }

@@ -22,7 +22,7 @@ namespace bt::gameplayModule {
 
     class gameBoard
       : public generic::coreModule::nodeProperties
-      , public cocos2d::NodeGrid {
+      , public cocos2d::Node {
     public:
         gameBoard();
         void loadLevel(int id);
@@ -50,7 +50,6 @@ namespace bt::gameplayModule {
             std::string movesPattern;
             float fadeDuration;
             float delayDuration;
-            cocos2d::Size gridSize;
         };
         gameBoardSettings settings;
     };

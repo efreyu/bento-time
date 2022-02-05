@@ -40,9 +40,6 @@ void gameBoard::loadSettings() {
     if (json.HasMember("delayDuration") && json["delayDuration"].IsNumber()) {
         settings.delayDuration = json["delayDuration"].GetFloat();
     }
-    if (json.HasMember("gridSizeX") && json.HasMember("gridSizeY")) {
-        settings.gridSize = cocos2d::Size(json["gridSizeX"].GetFloat(), json["gridSizeY"].GetFloat());
-    }
 }
 
 gameBoard::~gameBoard() {
@@ -71,14 +68,14 @@ void gameBoard::loadLevel(int id) {
         auto size = tiledMap->getTileSize();
         auto mapSize = tiledMap->getMapSize();
         gameFieldNode->setContentSize({ mapSize.width * size.width, mapSize.height * size.height });
+        setContentSize(gameFieldNode->getContentSize());
     }
     // update timeMap scale and position
     {
         auto width = tiledMap->getTileSize().width;
         auto mapSize = tiledMap->getMapSize();
         auto scale = cocos2d::Director::getInstance()->getVisibleSize().width / (mapSize.width * width - width);
-        gameFieldNode->setScale(scale);
-        gameFieldNode->setPositionY((width / 2) * scale);
+        setScale(scale);
     }
 
     if (auto objectsLayer = gameFieldNode->findNode("objectsLayer")) {
@@ -134,22 +131,20 @@ void gameBoard::updateMovesScore() {
 }
 
 void gameBoard::runShowAnimation(const std::function<void()>& clb) {
-    auto action = cocos2d::FadeOutBLTiles::create(settings.fadeDuration, settings.gridSize);
-    auto show = action->reverse();
+//    auto fadein = cocos2d::Show::create(settings.fadeDuration);
     auto clbDone = cocos2d::CallFunc::create([clb](){
         if (clb)
             clb();
     });
-    CC_SAFE_RETAIN(action);
-    runAction(cocos2d::Sequence::create(show, clbDone, nullptr));
+    runAction(cocos2d::Sequence::create(clbDone, nullptr));
 }
 
 void gameBoard::runHideAnimation(const std::function<void()>& clb) {
-    auto fadeout = cocos2d::FadeOutBLTiles::create(settings.fadeDuration, settings.gridSize);
+//    auto fadeout = cocos2d::Hide::create(settings.fadeDuration);
     auto delay = cocos2d::DelayTime::create(settings.delayDuration);
     auto clbDone = cocos2d::CallFunc::create([clb](){
         if (clb)
             clb();
     });
-    runAction(cocos2d::Sequence::create(fadeout, delay, clbDone, nullptr));
+    runAction(cocos2d::Sequence::create(delay, clbDone, nullptr));
 }

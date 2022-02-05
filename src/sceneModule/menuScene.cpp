@@ -7,6 +7,7 @@ using namespace cocos2d;
 
 menuScene::menuScene() {
     this->setName("menuScene");
+    initLayerColor(cocos2d::Color3B(114,101,181));
     initWithProperties("scenes/" + this->getName());
 }
 
