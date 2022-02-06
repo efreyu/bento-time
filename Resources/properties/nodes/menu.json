@@ -1,0 +1,149 @@
+{
+  "mainMenu": {
+    "buttons": [
+      {
+        "type": "gameList",
+        "text": "GAMES"
+      },
+      {
+        "type": "optionsMenu",
+        "text": "OPTIONS"
+      },
+      {
+        "type": "credits",
+        "text": "CREDITS"
+      }
+    ],
+    "hint": "Press A to select"
+  },
+  "gameList": {
+    "buttons": [
+      {
+        "type": "mainMenu",
+        "text": "< BACK",
+        "backBtn": true
+      },
+      {
+        "type": "play",
+        "text": "Bento Time"
+      },
+      {
+        "type": "notAvailable1",
+        "text": "Legend of Bento",
+        "enabled": false
+      },
+      {
+        "type": "notAvailable2",
+        "text": "Final Bento VII",
+        "enabled": false
+      },
+      {
+        "type": "notAvailable3",
+        "text": "Super Bento",
+        "enabled": false
+      },
+      {
+        "type": "notAvailable4",
+        "text": "Bento fighter",
+        "enabled": false
+      }
+    ],
+    "hint": "Press A to play"
+  },
+  "optionsMenu": {
+    "buttons": [
+      {
+        "type": "mainMenu",
+        "text": "< BACK",
+        "backBtn": true
+      },
+      {
+        "type": "soundSetting",
+        "text": "SOUND: %s"
+      },
+      {
+        "type": "musicSetting",
+        "text": "MUSIC: %s"
+      }
+    ],
+    "hint": "Press A to select"
+  },
+  "credits": {
+    "buttons": [
+      {
+        "type": "mainMenu",
+        "text": "< BACK",
+        "backBtn": true
+      },
+      {
+        "type": "temp",
+        "text": "Coding: \nArtur Barilo"
+      },
+      {
+        "type": "temp",
+        "text": "Art: \nAnastasia Barilo"
+      },
+      {
+        "type": "temp",
+        "text": "Fonts designed \nby Peter Hull"
+      }
+    ],
+    "hint": "Press A to select"
+  },
+  "notAvailable1": {
+    "buttons": [
+      {
+        "type": "gameList",
+        "text": "< BACK",
+        "backBtn": true
+      },
+      {
+        "type": "gameList",
+        "text": "\"Legend of Bento\" \nis not available \nin Demo mode"
+      }
+    ],
+    "hint": "Press A to select"
+  },
+  "notAvailable2": {
+    "buttons": [
+      {
+        "type": "gameList",
+        "text": "< BACK",
+        "backBtn": true
+      },
+      {
+        "type": "gameList",
+        "text": "\"Final Bento VII\" \nis not available \nin Demo mode"
+      }
+    ],
+    "hint": "Press A to select"
+  },
+  "notAvailable3": {
+    "buttons": [
+      {
+        "type": "gameList",
+        "text": "< BACK",
+        "backBtn": true
+      },
+      {
+        "type": "gameList",
+        "text": "\"Super Bento\" \nis not available \nin Demo mode"
+      }
+    ],
+    "hint": "Press A to select"
+  },
+  "notAvailable4": {
+    "buttons": [
+      {
+        "type": "gameList",
+        "text": "< BACK",
+        "backBtn": true
+      },
+      {
+        "type": "gameList",
+        "text": "\"Bento fighter\" \nis not available \nin Demo mode"
+      }
+    ],
+    "hint": "Press A to select"
+  }
+}

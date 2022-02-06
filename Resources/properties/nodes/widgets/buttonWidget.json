@@ -4,45 +4,63 @@
     "name": "buttonWidget",
     "child": [
       {
+        "type": "scale9Sprite",
+        "name": "select"
+      },
+      {
         "type": "label",
-        "name": "btnText"
+        "name": "label"
       }
     ]
   },
   "props": {
     "buttonWidget": {
       "transformProperty": {
-        "anchor": [ 0.0, 1.0 ],
-        "pivot": [ 0.0, 1.0 ],
-        "size": [382, 68]
-      },
-      "scale9SpriteProperty": {
-        "size": [382, 68],
-        "image": "images/general/cardBg.png",
-        "slice9": {
-          "x": 34,
-          "y": 34,
-          "width": 1,
-          "height": 1
-        }
+        "anchor": [ 0.5, 1.0 ],
+        "pivot": [ 0.5, 1.0 ]
       }
     },
-    "btnText": {
+    "label": {
       "transformProperty": {
         "anchor": [ 0.5, 0.5 ],
         "pivot": [ 0.5, 0.5 ]
       },
       "labelProperty": {
         "fontType": "ttf",
-        "fontSize": 36.0,
+        "fontSize": 76.0,
         "fontFile": "fonts/VT323-Regular.ttf",
         "bold": true,
         "italics": false,
         "align": "center"
       },
       "colorProperty": {
-        "color": [0, 0, 0]
+        "color": [255, 255, 255]
       }
+    },
+    "gray": {
+      "colorProperty": {
+        "color": [115, 115, 115]
+      }
+    },
+    "select": {
+      "transformProperty": {
+        "anchor": [ 0.5, 1.0 ],
+        "pivot": [ 0.5, 1.0 ]
+      },
+      "scale9SpriteProperty": {
+        "image": "images/widgets/buttonWidget/select.png",
+        "slice9": {
+          "x": 15,
+          "y": 23,
+          "width": 1,
+          "height": 1
+        }
+      }
+    },
+    "settings": {
+      "selectHorizontalOffset": 40,
+      "lightening": 0.3,
+      "selectDuration": 1
     }
   }
 }

@@ -43,14 +43,14 @@
       "transformProperty": {
         "pivot": [ 0.5, 1 ],
         "anchor": [ 0.5, 0 ],
-        "size": [100, 87]
+        "size": [100, 100]
       }
     },
     "down": {
       "transformProperty": {
         "pivot": [ 0.5, 0 ],
         "anchor": [ 0.5, 1 ],
-        "size": [100, 87]
+        "size": [100, 100]
       }
     },
     "right": {
@@ -64,7 +64,7 @@
       "transformProperty": {
         "pivot": [ 0.5, 0.5 ],
         "anchor": [ 0.5, 0.5 ],
-        "size": [100, 100]
+        "size": [100, 66]
       }
     },
     "left": {

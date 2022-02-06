@@ -1,20 +1,20 @@
 { "frames": [
    {
     "filename": "icon_replay 0.aseprite",
-    "frame": { "x": 0, "y": 0, "w": 19, "h": 15 },
+    "frame": { "x": 0, "y": 0, "w": 19, "h": 17 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 19, "h": 15 },
-    "sourceSize": { "w": 19, "h": 15 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 19, "h": 17 },
+    "sourceSize": { "w": 19, "h": 17 },
     "duration": 100
    },
    {
     "filename": "icon_replay 1.aseprite",
-    "frame": { "x": 19, "y": 0, "w": 19, "h": 15 },
+    "frame": { "x": 19, "y": 0, "w": 19, "h": 17 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 19, "h": 15 },
-    "sourceSize": { "w": 19, "h": 15 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 19, "h": 17 },
+    "sourceSize": { "w": 19, "h": 17 },
     "duration": 100
    }
  ],
@@ -23,7 +23,7 @@
   "version": "1.2.32-x64",
   "image": "icon_replay.png",
   "format": "RGBA8888",
-  "size": { "w": 38, "h": 15 },
+  "size": { "w": 38, "h": 17 },
   "scale": "1",
   "frameTags": [
    { "name": "off", "from": 0, "to": 0, "direction": "forward" },

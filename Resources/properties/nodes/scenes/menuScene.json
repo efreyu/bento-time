@@ -4,43 +4,178 @@
     "name": "menuScene",
     "child": [
       {
-        "type": "sprite",
-        "name": "bg",
+        "type": "node",
+        "name": "panelHolder",
         "child": [
           {
-            "type": "buttonWidget",
-            "name": "btn",
-            "settings": {
-              "text": "Let's play!"
-            }
+            "type": "sprite",
+            "name": "frame",
+            "child": [
+              {
+                "type": "node",
+                "name": "displayHolder",
+                "child": [
+                  {
+                    "type": "node",
+                    "name": "backBtnHolder"
+                  },
+                  {
+                    "type": "node",
+                    "name": "menuHolder"
+                  },
+                  {
+                    "type": "node",
+                    "name": "tipsHolder"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "sprite",
+            "name": "header"
+          },
+          {
+            "type": "sprite",
+            "name": "footer"
+          },
+          {
+            "type": "node",
+            "name": "downPanel",
+            "child": [
+              {
+                "type": "controllerStickWidget",
+                "name": "controller"
+              },
+              {
+                "type": "controllerButtonWidget",
+                "name": "buttonB",
+                "settings": {
+                  "buttonType": "typeB",
+                  "iconType": "replay",
+                  "iconAnimation": "off"
+                }
+              },
+              {
+                "type": "controllerButtonWidget",
+                "name": "buttonA",
+                "settings": {
+                  "buttonType": "typeA",
+                  "iconType": "menu",
+                  "iconAnimation": "off"
+                }
+              }
+            ]
           }
         ]
       }
     ]
   },
   "props": {
-    "menuScene": {
+    "battleScene": {
       "transformProperty": {
         "stretch": [ 1, 1 ]
       }
     },
-    "btn": {
+    "header": {
       "transformProperty": {
-        "anchor": [ 0.5, 0.5 ],
-        "pivot": [ 0.5, 0.5 ]
+        "anchor": [ 0.5, 1.0 ],
+        "pivot": [ 0.5, 1.0 ]
+      },
+      "spriteProperty": {
+        "image": "images/general/header.png"
       }
     },
-    "bg": {
+    "frame": {
+      "transformProperty": {
+        "anchor": [ 0.5, 1.0 ],
+        "pivot": [ 0.5, 1.0 ],
+        "position": [0, -69]
+      },
+      "spriteProperty": {
+        "image": "images/general/frame.png"
+      }
+    },
+    "footer": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.0 ],
+        "pivot": [ 0.5, 0.0 ]
+      },
+      "spriteProperty": {
+        "image": "images/general/footer.png"
+      }
+    },
+    "panelHolder": {
+      "transformProperty": {
+        "stretch": [ 1, 1 ]
+      }
+    },
+    "displayHolder": {
+      "transformProperty": {
+        "anchor": [ 0.5, 0.5 ],
+        "pivot": [ 0.5, 0.5 ],
+        "size": [ 616, 690 ],
+        "position": [0, 20]
+      }
+    },
+    "downPanel": {
+      "transformProperty": {
+        "size": [ 640, 250 ],
+        "position": [25, 25]
+      }
+    },
+    "buttonB": {
+      "transformProperty": {
+        "pivot": [0.55, 0.37]
+      }
+    },
+    "buttonA": {
+      "transformProperty": {
+        "pivot": [0.74, 0.53]
+      }
+    },
+    "menuHolder": {
+      "transformProperty": {
+        "pivot": [0.5, 0.5],
+        "anchor": [0.5, 0.5],
+        "size": [500, 500]
+      }
+    },
+    "backBtnHolder": {
+      "transformProperty": {
+        "pivot": [0.0, 1.0],
+        "anchor": [0.0, 1.0],
+        "scale": 0.7,
+        "position": [91, -21]
+      }
+    },
+    "tipsHolder": {
+      "transformProperty": {
+        "pivot": [0.5, 0.0],
+        "anchor": [0.5, 0.0],
+        "position": [0, 60]
+      }
+    },
+    "tipsLabel": {
       "transformProperty": {
         "anchor": [ 0.5, 0.5 ],
         "pivot": [ 0.5, 0.5 ]
       },
-      "spriteProperty": {
-        "image": "images/scenes/menuScene/bg.png"
+      "labelProperty": {
+        "fontType": "ttf",
+        "fontSize": 50.0,
+        "fontFile": "fonts/VT323-Regular.ttf",
+        "bold": true,
+        "italics": false,
+        "align": "center"
+      },
+      "colorProperty": {
+        "color": [252, 182, 40]
       }
     },
     "settings": {
-      "bgColor": [114,101,181]
+      "bgColor": [114,101,181],
+      "menuFile": "properties/nodes/menu"
     }
   }
 }

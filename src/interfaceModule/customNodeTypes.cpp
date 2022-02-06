@@ -7,8 +7,6 @@
 #include "interfaceModule/widgets/menuButton.h"
 #include "interfaceModule/widgets/rollbackButton.h"
 
-// all windows
-//#include "interfaceModule/windows/notifyWindow.h"
 
 void bt::interfaceModule::registerAllCustomNodes() {
     GET_NODE_FACTORY().registerCustomNodeType("buttonWidget", []() { return new buttonWidget(); });
@@ -17,6 +15,4 @@ void bt::interfaceModule::registerAllCustomNodes() {
     GET_NODE_FACTORY().registerCustomNodeType("controllerStickWidget", []() { return new controllerStickWidget(); });
     GET_NODE_FACTORY().registerCustomNodeType("controllerButtonWidget", []() { return new controllerButtonWidget(); });
 
-    // register all windows
-//    GET_CURRENT_SCENE()->getWindowSystem()->registerWindow("notifyWindow", []() { return new notifyWindow(); });
 }

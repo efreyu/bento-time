@@ -3,20 +3,22 @@
 
 #include "cocos2d.h"
 #include "generic/coreModule/nodes/nodeProperties.h"
-#include "generic/coreModule/nodes/types/soundButton.h"
 
 namespace bt::interfaceModule {
 
-    class buttonWidget : public generic::coreModule::soundButton {
+    class buttonWidget
+      : public cocos2d::Node
+      , public generic::coreModule::nodeProperties {
     public:
         buttonWidget();
-        ~buttonWidget() override = default;
-        void updateSettings() override;
 
         void setText(const std::string&);
+        void setDisabled();
+        void setSelect(bool status);
 
     private:
-        cocos2d::Label* label = nullptr;
+        void initWidget();
+        float selectHorizontalOffset = 0.f;
     };
 }// namespace bt::interfaceModule
 

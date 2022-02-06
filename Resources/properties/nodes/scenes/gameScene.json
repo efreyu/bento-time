@@ -35,18 +35,18 @@
               },
               {
                 "type": "controllerButtonWidget",
-                "name": "buttonA",
+                "name": "buttonB",
                 "settings": {
-                  "buttonType": "typeA",
+                  "buttonType": "typeB",
                   "iconType": "replay",
                   "iconAnimation": "on"
                 }
               },
               {
                 "type": "controllerButtonWidget",
-                "name": "buttonB",
+                "name": "buttonA",
                 "settings": {
-                  "buttonType": "typeB",
+                  "buttonType": "typeA",
                   "iconType": "menu",
                   "iconAnimation": "on"
                 }
@@ -110,14 +110,14 @@
         "position": [25, 25]
       }
     },
-    "buttonA": {
-      "transformProperty": {
-        "pivot": [0.58, 0.38]
-      }
-    },
     "buttonB": {
       "transformProperty": {
-        "pivot": [0.76, 0.65]
+        "pivot": [0.55, 0.37]
+      }
+    },
+    "buttonA": {
+      "transformProperty": {
+        "pivot": [0.74, 0.53]
       }
     },
     "settings": {

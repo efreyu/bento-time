@@ -19,6 +19,7 @@ controllerButtonWidget::controllerButtonWidget() {
     initWithProperties("widgets/" + this->getName());
     btnNode = dynamic_cast<generic::coreModule::asepriteNode*>(findNode("button"));
     iconNode = dynamic_cast<generic::coreModule::asepriteNode*>(findNode("icon"));
+    setChangeColorByClick(false);
 }
 
 void controllerButtonWidget::updateSettings() {
