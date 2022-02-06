@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="right-down" width="9" height="10" tilewidth="128" tileheight="128" infinite="0" backgroundcolor="#7265b5" nextlayerid="23" nextobjectid="62">
+ <editorsettings>
+  <chunksize width="40" height="40"/>
+ </editorsettings>
+ <tileset firstgid="1" name="triggers" tilewidth="128" tileheight="128" tilecount="36" columns="6">
+  <image source="assets/triggers.png" trans="ff00ff" width="768" height="768"/>
+  <tile id="0">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="top"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="wall0" value="top"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="left"/>
+    <property name="wall2" value="right"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="wall0" value="left"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="right"/>
+    <property name="wall2" value="left"/>
+    <property name="wall3" value="down"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="wall0" value="right"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="wall0" value="down"/>
+    <property name="wall1" value="left"/>
+    <property name="wall2" value="top"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="wall0" value="down"/>
+    <property name="wall1" value="top"/>
+    <property name="wall2" value="right"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="down"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="wall0" value="down"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="wall0" value="down"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="wall0" value="down"/>
+    <property name="wall1" value="left"/>
+    <property name="wall2" value="right"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="down"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="wall0" value="down"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="wall0" value="down"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="wall0" value="down"/>
+    <property name="wall1" value="top"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="wall0" value="top"/>
+    <property name="wall1" value="down"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="wall0" value="left"/>
+    <property name="wall1" value="right"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="37" name="tiles" tilewidth="128" tileheight="128" tilecount="5" columns="5">
+  <image source="assets/tiles.png" trans="ff00ff" width="640" height="128"/>
+ </tileset>
+ <layer id="20" name="background_ground" width="9" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYCAOqAKxGhCrA7EGGh8G0MWR+TCATT+MDwO47NEYxO4hBAD9Ewht
+  </data>
+ </layer>
+ <layer id="19" name="wallsLayer" width="9" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYGBg4MODQYCTAT9gH+FqQIAJDwYBAOIwAPE=
+  </data>
+ </layer>
+ <layer id="22" name="exitLayer" width="9" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgYoImEaa1mMAAAIb8Bcg==
+  </data>
+ </layer>
+ <objectgroup id="15" name="spawnLayer">
+  <object id="35" name="start" type="start" x="516.829" y="776.201" width="120" height="120"/>
+  <object id="40" name="end" type="end" x="517.059" y="518.071" width="120" height="120"/>
+  <object id="41" name="end" type="end" x="515.545" y="646.557" width="120" height="120"/>
+  <object id="43" name="end" type="end" x="645.382" y="649.361" width="120" height="120"/>
+  <object id="44" name="end" type="end" x="646.781" y="516.109" width="120" height="120"/>
+  <object id="45" name="food_20003_1" type="food_20003_1" x="903.797" y="902.784" width="120" height="120"/>
+  <object id="49" name="food_20003_1" type="food_20003_1" x="131.339" y="136.784" width="120" height="120"/>
+  <object id="51" name="end" type="end" x="387.604" y="643.528" width="120" height="120"/>
+  <object id="52" name="end" type="end" x="387.604" y="516.093" width="120" height="120"/>
+  <object id="53" name="end" type="end" x="388.657" y="385.498" width="120" height="120"/>
+  <object id="54" name="end" type="end" x="518.199" y="387.604" width="120" height="120"/>
+  <object id="55" name="end" type="end" x="647.741" y="386.551" width="120" height="120"/>
+  <object id="56" name="food_20002_1" type="food_20002_1" x="905.588" y="131.748" width="120" height="120"/>
+  <object id="57" name="food_20002_1" type="food_20002_1" x="905.588" y="515.244" width="120" height="120"/>
+  <object id="58" name="food_20004_1" type="food_20004_1" x="133.46" y="898.74" width="120" height="120"/>
+  <object id="59" name="food_20004_1" type="food_20004_1" x="135.172" y="515.244" width="120" height="120"/>
+  <object id="60" name="food_20003_1" type="food_20003_1" x="518.668" y="133.46" width="120" height="120"/>
+  <object id="61" name="food_20003_1" type="food_20003_1" x="775.473" y="515.244" width="120" height="120"/>
+ </objectgroup>
+</map>
