@@ -256,8 +256,11 @@ void menuScene::loadPage(const std::string& page) {
             if (pagePtr->small) {
                 btn->setSmallText();
             }
-            if (!menuHolder->getChildren().empty())
-                btn->setPositionY(0 - menuHolder->getChildren().size() * btn->getContentSize().height);
+            if (!menuHolder->getChildren().empty()) {
+                auto last = menuHolder->getChildren().rbegin();
+                btn->setPositionY((*last)->getPositionY() - (*last)->getContentSize().height);
+            }
+
             menuHolder->addChild(btn);
             if (!item->enabled)
                 btn->setDisabled();

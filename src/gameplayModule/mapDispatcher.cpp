@@ -54,20 +54,22 @@ bool mapDispatcher::move(eMoveDirection direction) {
             });
         }
         connectedCells->reset();
-        auto it = std::find_if(exitCells.begin(), exitCells.end(), [this](const std::pair<int, int>& p){
-            return !getCellByPos(p);
-        });
-        if (it == exitCells.end()) {
+    });
+    auto it = std::find_if(exitCells.begin(), exitCells.end(), [this](const std::pair<int, int>& p){
+        return !getCellByPos(p);
+    });
+    if (it == exitCells.end()) {
+        std::for_each(playerCells.begin(), playerCells.end(), [this, direction](mapCell* p){
             p->node->setAnimation(eBentoAnimation::WIN);
-            getEmitter()->onWin.emit();
             std::vector<mapCell*> sleepBlocks;
             auto tempCells = std::make_shared<mapCellItems>(p);
             getClosestCells(tempCells, sleepBlocks, direction);
             std::for_each(sleepBlocks.begin(), sleepBlocks.end(), [](mapCell* c){
                 c->node->setAnimation(eBentoAnimation::WIN);
             });
-        }
-    });
+        });
+        getEmitter()->onWin.emit();
+    }
 
     return true;
 }

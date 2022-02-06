@@ -55,7 +55,7 @@
 
     {
       "id": 5,
-      "tmxPath": "images/levels/1.tmx",
+      "tmxPath": "images/levels/5.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
       "backgroundLayer": "background_ground",
@@ -64,7 +64,7 @@
     },
     {
       "id": 6,
-      "tmxPath": "images/levels/2.tmx",
+      "tmxPath": "images/levels/6.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
       "backgroundLayer": "background_ground",
@@ -73,7 +73,7 @@
     },
     {
       "id": 7,
-      "tmxPath": "images/levels/3.tmx",
+      "tmxPath": "images/levels/7.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
       "backgroundLayer": "background_ground",
@@ -82,7 +82,7 @@
     },
     {
       "id": 8,
-      "tmxPath": "images/levels/4.tmx",
+      "tmxPath": "images/levels/8.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
       "backgroundLayer": "background_ground",
@@ -91,7 +91,7 @@
     },
     {
       "id": 9,
-      "tmxPath": "images/levels/1.tmx",
+      "tmxPath": "images/levels/9.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
       "backgroundLayer": "background_ground",
@@ -100,97 +100,7 @@
     },
     {
       "id": 10,
-      "tmxPath": "images/levels/2.tmx",
-      "objectTypes": "images/levels/1OT.xml",
-      "spawnLayer": "spawnLayer",
-      "backgroundLayer": "background_ground",
-      "wallsLayer": "wallsLayer",
-      "wallPropPattern": "wall%d"
-    },
-    {
-      "id": 11,
-      "tmxPath": "images/levels/3.tmx",
-      "objectTypes": "images/levels/1OT.xml",
-      "spawnLayer": "spawnLayer",
-      "backgroundLayer": "background_ground",
-      "wallsLayer": "wallsLayer",
-      "wallPropPattern": "wall%d"
-    },
-    {
-      "id": 12,
-      "tmxPath": "images/levels/4.tmx",
-      "objectTypes": "images/levels/1OT.xml",
-      "spawnLayer": "spawnLayer",
-      "backgroundLayer": "background_ground",
-      "wallsLayer": "wallsLayer",
-      "wallPropPattern": "wall%d"
-    },
-    {
-      "id": 13,
-      "tmxPath": "images/levels/1.tmx",
-      "objectTypes": "images/levels/1OT.xml",
-      "spawnLayer": "spawnLayer",
-      "backgroundLayer": "background_ground",
-      "wallsLayer": "wallsLayer",
-      "wallPropPattern": "wall%d"
-    },
-    {
-      "id": 14,
-      "tmxPath": "images/levels/2.tmx",
-      "objectTypes": "images/levels/1OT.xml",
-      "spawnLayer": "spawnLayer",
-      "backgroundLayer": "background_ground",
-      "wallsLayer": "wallsLayer",
-      "wallPropPattern": "wall%d"
-    },
-    {
-      "id": 15,
-      "tmxPath": "images/levels/3.tmx",
-      "objectTypes": "images/levels/1OT.xml",
-      "spawnLayer": "spawnLayer",
-      "backgroundLayer": "background_ground",
-      "wallsLayer": "wallsLayer",
-      "wallPropPattern": "wall%d"
-    },
-    {
-      "id": 16,
-      "tmxPath": "images/levels/4.tmx",
-      "objectTypes": "images/levels/1OT.xml",
-      "spawnLayer": "spawnLayer",
-      "backgroundLayer": "background_ground",
-      "wallsLayer": "wallsLayer",
-      "wallPropPattern": "wall%d"
-    },
-    {
-      "id": 17,
-      "tmxPath": "images/levels/4.tmx",
-      "objectTypes": "images/levels/1OT.xml",
-      "spawnLayer": "spawnLayer",
-      "backgroundLayer": "background_ground",
-      "wallsLayer": "wallsLayer",
-      "wallPropPattern": "wall%d"
-    },
-    {
-      "id": 18,
-      "tmxPath": "images/levels/4.tmx",
-      "objectTypes": "images/levels/1OT.xml",
-      "spawnLayer": "spawnLayer",
-      "backgroundLayer": "background_ground",
-      "wallsLayer": "wallsLayer",
-      "wallPropPattern": "wall%d"
-    },
-    {
-      "id": 19,
-      "tmxPath": "images/levels/4.tmx",
-      "objectTypes": "images/levels/1OT.xml",
-      "spawnLayer": "spawnLayer",
-      "backgroundLayer": "background_ground",
-      "wallsLayer": "wallsLayer",
-      "wallPropPattern": "wall%d"
-    },
-    {
-      "id": 20,
-      "tmxPath": "images/levels/4.tmx",
+      "tmxPath": "images/levels/10.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
       "backgroundLayer": "background_ground",
