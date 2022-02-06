@@ -57,6 +57,16 @@
         }
       }
     },
+    "small": {
+      "labelProperty": {
+        "fontType": "ttf",
+        "fontSize": 46.0,
+        "fontFile": "fonts/VT323-Regular.ttf",
+        "bold": false,
+        "italics": false,
+        "align": "center"
+      }
+    },
     "settings": {
       "selectHorizontalOffset": 40,
       "lightening": 0.3,

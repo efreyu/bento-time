@@ -19,6 +19,9 @@ gameScene::gameScene() {
         color.b = static_cast<uint8_t>(json["bgColor"][2u].GetInt());
     }
     initLayerColor(color);
+    if (json.HasMember("fadeTransitionTime") && json["fadeTransitionTime"].IsNumber()) {
+        fadeTransitionTime = json["fadeTransitionTime"].GetFloat();
+    }
 }
 
 void gameScene::onSceneLoading() {
@@ -34,8 +37,11 @@ void gameScene::onSceneLoading() {
     }
     auto board = new gameplayModule::gameBoard();
     displayHolder->addChild(board, -1);
-    // todo this is fake value, I will change this after testing
-    board->loadLevel(10001);
+    auto levelId = 10001;
+    if (sceneData.count("levelId")) {
+        levelId = sceneData["levelId"].asInt();
+    }
+    board->loadLevel(levelId);
     controllerNode->init();
     buttonA->initListener();
     buttonB->initListener();

@@ -51,6 +51,151 @@
       "backgroundLayer": "background_ground",
       "wallsLayer": "wallsLayer",
       "wallPropPattern": "wall%d"
+    },
+
+    {
+      "id": 10005,
+      "tmxPath": "images/levels/1.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10006,
+      "tmxPath": "images/levels/2.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10007,
+      "tmxPath": "images/levels/3.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10008,
+      "tmxPath": "images/levels/4.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10009,
+      "tmxPath": "images/levels/1.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10010,
+      "tmxPath": "images/levels/2.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10011,
+      "tmxPath": "images/levels/3.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10012,
+      "tmxPath": "images/levels/4.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10013,
+      "tmxPath": "images/levels/1.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10014,
+      "tmxPath": "images/levels/2.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10015,
+      "tmxPath": "images/levels/3.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10016,
+      "tmxPath": "images/levels/4.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10017,
+      "tmxPath": "images/levels/4.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10018,
+      "tmxPath": "images/levels/4.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10019,
+      "tmxPath": "images/levels/4.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
+    },
+    {
+      "id": 10010,
+      "tmxPath": "images/levels/4.tmx",
+      "objectTypes": "images/levels/1OT.xml",
+      "spawnLayer": "spawnLayer",
+      "backgroundLayer": "background_ground",
+      "wallsLayer": "wallsLayer",
+      "wallPropPattern": "wall%d"
     }
   ]
 }

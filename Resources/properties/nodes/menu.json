@@ -88,6 +88,7 @@
         "text": "Fonts designed \nby Peter Hull"
       }
     ],
+    "small": true,
     "hint": "Press A to select"
   },
   "notAvailable1": {
@@ -145,5 +146,16 @@
       }
     ],
     "hint": "Press A to select"
+  },
+  "play": {
+    "buttons": [
+      {
+        "type": "gameList",
+        "text": "< BACK",
+        "backBtn": true
+      }
+    ],
+    "small": true,
+    "hint": "Press A to play"
   }
 }

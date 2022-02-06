@@ -59,3 +59,10 @@ void buttonWidget::initWidget() {
         select->runAction(cocos2d::RepeatForever::create(seq));
     }
 }
+
+void buttonWidget::setSmallText() {
+    if (auto label = findNode("label")) {
+        loadProperty(label, "small");
+        label->init();
+    }
+}

@@ -49,7 +49,7 @@ add_subdirectory(src/generic)
 add_subdirectory(src/databaseModule)
 add_subdirectory(src/gameplayModule)
 add_subdirectory(src/interfaceModule)
-#add_subdirectory(src/localProfile)
+add_subdirectory(src/profileModule)
 add_subdirectory(src/sceneModule)
 
 if(ANDROID)

@@ -6,8 +6,8 @@
 #include "generic/debugModule/logManager.h"
 
 // all profile block header
-//#include "generic/profileModule/profileManager.h"
-//#include "localProfile/localProfileBlock.h"
+#include "generic/profileModule/profileManager.h"
+#include "profileModule/progressProfileBlock.h"
 // all databases header
 #include "databaseModule/databaseManager.h"
 #include "databaseModule/levelsDatabase.h"
@@ -19,11 +19,11 @@
 #include "interfaceModule/customNodeTypes.h"
 
 USING_NS_CC;
-
+using namespace bt;
 
 AppDelegate::AppDelegate() {
     GET_AUDIO_ENGINE();
-//    GET_PROFILE();
+    GET_PROFILE();
     GET_DATABASE_MANAGER();
     GET_NODE_FACTORY();
     GET_LOGGER();
@@ -33,8 +33,8 @@ AppDelegate::AppDelegate() {
 
 AppDelegate::~AppDelegate() {
     generic::audioModule::audioEngineInstance::cleanup();
-//    generic::profileModule::profileManager::cleanup();
-    bt::databaseModule::databaseManager::cleanup();
+    generic::profileModule::profileManager::cleanup();
+    databaseModule::databaseManager::cleanup();
     generic::coreModule::nodeFactory::cleanup();
     generic::coreModule::scenesFactoryInstance::cleanup();
     generic::debugModule::logManager::cleanup();
@@ -94,30 +94,30 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     GET_AUDIO_ENGINE().stopAll();
     // register all profile
-//    GET_PROFILE().registerBlock("local", []() {
-//        return new bt::localProfile::localProfileBlock();
-//    });
-//    GET_PROFILE().executeLoad();
-    // register all databases
+    GET_PROFILE().registerBlock("progress", []() {
+        return new profileModule::progressProfileBlock();
+    });
+    GET_PROFILE().executeLoad();
+//     register all databases
     GET_DATABASE_MANAGER().addDatabase(
-        bt::databaseModule::databaseManager::eDatabaseType::LEVELS_DB,
+        databaseModule::databaseManager::eDatabaseType::LEVELS_DB,
         "properties/database/levels/db.json",
-        std::make_shared<bt::databaseModule::levelsDatabase>()
+        std::make_shared<databaseModule::levelsDatabase>()
     );
     GET_DATABASE_MANAGER().addDatabase(
-        bt::databaseModule::databaseManager::eDatabaseType::MAP_OBJECTS_DB,
+        databaseModule::databaseManager::eDatabaseType::MAP_OBJECTS_DB,
         "properties/database/mapObjects/db.json",
-        std::make_shared<bt::databaseModule::mapObjectsDatabase>()
+        std::make_shared<databaseModule::mapObjectsDatabase>()
     );
     GET_DATABASE_MANAGER().executeLoadData();
     // register external node types
-    bt::interfaceModule::registerAllCustomNodes();
+    interfaceModule::registerAllCustomNodes();
     // register all states
     GET_SCENES_FACTORY().registerScene("menuScene", []() {
-        return new bt::sceneModule::menuScene();
+        return new sceneModule::menuScene();
     });
     GET_SCENES_FACTORY().registerScene("gameScene", []() {
-        return new bt::sceneModule::gameScene();
+        return new sceneModule::gameScene();
     });
 
     // run first scene

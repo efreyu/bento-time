@@ -121,7 +121,8 @@
       }
     },
     "settings": {
-      "bgColor": [114,101,181]
+      "bgColor": [114,101,181],
+      "fadeTransitionTime": 0.01
     }
   }
 }

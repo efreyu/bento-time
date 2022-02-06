@@ -15,6 +15,7 @@ namespace bt::interfaceModule {
         void setText(const std::string&);
         void setDisabled();
         void setSelect(bool status);
+        void setSmallText();
 
     private:
         void initWidget();

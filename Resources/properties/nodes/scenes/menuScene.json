@@ -175,7 +175,11 @@
     },
     "settings": {
       "bgColor": [114,101,181],
-      "menuFile": "properties/nodes/menu"
+      "menuFile": "properties/nodes/menu",
+      "fadeTransitionTime": 0.01,
+      "allowedItemCount": 5,
+      "moreButtonText": "More",
+      "levelProgressPattern": "Level %d"
     }
   }
 }

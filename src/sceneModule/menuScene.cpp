@@ -1,14 +1,19 @@
 #include "menuScene.h"
-#include "generic/coreModule/scenes/scenesFactoryInstance.h"
+#include "databaseModule/databaseManager.h"
+#include "databaseModule/levelsDatabase.h"
+#include "gameplayModule/moveEnum.h"
 #include "generic/coreModule/resources/resourceManager.h"
+#include "generic/coreModule/scenes/scenesFactoryInstance.h"
+#include "generic/profileModule/profileManager.h"
+#include "interfaceModule/widgets/buttonWidget.h"
 #include "interfaceModule/widgets/controllerButtonWidget.h"
 #include "interfaceModule/widgets/controllerStickWidget.h"
-#include "interfaceModule/widgets/buttonWidget.h"
-#include "gameplayModule/moveEnum.h"
+#include "profileModule/progressProfileBlock.h"
 
 using namespace bt::sceneModule;
 using namespace bt::interfaceModule;
 using namespace bt::gameplayModule;
+using namespace bt::databaseModule;
 using namespace cocos2d;
 
 std::map<eMenuPageType, std::string> menuTypes = {
@@ -20,6 +25,10 @@ std::map<eMenuPageType, std::string> menuTypes = {
 menuScene::menuScene() {
     this->setName("menuScene");
     initWithProperties("scenes/" + this->getName());
+    loadSettings();
+}
+
+void menuScene::loadSettings() {
     if (!hasPropertyObject("settings"))
         return;
     const auto& json = getPropertyObject("settings");
@@ -30,6 +39,18 @@ menuScene::menuScene() {
         color.b = static_cast<uint8_t>(json["bgColor"][2u].GetInt());
     }
     initLayerColor(color);
+    if (json.HasMember("fadeTransitionTime") && json["fadeTransitionTime"].IsNumber()) {
+        fadeTransitionTime = json["fadeTransitionTime"].GetFloat();
+    }
+    if (json.HasMember("allowedItemCount") && json["allowedItemCount"].IsNumber()) {
+        settings.allowedItemCount = json["allowedItemCount"].GetInt();
+    }
+    if (json.HasMember("moreButtonText") && json["moreButtonText"].IsString()) {
+        settings.moreButtonText = json["moreButtonText"].GetString();
+    }
+    if (json.HasMember("levelProgressPattern") && json["levelProgressPattern"].IsString()) {
+        settings.levelProgressPattern = json["levelProgressPattern"].GetString();
+    }
     if (json.HasMember("menuFile") && json["menuFile"].IsString()) {
         initMenu(json["menuFile"].GetString());
     }
@@ -103,6 +124,9 @@ void menuScene::initMenu(const std::string& path) {
         if (obj.HasMember("hint") && obj["hint"].IsString()) {
             page->hintText = obj["hint"].GetString();
         }
+        if (obj.HasMember("small") && obj["small"].IsBool()) {
+            page->small = obj["small"].GetBool();
+        }
         if (obj.HasMember("buttons") && obj["buttons"].IsArray()) {
             auto array = obj["buttons"].GetArray();
             for (auto item = array.Begin(); item != array.End(); ++item) {
@@ -127,6 +151,49 @@ void menuScene::initMenu(const std::string& path) {
         }
         menuPagesMap[page->pageId] = page;
     }
+
+    //level progress page
+    auto page = std::make_shared<menuPage>();
+    if (menuPagesMap.count(menuTypes[eMenuPageType::PLAY])) {
+        page = menuPagesMap[menuTypes[eMenuPageType::PLAY]];
+    }
+    page->pageId = menuTypes[eMenuPageType::PLAY];
+//    auto progressBlock = GET_PROFILE().getBlock<profileModule::progressProfileBlock>("progress");
+    auto levelDb = GET_DATABASE_MANAGER().getDatabase<levelsDatabase>(databaseManager::eDatabaseType::LEVELS_DB);
+    for (const auto& [id, info] : levelDb->getLevels()) {
+        if (page->buttons.size() > settings.allowedItemCount) {
+            auto newId = cocos2d::StringUtils::format("%s_%d", menuTypes[eMenuPageType::PLAY].c_str(), id);
+            auto button = std::make_shared<menuItem>();
+            button->text = settings.moreButtonText;
+            button->type = newId;
+            page->buttons.emplace_back(button);
+            menuPagesMap[page->pageId] = page;
+            auto firstBtn = page->buttons.front();
+            auto prevType = page->pageId;
+            page = std::make_shared<menuPage>(*page);;
+            page->buttons.clear();
+            page->pageId = newId;
+            //back Btn
+            button = std::make_shared<menuItem>(*firstBtn);
+            button->type = prevType;
+            page->buttons.emplace_back(button);
+        }
+        auto button = std::make_shared<menuItem>();
+        if (!settings.levelProgressPattern.empty()) {
+            button->text = cocos2d::StringUtils::format(settings.levelProgressPattern.c_str(), id);
+        } else {
+            button->text = std::to_string(id);
+        }
+        //run game with level
+        button->clb = [levelId = id](){
+            cocos2d::ValueMap data;
+            data["levelId"] = cocos2d::Value(levelId);
+            GET_SCENES_FACTORY().runSceneWithParameters("gameScene", data);
+        };
+        page->buttons.emplace_back(button);
+    }
+    menuPagesMap[page->pageId] = page;
+
 }
 
 void menuScene::loadPage(const std::string& page) {
@@ -134,9 +201,6 @@ void menuScene::loadPage(const std::string& page) {
     auto backBtnHolder = findNode("backBtnHolder");
     auto tipsHolder = findNode("tipsHolder");
 
-    if (menuTypes[eMenuPageType::PLAY] == page) {
-        GET_SCENES_FACTORY().runScene("gameScene");
-    }
     if (!menuPagesMap.count(page) || !menuHolder || !backBtnHolder || !tipsHolder) {
         LOG_ERROR("Problems with loading nodes.");
         return;
@@ -160,27 +224,39 @@ void menuScene::loadPage(const std::string& page) {
             backBtnHolder->addChild(btn);
             if (!btnIt->enabled)
                 btn->setDisabled();
-            menuItem->clb = [this, data = btnIt->type](){
-                loadPage(data);
-            };
+            if (btnIt->clb) {
+                menuItem->clb = btnIt->clb;
+            } else {
+                menuItem->clb = [this, data = btnIt->type, clb = btnIt->clb](){
+                    if (clb)
+                        clb();
+                    loadPage(data);
+                };
+            }
             menuList.emplace_back(menuItem);
         }
     }
-
     for (const auto& item : pagePtr->buttons) {
         if (!item->backBtn) {
             auto menuItem = std::make_shared<sActiveMenu>();
             auto btn = new buttonWidget();
             menuItem->node = btn;
             btn->setText(item->text);
+            if (pagePtr->small) {
+                btn->setSmallText();
+            }
             if (!menuHolder->getChildren().empty())
                 btn->setPositionY(0 - menuHolder->getChildren().size() * btn->getContentSize().height);
             menuHolder->addChild(btn);
             if (!item->enabled)
                 btn->setDisabled();
-            menuItem->clb = [this, data = item->type](){
-                loadPage(data);
-            };
+            if (item->clb) {
+                menuItem->clb = item->clb;
+            } else {
+                menuItem->clb = [this, data = item->type](){
+                    loadPage(data);
+                };
+            }
             menuList.emplace_back(menuItem);
         }
     }
@@ -205,5 +281,4 @@ void menuScene::loadPage(const std::string& page) {
         tipsLabel->setString(pagePtr->hintText);
         tipsHolder->addChild(tipsLabel);
     }
-
 }
