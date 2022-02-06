@@ -25,7 +25,7 @@
       "transformProperty": {
         "anchor": [ 0.5, 0.5 ],
         "pivot": [ 0.5, 0.5 ],
-        "scale": 2.5
+        "scale": 1
       },
       "asepriteProperty": {
         "file": "images/widgets/controllerButtonWidget/a",
@@ -37,7 +37,7 @@
       "transformProperty": {
         "anchor": [ 0.5, 0.5 ],
         "pivot": [ 0.5, 0.5 ],
-        "scale": 2.5
+        "scale": 1
       },
       "asepriteProperty": {
         "file": "images/widgets/controllerButtonWidget/b",
@@ -50,7 +50,7 @@
         "anchor": [ 0.5, 0.5 ],
         "pivot": [ 0.5, 0.5 ],
         "position": [ 0, -80 ],
-        "scale": 2.5
+        "scale": 1
       },
       "asepriteProperty": {
         "file": "images/widgets/controllerButtonWidget/icon_replay",
@@ -63,7 +63,7 @@
         "anchor": [ 0.5, 0.5 ],
         "pivot": [ 0.5, 0.5 ],
         "position": [ 0, -80 ],
-        "scale": 2.5
+        "scale": 1
       },
       "asepriteProperty": {
         "file": "images/widgets/controllerButtonWidget/icon_menu",

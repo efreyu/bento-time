@@ -13,6 +13,11 @@
   <property name="id" type="int" default="20003"/>
   <property name="type" type="string" default="food"/>
  </objecttype>
+ <objecttype name="food_20004_1" color="#ff2600">
+  <property name="follow" type="bool" default="true"/>
+  <property name="id" type="int" default="20004"/>
+  <property name="type" type="string" default="food"/>
+ </objecttype>
  <objecttype name="start" color="#00f900">
   <property name="id" type="int" default="20001"/>
   <property name="type" type="string" default="levelStart"/>

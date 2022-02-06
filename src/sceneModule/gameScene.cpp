@@ -37,7 +37,7 @@ void gameScene::onSceneLoading() {
     }
     auto board = new gameplayModule::gameBoard();
     displayHolder->addChild(board, -1);
-    auto levelId = 10001;
+    auto levelId = 1;
     if (sceneData.count("levelId")) {
         levelId = sceneData["levelId"].asInt();
     }

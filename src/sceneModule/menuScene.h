@@ -13,7 +13,6 @@ namespace bt::sceneModule {
 
     enum class eMenuPageType {
         MAIN_MENU = 0,
-        OPTIONS,
         PLAY
     };
 
@@ -59,6 +58,8 @@ namespace bt::sceneModule {
             int allowedItemCount;
             std::string moreButtonText;
             std::string levelProgressPattern;
+            float lightening = 1.f;
+            float selectDuration = .1f;
         };
         menuSceneSettings settings;
     };

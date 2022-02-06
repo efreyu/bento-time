@@ -6,8 +6,8 @@
         "text": "GAMES"
       },
       {
-        "type": "optionsMenu",
-        "text": "OPTIONS"
+        "type": "about",
+        "text": "ABOUT"
       },
       {
         "type": "credits",
@@ -50,7 +50,7 @@
     ],
     "hint": "Press A to play"
   },
-  "optionsMenu": {
+  "about": {
     "buttons": [
       {
         "type": "mainMenu",
@@ -58,14 +58,11 @@
         "backBtn": true
       },
       {
-        "type": "soundSetting",
-        "text": "SOUND: %s"
-      },
-      {
-        "type": "musicSetting",
-        "text": "MUSIC: %s"
+        "type": "temp",
+        "text": "Bento Time is a game \nfor people who loves \nbento. \nI hope you will \nenjoy for this game!"
       }
     ],
+    "small": true,
     "hint": "Press A to select"
   },
   "credits": {
@@ -103,6 +100,7 @@
         "text": "\"Legend of Bento\" \nis not available \nin Demo mode"
       }
     ],
+    "small": true,
     "hint": "Press A to select"
   },
   "notAvailable2": {
@@ -117,6 +115,7 @@
         "text": "\"Final Bento VII\" \nis not available \nin Demo mode"
       }
     ],
+    "small": true,
     "hint": "Press A to select"
   },
   "notAvailable3": {
@@ -131,6 +130,7 @@
         "text": "\"Super Bento\" \nis not available \nin Demo mode"
       }
     ],
+    "small": true,
     "hint": "Press A to select"
   },
   "notAvailable4": {
@@ -145,6 +145,7 @@
         "text": "\"Bento fighter\" \nis not available \nin Demo mode"
       }
     ],
+    "small": true,
     "hint": "Press A to select"
   },
   "play": {

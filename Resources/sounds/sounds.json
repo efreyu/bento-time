@@ -1,10 +1,12 @@
 {
   "sounds": {
-    "ui.click": "effects/click.wav",
+    "ui.click": "effects/select.wav",
+    "ui.reset": "effects/error.wav",
+    "ui.choose": "effects/choose.mp3",
 
-    "battle.step_lth4": "effects/step_lth4.ogg",
-    "battle.step_lth33": "effects/step_lth33.ogg",
+    "gameScene.win": "effects/win.wav",
+    "gameScene.move": "effects/move.mp3",
 
-    "music.main": "musics/theme_ruine.mp3"
+    "music.main": "musics/8bit_Bossa.mp3"
   }
 }

@@ -1,0 +1,114 @@
+{ "frames": [
+   {
+    "filename": "bento_pancakes_2 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "sourceSize": { "w": 224, "h": 224 },
+    "duration": 320
+   },
+   {
+    "filename": "bento_pancakes_2 1.aseprite",
+    "frame": { "x": 224, "y": 0, "w": 224, "h": 224 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "sourceSize": { "w": 224, "h": 224 },
+    "duration": 320
+   },
+   {
+    "filename": "bento_pancakes_2 2.aseprite",
+    "frame": { "x": 448, "y": 0, "w": 224, "h": 224 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "sourceSize": { "w": 224, "h": 224 },
+    "duration": 100
+   },
+   {
+    "filename": "bento_pancakes_2 3.aseprite",
+    "frame": { "x": 672, "y": 0, "w": 224, "h": 224 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "sourceSize": { "w": 224, "h": 224 },
+    "duration": 320
+   },
+   {
+    "filename": "bento_pancakes_2 4.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "sourceSize": { "w": 224, "h": 224 },
+    "duration": 100
+   },
+   {
+    "filename": "bento_pancakes_2 5.aseprite",
+    "frame": { "x": 896, "y": 0, "w": 224, "h": 224 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "sourceSize": { "w": 224, "h": 224 },
+    "duration": 220
+   },
+   {
+    "filename": "bento_pancakes_2 6.aseprite",
+    "frame": { "x": 1120, "y": 0, "w": 224, "h": 224 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "sourceSize": { "w": 224, "h": 224 },
+    "duration": 220
+   },
+   {
+    "filename": "bento_pancakes_2 7.aseprite",
+    "frame": { "x": 1344, "y": 0, "w": 224, "h": 224 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "sourceSize": { "w": 224, "h": 224 },
+    "duration": 220
+   },
+   {
+    "filename": "bento_pancakes_2 8.aseprite",
+    "frame": { "x": 1568, "y": 0, "w": 224, "h": 224 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "sourceSize": { "w": 224, "h": 224 },
+    "duration": 500
+   },
+   {
+    "filename": "bento_pancakes_2 9.aseprite",
+    "frame": { "x": 1792, "y": 0, "w": 224, "h": 224 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 224 },
+    "sourceSize": { "w": 224, "h": 224 },
+    "duration": 1000
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.32-x64",
+  "image": "bento_pancakes_2.png",
+  "format": "RGBA8888",
+  "size": { "w": 2016, "h": 224 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 1, "direction": "forward" },
+   { "name": "move", "from": 2, "to": 4, "direction": "forward" },
+   { "name": "win", "from": 5, "to": 7, "direction": "forward" },
+   { "name": "sleep", "from": 8, "to": 9, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "base", "opacity": 255, "blendMode": "normal" },
+   { "name": "pancakes", "opacity": 255, "blendMode": "normal" },
+   { "name": "face", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

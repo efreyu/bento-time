@@ -42,12 +42,14 @@ namespace bt::gameplayModule {
         mapDispatcher* dispatcher = nullptr;
         cocos2d::TMXTiledMap* tiledMap = nullptr;
         cocos2d::Label* movesLabel = nullptr;
+        cocos2d::Label* levelsLabel = nullptr;
         int currentLevel;
         int movesCnt;
         bool boardBlocked = true;
 
         struct gameBoardSettings {
             std::string movesPattern;
+            std::string levelsPattern;
             float fadeDuration;
             float delayDuration;
         };

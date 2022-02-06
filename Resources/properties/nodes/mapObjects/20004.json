@@ -1,0 +1,16 @@
+{
+  "props": {
+    "asepriteNode": {
+      "transformProperty": {
+        "anchor": [0.5, 0.5],
+        "pivot": [0.5, 0.76]
+      },
+      "asepriteProperty": {
+        "file": "images/mapObjects/20004/anim",
+        "animation": "sleep",
+        "loop": true,
+        "usePixelMode": true
+      }
+    }
+  }
+}

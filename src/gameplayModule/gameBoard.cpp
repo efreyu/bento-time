@@ -6,7 +6,9 @@
 #include "generic/coreModule/nodes/types/node3d.h"
 #include "generic/debugModule/imGuiLayer.h"
 #include "generic/debugModule/logManager.h"
+#include "generic/profileModule/profileManager.h"
 #include "interfaceModule/widgets/controllerStickWidget.h"
+#include "profileModule/progressProfileBlock.h"
 
 using namespace bt::gameplayModule;
 using namespace bt::databaseModule;
@@ -19,11 +21,8 @@ gameBoard::gameBoard() {
         LOG_ERROR("gameField was not loaded correctly!");
     }
     movesLabel = dynamic_cast<cocos2d::Label*>(findNode("movesLabel"));
+    levelsLabel = dynamic_cast<cocos2d::Label*>(findNode("infoLabel"));
     loadSettings();
-
-    GET_AUDIO_ENGINE().preload("ui.click");
-    GET_AUDIO_ENGINE().preload("music.main");
-    //    GET_AUDIO_ENGINE().play("music.main");
     removeJsonData();
 }
 
@@ -33,6 +32,9 @@ void gameBoard::loadSettings() {
     const auto& json = getPropertyObject("settings");
     if (json.HasMember("movesPattern") && json["movesPattern"].IsString()) {
         settings.movesPattern = json["movesPattern"].GetString();
+    }
+    if (json.HasMember("levelsPattern") && json["levelsPattern"].IsString()) {
+        settings.levelsPattern = json["levelsPattern"].GetString();
     }
     if (json.HasMember("fadeDuration") && json["fadeDuration"].IsNumber()) {
         settings.fadeDuration = json["fadeDuration"].GetFloat();
@@ -93,17 +95,31 @@ void gameBoard::loadLevel(int id) {
     });
     dispatcher = mapDispatcher::createWithObjectsNode(objectsLayer, tiledMap, id);
     dispatcher->getEmitter()->onWin.connect([this](){
+        GET_AUDIO_ENGINE().play("gameScene.win");
+        auto progressBlock = GET_PROFILE().getBlock<profileModule::progressProfileBlock>("progress");
+        if (auto block = progressBlock->getProgressForLevel(currentLevel)) {
+            block->addProgress(movesCnt);
+        }
+        SAVE_PROFILE();
         boardBlocked = true;
         runHideAnimation([this](){
             loadLevel(currentLevel + 1);
         });
     });
     movesCnt = 0;
-    updateMovesScore();
     dispatcher->getEmitter()->onPlayerMove.connect([this](){
+        GET_AUDIO_ENGINE().play("gameScene.move");
         movesCnt++;
         updateMovesScore();
     });
+    updateMovesScore();
+    if (levelsLabel) {
+        if (!settings.levelsPattern.empty()) {
+            levelsLabel->setString(cocos2d::StringUtils::format(settings.levelsPattern.c_str(), currentLevel));
+        } else {
+            levelsLabel->setString(std::to_string(currentLevel));
+        }
+    }
 }
 
 void gameBoard::attachController(interfaceModule::sControllerStickEvents* emitter, generic::coreModule::eventNode* replayBtn) {

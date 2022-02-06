@@ -2,9 +2,11 @@
 #include "databaseModule/databaseManager.h"
 #include "databaseModule/levelsDatabase.h"
 #include "gameplayModule/moveEnum.h"
+#include "generic/audioModule/audioEngineInstance.h"
 #include "generic/coreModule/resources/resourceManager.h"
 #include "generic/coreModule/scenes/scenesFactoryInstance.h"
 #include "generic/profileModule/profileManager.h"
+#include "generic/utilityModule/convertUtility.h"
 #include "interfaceModule/widgets/buttonWidget.h"
 #include "interfaceModule/widgets/controllerButtonWidget.h"
 #include "interfaceModule/widgets/controllerStickWidget.h"
@@ -18,7 +20,6 @@ using namespace cocos2d;
 
 std::map<eMenuPageType, std::string> menuTypes = {
     {eMenuPageType::MAIN_MENU, "mainMenu"},
-    {eMenuPageType::OPTIONS, "optionsMenu"},
     {eMenuPageType::PLAY, "play"}
 };
 
@@ -51,6 +52,12 @@ void menuScene::loadSettings() {
     if (json.HasMember("levelProgressPattern") && json["levelProgressPattern"].IsString()) {
         settings.levelProgressPattern = json["levelProgressPattern"].GetString();
     }
+    if (json.HasMember("lightening") && json["lightening"].IsNumber()) {
+        settings.lightening = json["lightening"].GetFloat();
+    }
+    if (json.HasMember("selectDuration") && json["selectDuration"].IsNumber()) {
+        settings.selectDuration = json["selectDuration"].GetFloat();
+    }
     if (json.HasMember("menuFile") && json["menuFile"].IsString()) {
         initMenu(json["menuFile"].GetString());
     }
@@ -58,6 +65,7 @@ void menuScene::loadSettings() {
 
 void menuScene::onSceneLoading() {
     sceneInterface::onSceneLoading();
+    GET_AUDIO_ENGINE().playOnce("music.main", true);
     auto controllerNode = dynamic_cast<interfaceModule::controllerStickWidget*>(findNode("controller"));
     auto buttonA = dynamic_cast<interfaceModule::controllerButtonWidget*>(findNode("buttonA"));
     auto buttonB = dynamic_cast<interfaceModule::controllerButtonWidget*>(findNode("buttonB"));
@@ -94,6 +102,7 @@ void menuScene::onSceneLoading() {
         if (auto btn = dynamic_cast<buttonWidget*>(menuListIt->get()->node)) {
             btn->setSelect(true);
         }
+        GET_AUDIO_ENGINE().play("ui.choose");
     });
     buttonA->setOnTouchEnded([this](){
         if (menuList.empty())
@@ -158,7 +167,7 @@ void menuScene::initMenu(const std::string& path) {
         page = menuPagesMap[menuTypes[eMenuPageType::PLAY]];
     }
     page->pageId = menuTypes[eMenuPageType::PLAY];
-//    auto progressBlock = GET_PROFILE().getBlock<profileModule::progressProfileBlock>("progress");
+    auto progressBlock = GET_PROFILE().getBlock<profileModule::progressProfileBlock>("progress");
     auto levelDb = GET_DATABASE_MANAGER().getDatabase<levelsDatabase>(databaseManager::eDatabaseType::LEVELS_DB);
     for (const auto& [id, info] : levelDb->getLevels()) {
         if (page->buttons.size() > settings.allowedItemCount) {
@@ -179,11 +188,13 @@ void menuScene::initMenu(const std::string& path) {
             page->buttons.emplace_back(button);
         }
         auto button = std::make_shared<menuItem>();
-        if (!settings.levelProgressPattern.empty()) {
-            button->text = cocos2d::StringUtils::format(settings.levelProgressPattern.c_str(), id);
+        auto progress = progressBlock->getProgressForLevel(id);
+        if (progress && !settings.levelProgressPattern.empty()) {
+            button->text = cocos2d::StringUtils::format(settings.levelProgressPattern.c_str(), id, progress->getMoves());
         } else {
             button->text = std::to_string(id);
         }
+        button->enabled = id == 1 || (progress && progress->getMoves() > 0);
         //run game with level
         button->clb = [levelId = id](){
             cocos2d::ValueMap data;
@@ -280,5 +291,11 @@ void menuScene::loadPage(const std::string& page) {
         loadProperty(tipsLabel, "tipsLabel");
         tipsLabel->setString(pagePtr->hintText);
         tipsHolder->addChild(tipsLabel);
+        auto color = tipsLabel->getColor();
+        auto nextColor = generic::utilityModule::convertUtility::changeColorByPercent(color, settings.lightening);
+        auto tint = cocos2d::TintTo::create(settings.selectDuration, nextColor);
+        auto reverse = cocos2d::TintTo::create(settings.selectDuration, color);
+        auto seq = cocos2d::Sequence::create(tint, reverse, nullptr);
+        tipsLabel->runAction(cocos2d::RepeatForever::create(seq));
     }
 }

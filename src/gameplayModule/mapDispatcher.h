@@ -76,6 +76,7 @@ namespace bt::gameplayModule {
         cocos2d::Node* objectsNode = nullptr;
         std::pair<int, int> mapSize;
         mapDispatcherEvents eventHolder;
+//        bool win = false;
 
         // (x, y from tiled)
         std::map<int, std::map<int, mapCell*>> cells;

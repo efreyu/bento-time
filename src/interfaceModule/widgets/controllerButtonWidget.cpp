@@ -1,4 +1,5 @@
 #include "controllerButtonWidget.h"
+#include <generic/audioModule/audioEngineInstance.h>
 #include <map>
 #include <string>
 
@@ -43,10 +44,10 @@ void controllerButtonWidget::updateSettings() {
     updateButton(type, icon, iconAnimation);
 }
 
-void controllerButtonWidget::updateButton(eControllerButtonType buttonType, eControllerIconType iconType, const std::string& iconAnimation) {
+void controllerButtonWidget::updateButton(eControllerButtonType _buttonType, eControllerIconType iconType, const std::string& iconAnimation) {
     if (!btnNode)
         return;
-    switch (buttonType) {
+    switch (_buttonType) {
     case eControllerButtonType::TYPE_A:
         loadProperty(btnNode, "typeA");
         break;
@@ -54,6 +55,7 @@ void controllerButtonWidget::updateButton(eControllerButtonType buttonType, eCon
         loadProperty(btnNode, "typeB");
         break;
     }
+    buttonType = _buttonType;
     if (!iconNode)
         return;
     switch (iconType) {
@@ -70,7 +72,12 @@ void controllerButtonWidget::updateButton(eControllerButtonType buttonType, eCon
 }
 
 generic::coreModule::eventNode::eventTouchClb controllerButtonWidget::getOnTouchBegan() {
-    btnNode->setAnimation("press");
+    btnNode->setAnimation("pressed");
+    if (buttonType == eControllerButtonType::TYPE_A) {
+        GET_AUDIO_ENGINE().play("ui.click");
+    } else {
+        GET_AUDIO_ENGINE().play("ui.reset");
+    }
     return eventNode::getOnTouchBegan();
 }
 

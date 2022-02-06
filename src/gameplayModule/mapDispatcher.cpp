@@ -9,6 +9,8 @@
 using namespace bt::gameplayModule;
 using namespace bt::databaseModule;
 
+const float animDelay = 0.13f;
+
 mapDispatcher* mapDispatcher::createWithObjectsNode(cocos2d::Node* node, cocos2d::TMXTiledMap* tiled, int levelId) {
     auto levelsDb = GET_DATABASE_MANAGER().getDatabase<levelsDatabase>(databaseManager::eDatabaseType::LEVELS_DB);
     if (!levelsDb->hasLevelById(levelId)) {
@@ -40,13 +42,30 @@ bool mapDispatcher::move(eMoveDirection direction) {
         getClosestCells(connectedCells, exclude, direction);
         if (connectedCells->move(direction)) {
             getEmitter()->onPlayerMove.emit();
+            auto tempCells = std::make_shared<mapCellItems>(p);
+            std::vector<mapCell*> sleepBlocks;
+            getClosestCells(tempCells, sleepBlocks, direction);
+            std::for_each(sleepBlocks.begin(), sleepBlocks.end(), [this, p](mapCell* c){
+                auto delay = cocos2d::DelayTime::create(animDelay);
+                auto clb = cocos2d::CallFunc::create([bento = c->node](){
+                    bento->setAnimation(eBentoAnimation::IDLE);
+                });
+                c->node->runAction(cocos2d::Sequence::create(delay, clb, nullptr));
+            });
         }
         connectedCells->reset();
         auto it = std::find_if(exitCells.begin(), exitCells.end(), [this](const std::pair<int, int>& p){
             return !getCellByPos(p);
         });
         if (it == exitCells.end()) {
+            p->node->setAnimation(eBentoAnimation::WIN);
             getEmitter()->onWin.emit();
+            std::vector<mapCell*> sleepBlocks;
+            auto tempCells = std::make_shared<mapCellItems>(p);
+            getClosestCells(tempCells, sleepBlocks, direction);
+            std::for_each(sleepBlocks.begin(), sleepBlocks.end(), [](mapCell* c){
+                c->node->setAnimation(eBentoAnimation::WIN);
+            });
         }
     });
 
@@ -141,6 +160,7 @@ void mapDispatcher::spawnObjects(const databaseModule::sLevelData& levelData, co
                 });
                 cells[item.x][item.y] = cell;
                 if (unitObject->type == databaseModule::eMapObjectType::HERO) {
+                    unitObject->setAnimation(eBentoAnimation::IDLE);
                     playerCells.push_back(cell);
                 }
             } else {
@@ -238,9 +258,6 @@ void mapDispatcher::getClosestCells(mapCellItemsPtr& closest, std::vector<mapCel
     std::set<eMoveDirection> closestPattern = {
         eMoveDirection::UP, eMoveDirection::DOWN, eMoveDirection::LEFT, eMoveDirection::RIGHT
     };
-//    if (closestPattern.count(direction)) {
-//        closestPattern.erase(direction);
-//    }
     for (auto& dir : closestPattern) {
         auto nextPosition = getNextIndex(dir, closest->cell->pos);
         if (auto neighborCell = getCellByPos(nextPosition)) {
@@ -265,8 +282,12 @@ bool mapCell::move(eMoveDirection direction) {
         case eMoveDirection::LEFT: actionPos.x -= node->getContentSize().width * node->getScale(); break;
         default: break;
         }
-        auto action = cocos2d::MoveTo::create(0.13f, actionPos);
-        node->runAction(action);
+        node->setAnimation(eBentoAnimation::MOVE);
+        auto action = cocos2d::MoveTo::create(animDelay, actionPos);
+        auto clb = cocos2d::CallFunc::create([this, bento = node](){
+            bento->setAnimation(eBentoAnimation::IDLE);
+        });
+        node->runAction(cocos2d::Sequence::create(action, clb, nullptr));
         return true;
     }
     return false;

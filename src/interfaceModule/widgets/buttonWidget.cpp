@@ -15,11 +15,7 @@ void buttonWidget::setText(const std::string& value) {
     if (auto label = dynamic_cast<cocos2d::Label*>(findNode("label"))) {
         label->setString(value);
         label->init();
-        auto size = label->getContentSize();
-        setContentSize(size);
-        if (auto select = dynamic_cast<cocos2d::ui::Scale9Sprite*>(findNode("select"))) {
-            select->setContentSize({size.width + selectHorizontalOffset, size.height});
-        }
+        updateSize();
     }
 }
 
@@ -63,6 +59,16 @@ void buttonWidget::initWidget() {
 void buttonWidget::setSmallText() {
     if (auto label = findNode("label")) {
         loadProperty(label, "small");
-        label->init();
+        updateSize();
+    }
+}
+
+void buttonWidget::updateSize() {
+    if (auto label = findNode("label")) {
+        auto size = label->getContentSize();
+        setContentSize(size);
+        if (auto select = dynamic_cast<cocos2d::ui::Scale9Sprite*>(findNode("select"))) {
+            select->setContentSize({size.width + selectHorizontalOffset, size.height});
+        }
     }
 }

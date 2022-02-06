@@ -24,10 +24,11 @@ namespace bt::interfaceModule {
         eventTouchClb getOnTouchEnded() override;
 
     private:
-        void updateButton(eControllerButtonType buttonType, eControllerIconType iconType, const std::string& iconAnimation = "");
+        void updateButton(eControllerButtonType _buttonType, eControllerIconType iconType, const std::string& iconAnimation = "");
 
         generic::coreModule::asepriteNode* btnNode = nullptr;
         generic::coreModule::asepriteNode* iconNode = nullptr;
+        eControllerButtonType buttonType = eControllerButtonType::TYPE_A;
 
     };
 }// namespace bt::interfaceModule

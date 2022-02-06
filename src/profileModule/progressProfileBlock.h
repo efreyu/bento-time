@@ -11,11 +11,13 @@
 namespace bt::profileModule {
 
     struct sProgressProfile {
-        int moves = 0;
 
         bool load(const rapidjson::GenericValue<rapidjson::UTF8<char>>::ConstObject&);
         bool save(rapidjson::Value&, rapidjson::Document::AllocatorType&);
         void addProgress(int progress);
+        int getMoves() const { return moves; }
+    private:
+        int moves = 0;
     };
 
     class progressProfileBlock : public generic::profileModule::profileBlockInterface {

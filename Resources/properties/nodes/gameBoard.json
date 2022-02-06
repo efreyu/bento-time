@@ -10,6 +10,10 @@
       {
         "type": "label",
         "name": "movesLabel"
+      },
+      {
+        "type": "label",
+        "name": "infoLabel"
       }
     ]
   },
@@ -41,10 +45,26 @@
         "align": "left"
       }
     },
+    "infoLabel": {
+      "transformProperty": {
+        "pivot": [ 0.0, 1.0 ],
+        "anchor": [ 0.0, 1.0 ],
+        "position": [94, -74]
+      },
+      "labelProperty": {
+        "text": "Level 1",
+        "fontType": "ttf",
+        "fontSize": 64.0,
+        "fontFile": "fonts/VT323-Regular.ttf",
+        "bold": true,
+        "align": "left"
+      }
+    },
     "settings": {
       "movesPattern": "Moves:%d",
+      "levelsPattern": "Level:%d",
       "fadeDuration": 0.75,
-      "delayDuration": 0.8
+      "delayDuration": 1.2
     }
   }
 }

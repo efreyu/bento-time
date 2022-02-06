@@ -17,6 +17,12 @@
       "propertyPath": "mapObjects/20003",
       "objectType": "food",
       "nodeType": "aseprite"
+    },
+    {
+      "id": 20004,
+      "propertyPath": "mapObjects/20004",
+      "objectType": "food",
+      "nodeType": "aseprite"
     }
   ]
 }

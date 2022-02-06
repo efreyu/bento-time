@@ -1,8 +1,17 @@
 #include "bentoNode.h"
 #include "databaseModule/mapObjectsDatabase.h"
 #include "generic/coreModule/nodes/types/asepriteNode.h"
+#include <string>
+#include <map>
 
 using namespace bt::gameplayModule;
+
+std::map<eBentoAnimation, std::string> animationTypes = {
+    {eBentoAnimation::WIN, "win"},
+    {eBentoAnimation::IDLE, "idle"},
+    {eBentoAnimation::MOVE, "move"},
+    {eBentoAnimation::SLEEP, "sleep"}
+};
 
 bentoNode::bentoNode() {
     this->setName("bentoNode");
@@ -27,5 +36,14 @@ void bentoNode::initWithData(const databaseModule::sMapObjectsData& data) {
         node->loadProperty(node, "asepriteNode");
         node->removeJsonData();
         addChild(node);
+    }
+}
+
+void bentoNode::setAnimation(eBentoAnimation type) {
+    if (lastAnimation != eBentoAnimation::WIN) {
+        lastAnimation = type;
+        if (auto asepriteNode = dynamic_cast<generic::coreModule::asepriteNode*>(findNode("asepriteNode"))) {
+            asepriteNode->setAnimation(animationTypes[type], true);
+        }
     }
 }

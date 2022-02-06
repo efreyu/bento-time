@@ -19,6 +19,7 @@ namespace bt::interfaceModule {
 
     private:
         void initWidget();
+        void updateSize();
         float selectHorizontalOffset = 0.f;
     };
 }// namespace bt::interfaceModule

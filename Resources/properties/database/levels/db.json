@@ -17,7 +17,7 @@
   },
   "levels": [
     {
-      "id": 10001,
+      "id": 1,
       "tmxPath": "images/levels/1.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -26,7 +26,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10002,
+      "id": 2,
       "tmxPath": "images/levels/2.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -35,7 +35,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10003,
+      "id": 3,
       "tmxPath": "images/levels/3.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -44,7 +44,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10004,
+      "id": 4,
       "tmxPath": "images/levels/4.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -54,7 +54,7 @@
     },
 
     {
-      "id": 10005,
+      "id": 5,
       "tmxPath": "images/levels/1.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -63,7 +63,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10006,
+      "id": 6,
       "tmxPath": "images/levels/2.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -72,7 +72,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10007,
+      "id": 7,
       "tmxPath": "images/levels/3.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -81,7 +81,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10008,
+      "id": 8,
       "tmxPath": "images/levels/4.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -90,7 +90,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10009,
+      "id": 9,
       "tmxPath": "images/levels/1.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -99,7 +99,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10010,
+      "id": 10,
       "tmxPath": "images/levels/2.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -108,7 +108,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10011,
+      "id": 11,
       "tmxPath": "images/levels/3.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -117,7 +117,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10012,
+      "id": 12,
       "tmxPath": "images/levels/4.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -126,7 +126,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10013,
+      "id": 13,
       "tmxPath": "images/levels/1.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -135,7 +135,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10014,
+      "id": 14,
       "tmxPath": "images/levels/2.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -144,7 +144,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10015,
+      "id": 15,
       "tmxPath": "images/levels/3.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -153,7 +153,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10016,
+      "id": 16,
       "tmxPath": "images/levels/4.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -162,7 +162,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10017,
+      "id": 17,
       "tmxPath": "images/levels/4.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -171,7 +171,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10018,
+      "id": 18,
       "tmxPath": "images/levels/4.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -180,7 +180,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10019,
+      "id": 19,
       "tmxPath": "images/levels/4.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
@@ -189,7 +189,7 @@
       "wallPropPattern": "wall%d"
     },
     {
-      "id": 10010,
+      "id": 20,
       "tmxPath": "images/levels/4.tmx",
       "objectTypes": "images/levels/1OT.xml",
       "spawnLayer": "spawnLayer",
