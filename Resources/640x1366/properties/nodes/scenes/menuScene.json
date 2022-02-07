@@ -1,0 +1,11 @@
+{
+
+  "props": {
+    "downPanel": {
+      "transformProperty": {
+        "size": [ 640, 250 ],
+        "position": [25, 140]
+      }
+    }
+  }
+}

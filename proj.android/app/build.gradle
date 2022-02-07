@@ -9,7 +9,7 @@ android {
         applicationId "com.efreyu.BentoTime"
         minSdkVersion PROP_MIN_SDK_VERSION
         targetSdkVersion PROP_TARGET_SDK_VERSION
-        versionCode 1
+        versionCode 3
         versionName "1.001"
 
         externalNativeBuild {
@@ -36,6 +36,7 @@ android {
     externalNativeBuild {
         cmake {
             path "../../CMakeLists.txt"
+            version "3.18.1"
         }
     }
 

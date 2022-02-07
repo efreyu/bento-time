@@ -13,7 +13,7 @@
 
 
 namespace bt::interfaceModule {
-    class sControllerStickEvents;
+    struct sControllerStickEvents;
 }
 
 namespace bt::gameplayModule {

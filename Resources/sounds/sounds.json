@@ -1,7 +1,6 @@
 {
   "sounds": {
     "ui.click": "effects/select.wav",
-    "ui.reset": "effects/error.wav",
     "ui.choose": "effects/choose.mp3",
 
     "gameScene.win": "effects/win.wav",

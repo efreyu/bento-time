@@ -11,11 +11,11 @@ else ()
 endif ()
 add_definitions(-DGENERIC_APP_NAME="${APP_NAME}")
 
-if(XCODE)
-    if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
-        SET (CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 11.0)
-    endif()
-endif()
+#if(XCODE)
+#    if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
+#        SET (CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 11.0)
+#    endif()
+#endif()
 
 if(NOT DEFINED BUILD_ENGINE_DONE) # to test bento-time into root project
     set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cocos2d)
@@ -73,8 +73,8 @@ elseif(WINDOWS)
          ${common_res_files}
          )
 elseif(APPLE)
-    set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "11.0")
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.4" CACHE STRING "Minimum OS X deployment version")
+#    set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "11.0")
+#    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.4" CACHE STRING "Minimum OS X deployment version")
     if(IOS)
         list(APPEND GAME_HEADER
              proj.ios_mac/ios/AppController.h

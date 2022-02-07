@@ -59,7 +59,7 @@
       },
       {
         "type": "temp",
-        "text": "Bento Time is a game \nfor people who love \nbento. \nI hope you will \nenjoy this game!"
+        "text": "Bento Boy is for \neveryone who loves \nbento. \nI hope you \nenjoy the game!"
       }
     ],
     "small": true,
@@ -82,7 +82,7 @@
       },
       {
         "type": "temp",
-        "text": "Fonts VT323 \nby Peter Hull"
+        "text": "Based on original \ngameplay \"Sleepy Blocks\" \nby Davi Fox"
       },
       {
         "type": "credits1",
@@ -105,15 +105,11 @@
       },
       {
         "type": "temp",
-        "text": "Sound effects \n@Shades"
+        "text": "Sound effects: \n@Shades, phoenix1291 \nand SubspaceAudio"
       },
       {
         "type": "temp",
-        "text": "Sound effects \nphoenix1291"
-      },
-      {
-        "type": "temp",
-        "text": "Sound effects \nSubspaceAudio"
+        "text": "Fonts VT323 \nby Peter Hull"
       }
     ],
     "small": true,

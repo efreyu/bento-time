@@ -73,11 +73,7 @@ void controllerButtonWidget::updateButton(eControllerButtonType _buttonType, eCo
 
 generic::coreModule::eventNode::eventTouchClb controllerButtonWidget::getOnTouchBegan() {
     btnNode->setAnimation("pressed");
-    if (buttonType == eControllerButtonType::TYPE_A) {
-        GET_AUDIO_ENGINE().play("ui.click");
-    } else {
-        GET_AUDIO_ENGINE().play("ui.reset");
-    }
+    GET_AUDIO_ENGINE().play("ui.click");
     return eventNode::getOnTouchBegan();
 }
 

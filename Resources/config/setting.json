@@ -9,7 +9,7 @@
   "640x1366": {
     "width": 640, "height": 1366, "desktopScale": 0.75,
     "parent": "640x1136",
-    "path": "640x1136",
+    "path": "640x1366",
     "showDisplayStats": false,
     "pixel": false
   }

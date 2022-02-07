@@ -21,15 +21,7 @@
 USING_NS_CC;
 using namespace bt;
 
-AppDelegate::AppDelegate() {
-    GET_AUDIO_ENGINE();
-    GET_PROFILE();
-    GET_DATABASE_MANAGER();
-    GET_NODE_FACTORY();
-    GET_LOGGER();
-    GET_PHYSICS_SHAPE();
-    GET_SCENES_FACTORY();
-}
+AppDelegate::AppDelegate() {}
 
 AppDelegate::~AppDelegate() {
     generic::audioModule::audioEngineInstance::cleanup();
@@ -53,7 +45,6 @@ void AppDelegate::initGLContextAttrs() {
 bool AppDelegate::applicationDidFinishLaunching() {
     auto setting = GET_RESOLUTION_SETTING();
     setting->load();
-//    cocos2d::FileUtils::getInstance()->setPopupNotify(false);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
     setting->init(false, "640x1136");// default development resolution
 #else
@@ -98,7 +89,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         return new profileModule::progressProfileBlock();
     });
     GET_PROFILE().executeLoad();
-//     register all databases
+    // register all databases
     GET_DATABASE_MANAGER().addDatabase(
         databaseModule::databaseManager::eDatabaseType::LEVELS_DB,
         "properties/database/levels/db.json",
