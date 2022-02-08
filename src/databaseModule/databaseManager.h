@@ -20,16 +20,16 @@ namespace bt::databaseModule {
         static databaseManager& getInstance();
         static void cleanup();
 
-        void addDatabase(eDatabaseType id, const std::string& value, const std::shared_ptr<generic::databaseModule::databaseInterface>& dbPtr);
+        void addDatabase(eDatabaseType id, const std::string& value, generic::databaseModule::databaseInterface* db);
 
         template<typename T>
-        const std::shared_ptr<T> &getDatabase(eDatabaseType key) {
+        T* getDatabase(eDatabaseType key) {
             return getRegisteredDatabase<T>(static_cast<int>(key));
         }
 
     private:
         databaseManager() = default;
-        ~databaseManager() override = default;
+        ~databaseManager() override;
         databaseManager(const databaseManager&) = default;
         databaseManager& operator=(const databaseManager&) = default;
         static void create();

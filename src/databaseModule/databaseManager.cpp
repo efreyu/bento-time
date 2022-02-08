@@ -33,7 +33,14 @@ void databaseManager::onDeadReference() {
 
 void databaseManager::addDatabase(databaseManager::eDatabaseType id,
                                   const std::string& value,
-                                  const std::shared_ptr<generic::databaseModule::databaseInterface>& dbPtr) {
+                                  generic::databaseModule::databaseInterface* db) {
     auto type = static_cast<int>(id);
-    registerDatabase({ type, value }, dbPtr);
+    registerDatabase({ type, value }, db);
+}
+
+databaseManager::~databaseManager() {
+    for (auto& [_, db] : databasesMap) {
+        delete db;
+    }
+    databasesMap.clear();
 }

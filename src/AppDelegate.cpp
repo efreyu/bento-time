@@ -93,12 +93,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     GET_DATABASE_MANAGER().addDatabase(
         databaseModule::databaseManager::eDatabaseType::LEVELS_DB,
         "properties/database/levels/db.json",
-        std::make_shared<databaseModule::levelsDatabase>()
+        new databaseModule::levelsDatabase
     );
     GET_DATABASE_MANAGER().addDatabase(
         databaseModule::databaseManager::eDatabaseType::MAP_OBJECTS_DB,
         "properties/database/mapObjects/db.json",
-        std::make_shared<databaseModule::mapObjectsDatabase>()
+        new databaseModule::mapObjectsDatabase
     );
     GET_DATABASE_MANAGER().executeLoadData();
     // register external node types
