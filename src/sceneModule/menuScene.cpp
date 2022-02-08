@@ -134,7 +134,7 @@ void menuScene::initMenu(const std::string& path) {
             page->hintText = obj["hint"].GetString();
         }
         if (obj.HasMember("small") && obj["small"].IsBool()) {
-            page->small = obj["small"].GetBool();
+            page->smallText = obj["small"].GetBool();
         }
         if (obj.HasMember("buttons") && obj["buttons"].IsArray()) {
             auto array = obj["buttons"].GetArray();
@@ -253,7 +253,7 @@ void menuScene::loadPage(const std::string& page) {
             auto btn = new buttonWidget();
             menuItem->node = btn;
             btn->setText(item->text);
-            if (pagePtr->small) {
+            if (pagePtr->smallText) {
                 btn->setSmallText();
             }
             if (!menuHolder->getChildren().empty()) {

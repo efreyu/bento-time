@@ -28,7 +28,7 @@ namespace bt::sceneModule {
         std::string pageId;
         std::vector<std::shared_ptr<menuItem>> buttons;
         std::string hintText;
-        bool small = false;
+        bool smallText = false;
     };
 
     struct sActiveMenu {
